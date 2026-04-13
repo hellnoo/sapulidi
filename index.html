@@ -468,23 +468,17 @@ async function analyzeWaste() {
   document.getElementById('loading-spinner').style.display = 'flex';
   document.getElementById('analyze-btn').disabled = true;
 
+  const GEMINI_KEY = 'AIzaSyAuyXL_vnxUI__eUEw4ztIbcxMqGnN9aO8';
+
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: {type: 'base64', media_type: currentImageType, data: currentImageData}
-            },
-            {
-              type: 'text',
-              text: `Kamu adalah sistem deteksi sampah cerdas. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.
+        contents: [{
+          parts: [
+            {inline_data: {mime_type: currentImageType, data: currentImageData}},
+            {text: `Kamu adalah sistem deteksi sampah cerdas. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.
 
 Respond HANYA dalam format JSON berikut tanpa teks lain:
 {
@@ -498,15 +492,14 @@ Respond HANYA dalam format JSON berikut tanpa teks lain:
   ],
   "ringkasan": "deskripsi singkat kondisi sampah dalam gambar (1-2 kalimat)",
   "rekomendasi": "rekomendasi pengelolaan utama (1 kalimat)"
-}`
-            }
+}`}
           ]
         }]
       })
     });
 
     const data = await resp.json();
-    const text = data.content.map(c => c.text || '').join('');
+    const text = data.candidates[0].content.parts[0].text;
     const clean = text.replace(/```json|```/g, '').trim();
     const result = JSON.parse(clean);
     showResult(result);
