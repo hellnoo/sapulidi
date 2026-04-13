@@ -3,629 +3,528 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SapuLidi - Sistem Analisis Limbah Cerdas</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<title>SapuLidi — by Navis</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --green-darkest:#0d2206;
-  --green-dark:#1a3a0a;
-  --green:#27500a;
-  --green-mid:#3b6d11;
-  --green-accent:#639922;
-  --green-bright:#97c459;
-  --green-light:#c0dd97;
-  --green-pale:#eaf3de;
-  --amber:#ef9f27;
-  --amber-light:#faeeda;
-  --blue:#185fa5;
-  --blue-light:#e6f1fb;
-  --coral:#993c1d;
-  --coral-light:#faece7;
-  --red:#a32d2d;
-  --red-light:#fcebeb;
-  --gray:#5f5e5a;
-  --gray-light:#f4f6f0;
-  --white:#ffffff;
-  --border:#e2e8d8;
+  --g9:#0d2206;--g8:#1a3a0a;--g7:#27500a;--g6:#3b6d11;--g5:#639922;
+  --g4:#97c459;--g3:#c0dd97;--g2:#dff0c0;--g1:#eaf3de;
+  --t8:#085041;--t5:#1d9e75;--t2:#9fe1cb;--t1:#e1f5ee;
+  --a5:#ef9f27;--a1:#faeeda;
+  --b7:#0c447c;--b5:#185fa5;--b2:#b5d4f4;--b1:#e6f1fb;
+  --c6:#993c1d;--c2:#f5c4b3;--c1:#faece7;
+  --r5:#a32d2d;--r1:#fcebeb;
+  --ink:#0f1a08;--ink2:#3b4a30;--muted:#7a8a6a;--border:#d6e8c0;
+  --surface:#f7faf2;--white:#fff;
 }
-body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-light);color:#1a1a1a;min-height:100vh}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh}
 
-/* HEADER */
-.header{background:linear-gradient(135deg,var(--green-darkest) 0%,var(--green-dark) 60%,#1e4a10 100%);padding:0 28px;display:flex;align-items:center;gap:0;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,0.3)}
-.logo{display:flex;align-items:center;gap:12px;flex:1}
-.logo-mark{width:40px;height:40px;background:var(--green-bright);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(151,196,89,0.4)}
-.logo-mark svg{width:22px;height:22px}
-.logo-text h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-light);letter-spacing:1px;line-height:1}
-.logo-text p{font-size:10px;color:#5dcaa5;letter-spacing:0.5px;margin-top:1px}
-.header-badge{background:rgba(151,196,89,0.15);border:1px solid rgba(151,196,89,0.3);color:var(--green-light);font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:0.5px}
+/* ===== HEADER ===== */
+.header{background:var(--g9);padding:0 28px;height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(192,221,151,0.1)}
+.logo-mark{width:34px;height:34px;background:var(--g4);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:19px;height:19px}
+.brand{flex:1;display:flex;align-items:baseline;gap:8px}
+.brand-name{font-family:'Instrument Serif',serif;font-size:21px;color:var(--g3);letter-spacing:0.3px;line-height:1}
+.brand-sub{font-size:10px;color:var(--t2);letter-spacing:0.5px;font-weight:500}
+.by-navis{font-family:'Instrument Serif',serif;font-style:italic;font-size:12px;color:rgba(192,221,151,0.5);letter-spacing:0.3px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-chip{background:rgba(151,196,89,0.12);border:1px solid rgba(151,196,89,0.25);color:var(--g3);font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:0.5px}
 
-/* NAV */
-.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;display:flex;gap:2px;overflow-x:auto}
+/* ===== NAV ===== */
+.nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;display:flex;overflow-x:auto}
 .nav::-webkit-scrollbar{display:none}
-.nav-btn{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;padding:14px 18px;border:none;background:transparent;color:var(--gray);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:6px}
-.nav-btn .nav-icon{font-size:14px}
-.nav-btn.active{color:var(--green);border-bottom-color:var(--green-accent)}
-.nav-btn:hover:not(.active){color:var(--green-mid);background:var(--green-pale)}
+.nav-btn{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;padding:13px 16px;border:none;background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;border-bottom:2.5px solid transparent;transition:all 0.18s;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nav-btn.active{color:var(--g7);border-bottom-color:var(--g5)}
+.nav-btn:hover:not(.active){color:var(--g6);background:var(--g1)}
 
-/* PAGES */
-.page{display:none;padding:24px 28px;max-width:1200px;margin:0 auto}
+/* ===== PAGES ===== */
+.page{display:none;padding:26px 28px;max-width:1100px;margin:0 auto}
 .page.active{display:block}
-@media(max-width:640px){.page{padding:16px}.nav{padding:0 12px}.header{padding:0 16px}}
+@media(max-width:640px){.page{padding:16px 14px}.nav{padding:0 10px}.header{padding:0 14px}}
 
-/* PAGE HEADER */
-.page-header{margin-bottom:22px}
-.page-header h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green-dark)}
-.page-header p{font-size:13px;color:var(--gray);margin-top:4px}
+/* ===== PAGE TITLE ===== */
+.pg-title{margin-bottom:22px}
+.pg-title h2{font-family:'Instrument Serif',serif;font-size:26px;color:var(--g8);line-height:1.2}
+.pg-title p{font-size:13px;color:var(--muted);margin-top:5px}
 
-/* DETECT LAYOUT */
-.detect-layout{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-@media(max-width:700px){.detect-layout{grid-template-columns:1fr}}
+/* ===== DETECT ===== */
+.detect-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.detect-wrap{grid-template-columns:1fr}}
 
 .panel{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden}
-.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
-.panel-header-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.panel-header h3{font-size:13px;font-weight:700;color:var(--green-dark)}
-.panel-header p{font-size:11px;color:var(--gray);margin-top:1px}
-.panel-body{padding:18px}
+.ph{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.ph-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ph h3{font-size:13px;font-weight:700;color:var(--g8)}
+.ph p{font-size:11px;color:var(--muted);margin-top:1px}
+.pb{padding:16px}
 
-/* UPLOAD */
-.upload-zone{border:2px dashed var(--green-bright);border-radius:12px;background:var(--green-pale);cursor:pointer;transition:all 0.2s;overflow:hidden;min-height:200px;display:flex;align-items:center;justify-content:center;position:relative}
-.upload-zone:hover{border-color:var(--green-accent);background:#dff0c0}
-.upload-placeholder{text-align:center;padding:28px 16px}
-.upload-placeholder .up-icon{width:52px;height:52px;background:var(--green-bright);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 12px rgba(151,196,89,0.35)}
-.upload-placeholder .up-icon svg{width:24px;height:24px}
-.upload-placeholder h4{font-size:14px;font-weight:700;color:var(--green-dark);margin-bottom:4px}
-.upload-placeholder p{font-size:11px;color:var(--gray)}
+.upload-zone{border:2px dashed var(--g3);border-radius:12px;background:var(--g1);cursor:pointer;transition:all 0.2s;min-height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.upload-zone:hover{border-color:var(--g5);background:var(--g2)}
+.up-ph{text-align:center;padding:24px 12px}
+.up-icon{width:48px;height:48px;background:var(--g4);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 3px 10px rgba(151,196,89,0.3)}
+.up-icon svg{width:22px;height:22px}
+.up-ph h4{font-size:13px;font-weight:700;color:var(--g8);margin-bottom:3px}
+.up-ph p{font-size:11px;color:var(--muted)}
 #file-input{display:none}
-#preview-img{width:100%;max-height:240px;object-fit:cover;display:none;border-radius:10px}
+#preview-img{width:100%;max-height:230px;object-fit:cover;display:none;border-radius:10px}
 
-.analyze-btn{width:100%;margin-top:14px;padding:14px;background:var(--green-dark);color:var(--green-light);border:none;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:0.3px}
-.analyze-btn:hover:not(:disabled){background:var(--green-mid);transform:translateY(-1px);box-shadow:0 4px 16px rgba(39,80,10,0.3)}
-.analyze-btn:active:not(:disabled){transform:translateY(0)}
-.analyze-btn:disabled{background:#c8c8c0;color:#999;cursor:not-allowed;transform:none;box-shadow:none}
-.analyze-btn svg{width:16px;height:16px}
+.go-btn{width:100%;margin-top:12px;padding:13px;background:var(--g8);color:var(--g3);border:none;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;justify-content:center;gap:8px}
+.go-btn:hover:not(:disabled){background:var(--g7);transform:translateY(-1px);box-shadow:0 5px 18px rgba(39,80,10,0.25)}
+.go-btn:active:not(:disabled){transform:none}
+.go-btn:disabled{background:#d0d8c4;color:#aaa;cursor:not-allowed;box-shadow:none;transform:none}
+.go-btn svg{width:15px;height:15px}
 
-/* RESULT */
-.result-empty{text-align:center;padding:40px 20px;color:#bbb}
-.result-empty svg{width:48px;height:48px;margin:0 auto 12px;display:block;opacity:0.4}
-.result-empty p{font-size:13px}
-.result-empty span{font-size:12px;color:#ccc}
+.r-empty{text-align:center;padding:36px 16px;color:#c0c8b4}
+.r-empty svg{width:44px;height:44px;margin:0 auto 10px;display:block;opacity:0.35}
+.r-empty p{font-size:13px;font-weight:500}
+.r-empty span{font-size:11px;color:#ccc}
 
-.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:40px 20px}
-.spinner{width:40px;height:40px;border:3px solid var(--green-pale);border-top-color:var(--green-accent);border-radius:50%;animation:spin 0.7s linear infinite}
+.loading{display:none;flex-direction:column;align-items:center;gap:12px;padding:36px 16px}
+.spin{width:38px;height:38px;border:3px solid var(--g1);border-top-color:var(--g5);border-radius:50%;animation:spin 0.7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.loading p{font-size:13px;color:var(--gray);font-weight:500}
-.loading-dots::after{content:'...';animation:dots 1.2s steps(3,end) infinite}
-@keyframes dots{0%,33%{content:'.'}34%,66%{content:'..'}67%,100%{content:'...'}}
+.loading p{font-size:12px;color:var(--muted);font-weight:600}
+.ld::after{content:'';animation:ld 1.2s steps(3,end) infinite}
+@keyframes ld{0%,33%{content:'.'}34%,66%{content:'..'}67%,100%{content:'...'}}
 
 #result-content{display:none}
-.result-title{font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.result-count{background:var(--green-pale);color:var(--green);font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px}
+.r-head{font-size:12px;font-weight:700;color:var(--g7);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.r-count{background:var(--g1);color:var(--g7);font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px}
 
-.waste-item{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);margin-bottom:8px;transition:border-color 0.15s}
-.waste-item:hover{border-color:var(--green-bright)}
-.waste-left{display:flex;align-items:flex-start;gap:10px;flex:1}
-.waste-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
-.waste-info{flex:1}
-.waste-name{font-size:13px;font-weight:700;color:#222;margin-bottom:2px}
-.waste-handle{font-size:11px;color:var(--gray);line-height:1.4}
-.conf-row{display:flex;align-items:center;gap:6px;margin-top:6px}
-.conf-bar{flex:1;height:4px;background:#eee;border-radius:2px;overflow:hidden;max-width:100px}
-.conf-fill{height:100%;border-radius:2px;transition:width 0.6s ease}
-.conf-val{font-size:10px;color:#aaa;font-weight:600}
+.wi{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:11px 13px;border-radius:10px;border:1px solid var(--border);margin-bottom:7px;transition:border-color 0.15s}
+.wi:hover{border-color:var(--g3)}
+.wl{display:flex;align-items:flex-start;gap:9px;flex:1}
+.wd{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.wi-info{flex:1}
+.wi-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.wi-handle{font-size:11px;color:var(--muted);line-height:1.4}
+.cbar{display:flex;align-items:center;gap:5px;margin-top:5px}
+.ctrack{flex:1;height:3px;background:#eee;border-radius:2px;overflow:hidden;max-width:90px}
+.cfill{height:100%;border-radius:2px;transition:width 0.6s ease}
+.cval{font-size:10px;color:#bbb;font-weight:600}
 
-.waste-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-.badge-organik{background:var(--green-pale);color:var(--green)}
-.badge-anorganik{background:var(--blue-light);color:var(--blue)}
-.badge-b3{background:var(--coral-light);color:var(--coral)}
-.badge-residu{background:var(--amber-light);color:#854f0b}
+.badge{font-size:10px;font-weight:800;padding:4px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;letter-spacing:0.2px}
+.b-organik{background:var(--g1);color:var(--g7)}
+.b-anorganik{background:var(--b1);color:var(--b5)}
+.b-b3{background:var(--c1);color:var(--c6)}
+.b-residu{background:var(--a1);color:#7a4a00}
 
-.summary-box{background:linear-gradient(135deg,var(--green-pale),#f0f8e0);border-radius:12px;padding:14px;border:1px solid var(--green-bright);margin-top:10px}
-.summary-box .sum-title{font-size:11px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px}
-.summary-box p{font-size:12px;color:var(--green-dark);line-height:1.6}
-.summary-box .rec{margin-top:8px;padding-top:8px;border-top:1px solid var(--green-bright)}
+.sum-box{background:linear-gradient(135deg,var(--g1),#f3f9e8);border-radius:11px;padding:13px;border:1px solid var(--g3);margin-top:8px}
+.sum-label{font-size:10px;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.sum-box p{font-size:12px;color:var(--g8);line-height:1.6}
+.sum-rec{margin-top:7px;padding-top:7px;border-top:1px solid var(--g3)}
 
-.error-box{text-align:center;padding:24px;color:var(--coral)}
-.error-box p{font-size:13px;font-weight:700}
-.error-box span{font-size:11px;color:var(--gray);display:block;margin-top:4px}
+.err-box{text-align:center;padding:22px;color:var(--c6)}
+.err-box p{font-size:13px;font-weight:700}
+.err-box span{font-size:11px;color:var(--muted);display:block;margin-top:4px;line-height:1.5}
 
-/* KATEGORI GUIDE */
-.guide-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px}
+.guide-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
 @media(max-width:700px){.guide-grid{grid-template-columns:repeat(2,1fr)}}
-.guide-item{border-radius:12px;padding:14px}
-.guide-item h4{font-size:12px;font-weight:700;margin-bottom:6px}
-.guide-item p{font-size:11px;line-height:1.5;opacity:0.85}
-.guide-organik{background:var(--green-pale)}
-.guide-organik h4{color:var(--green-dark)}
-.guide-organik p{color:var(--green-mid)}
-.guide-anorganik{background:var(--blue-light)}
-.guide-anorganik h4{color:var(--blue)}
-.guide-anorganik p{color:var(--blue)}
-.guide-b3{background:var(--coral-light)}
-.guide-b3 h4{color:var(--coral)}
-.guide-b3 p{color:var(--coral)}
-.guide-residu{background:var(--amber-light)}
-.guide-residu h4{color:#854f0b}
-.guide-residu p{color:#854f0b}
+.guide{border-radius:11px;padding:13px}
+.guide h4{font-size:11px;font-weight:800;margin-bottom:5px}
+.guide p{font-size:11px;line-height:1.5;opacity:0.85}
+.g-o{background:var(--g1)}.g-o h4{color:var(--g8)}.g-o p{color:var(--g6)}
+.g-a{background:var(--b1)}.g-a h4{color:var(--b7)}.g-a p{color:var(--b5)}
+.g-b{background:var(--c1)}.g-b h4{color:var(--c6)}.g-b p{color:var(--c6)}
+.g-r{background:var(--a1)}.g-r h4{color:#7a4a00}.g-r p{color:#7a4a00}
 
-/* MATERI */
-.materi-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
-.materi-tab{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--gray);cursor:pointer;transition:all 0.15s}
-.materi-tab.active{background:var(--green-dark);color:var(--green-light);border-color:var(--green-dark)}
-.materi-tab:hover:not(.active){background:var(--green-pale);border-color:var(--green-bright);color:var(--green-dark)}
+/* ===== MATERI ===== */
+.m-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:18px}
+.mtab{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:600;padding:7px 15px;border-radius:20px;border:1px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all 0.15s}
+.mtab.active{background:var(--g8);color:var(--g3);border-color:var(--g8)}
+.mtab:hover:not(.active){background:var(--g1);border-color:var(--g3);color:var(--g7)}
 
-.materi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
-.materi-card{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s}
-.materi-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:var(--green-bright)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.mcard{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s;cursor:pointer}
+.mcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.07);border-color:var(--g3)}
 
-.thumb{height:130px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
-.thumb-video{background:var(--green-darkest)}
-.thumb-artikel-organik{background:linear-gradient(135deg,#d4edaa,#eaf3de)}
-.thumb-artikel-anorganik{background:linear-gradient(135deg,#b5d4f4,#e6f1fb)}
-.thumb-artikel-b3{background:linear-gradient(135deg,#f5c4b3,#faece7)}
-.thumb-emoji{font-size:40px}
-.play-circle{width:46px;height:46px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:8px}
-.play-circle svg{width:18px;height:18px;margin-left:2px}
-.type-badge{position:absolute;top:10px;right:10px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:0.3px}
-.type-video{background:var(--green-light);color:var(--green-dark)}
-.type-artikel{background:var(--blue-light);color:var(--blue)}
+.mthumb{height:125px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.mt-vid{background:var(--g9)}
+.mt-o{background:linear-gradient(135deg,#c8e87a22,var(--g1))}
+.mt-a{background:linear-gradient(135deg,#b5d4f422,var(--b1))}
+.mt-b{background:linear-gradient(135deg,#f5c4b322,var(--c1))}
+.mt-ig{background:linear-gradient(135deg,#f09563,#e1306c)}
 
-.materi-body{padding:16px}
-.materi-cat{font-size:10px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px}
-.materi-title{font-size:14px;font-weight:700;color:var(--green-dark);line-height:1.4;margin-bottom:6px}
-.materi-desc{font-size:11px;color:var(--gray);line-height:1.5}
-.materi-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid var(--border)}
-.materi-author{font-size:11px;color:#aaa;font-weight:500}
-.materi-cta{font-size:12px;font-weight:700;color:var(--blue);cursor:pointer;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif}
-.materi-cta:hover{text-decoration:underline}
+.play-ring{width:44px;height:44px;background:rgba(255,255,255,0.92);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-top:8px;box-shadow:0 2px 10px rgba(0,0,0,0.15)}
+.play-ring svg{width:16px;height:16px;margin-left:2px}
+.mtype{position:absolute;top:9px;right:9px;font-size:9px;font-weight:800;padding:3px 8px;border-radius:20px;letter-spacing:0.5px}
+.mt-vid-badge{background:var(--g3);color:var(--g9)}
+.mt-art-badge{background:var(--b2);color:var(--b7)}
+.mt-ig-badge{background:#fff;color:#c13584}
 
-/* VIDEO MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:1000;align-items:center;justify-content:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal-box{background:#000;border-radius:16px;overflow:hidden;width:100%;max-width:600px;position:relative}
-.modal-close{position:absolute;top:12px;right:12px;z-index:10;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
-.modal-close:hover{background:rgba(255,255,255,0.25)}
-.iframe-wrap{position:relative;padding-bottom:56.25%;height:0}
-.iframe-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+.mb{padding:14px}
+.mcat{font-size:9px;font-weight:800;color:var(--g5);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.mtit{font-size:13px;font-weight:700;color:var(--g8);line-height:1.4;margin-bottom:5px}
+.mdesc{font-size:11px;color:var(--muted);line-height:1.5}
+.mfoot{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border)}
+.mauthor{font-size:10px;color:#aaa;font-weight:600}
+.mcta{font-size:11px;font-weight:800;color:var(--b5);background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer}
+.mcta:hover{text-decoration:underline}
 
-/* DASHBOARD */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
-.stat-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:16px;text-align:center}
-.stat-num{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;line-height:1}
-.stat-label{font-size:11px;font-weight:600;color:var(--gray);margin-top:4px}
-.stat-num.green{color:var(--green)}
-.stat-num.blue{color:var(--blue)}
-.stat-num.coral{color:var(--coral)}
-.stat-num.amber{color:#854f0b}
+/* ===== IG EMBED ===== */
+.ig-card{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s}
+.ig-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.07)}
+.ig-header{background:linear-gradient(135deg,#f09563,#e1306c,#833ab4);padding:16px;display:flex;align-items:center;gap:10px}
+.ig-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
+.ig-name{color:#fff;font-size:13px;font-weight:700}
+.ig-handle{color:rgba(255,255,255,0.7);font-size:10px}
+.ig-body{padding:14px}
+.ig-desc{font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:10px}
+.ig-link{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f09563,#e1306c);color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;transition:opacity 0.15s}
+.ig-link:hover{opacity:0.85}
 
-.chart-panel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:20px;margin-bottom:14px}
-.chart-label{font-size:12px;font-weight:700;color:#333;margin-bottom:16px}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.bar-name{font-size:12px;font-weight:600;color:#555;width:90px;flex-shrink:0}
-.bar-track{flex:1;height:10px;background:#f0f0f0;border-radius:5px;overflow:hidden}
-.bar-fill{height:100%;border-radius:5px;transition:width 0.7s ease}
-.bar-num{font-size:11px;color:#888;font-weight:600;width:28px;text-align:right}
+/* ===== VIDEO MODAL ===== */
+.vmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;padding:20px}
+.vmodal.open{display:flex}
+.vbox{background:#000;border-radius:16px;overflow:hidden;width:100%;max-width:580px;position:relative}
+.vclose{position:absolute;top:10px;right:10px;z-index:10;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:background 0.15s}
+.vclose:hover{background:rgba(255,255,255,0.25)}
+.vwrap{position:relative;padding-bottom:56.25%;height:0}
+.vwrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 
-.history-panel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:20px}
-.history-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
-.history-item:last-child{border-bottom:none}
-.h-icon{width:36px;height:36px;border-radius:10px;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.h-info{flex:1}
-.h-title{font-size:13px;font-weight:600;color:#333}
-.h-time{font-size:11px;color:#aaa;margin-top:1px}
-.h-cats{display:flex;gap:4px;flex-wrap:wrap}
-.empty-state{text-align:center;padding:28px;color:#bbb;font-size:13px}
+/* ===== DASHBOARD ===== */
+.stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:580px){.stats4{grid-template-columns:repeat(2,1fr)}}
+.scard{background:var(--white);border-radius:13px;border:1px solid var(--border);padding:16px 14px;text-align:center}
+.snum{font-family:'Instrument Serif',serif;font-size:30px;line-height:1;color:var(--g7)}
+.snum.blue{color:var(--b5)}.snum.coral{color:var(--c6)}.snum.amber{color:#7a4a00}
+.slabel{font-size:10px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
 
-/* TENTANG */
-.about-hero{background:linear-gradient(135deg,var(--green-darkest),var(--green-dark),#1e5012);border-radius:20px;padding:32px 28px;text-align:center;margin-bottom:18px}
-.about-logo{width:64px;height:64px;background:var(--green-bright);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 20px rgba(151,196,89,0.35)}
-.about-logo svg{width:36px;height:36px}
-.about-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green-light);letter-spacing:1.5px}
-.about-tagline{font-size:12px;color:#5dcaa5;margin-top:6px;letter-spacing:0.5px}
-.about-desc{font-size:13px;color:#97c459;margin-top:14px;line-height:1.8;max-width:480px;margin-left:auto;margin-right:auto}
-.about-ver{display:inline-block;background:rgba(151,196,89,0.15);border:1px solid rgba(151,196,89,0.3);color:var(--green-light);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;margin-top:14px;letter-spacing:0.5px}
+.cpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px;margin-bottom:14px}
+.ctitle{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px}
+.brow{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.bname{font-size:12px;font-weight:600;color:var(--ink2);width:90px;flex-shrink:0}
+.btrack{flex:1;height:8px;background:#eef2e8;border-radius:4px;overflow:hidden}
+.bfill{height:100%;border-radius:4px;transition:width 0.7s ease}
+.bval{font-size:10px;color:#aaa;font-weight:700;width:24px;text-align:right}
 
-.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-@media(max-width:480px){.features-grid{grid-template-columns:1fr}}
-.feature-card{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:16px}
-.feat-icon{font-size:24px;margin-bottom:8px}
-.feat-title{font-size:13px;font-weight:700;color:var(--green-dark);margin-bottom:4px}
-.feat-desc{font-size:11px;color:var(--gray);line-height:1.5}
+.hpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px}
+.hitem{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.hitem:last-child{border-bottom:none}
+.hico{width:34px;height:34px;border-radius:9px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.hinfo{flex:1}
+.htit{font-size:12px;font-weight:700;color:var(--ink)}
+.htime{font-size:10px;color:#aaa;margin-top:1px}
+.hbadges{display:flex;gap:4px;flex-wrap:wrap}
+.empty{text-align:center;padding:24px;color:#bbb;font-size:12px}
 
-.tech-panel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px}
-.tech-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px}
-.tech-tags{display:flex;flex-wrap:wrap;gap:8px}
-.tech-tag{font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px}
+/* ===== TENTANG ===== */
+.about-hero{background:linear-gradient(150deg,var(--g9) 0%,#1e4a10 60%,#0a2a05 100%);border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.about-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(151,196,89,0.08),transparent 70%);pointer-events:none}
+.a-logo{width:60px;height:60px;background:var(--g4);border-radius:17px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 22px rgba(151,196,89,0.3)}
+.a-logo svg{width:34px;height:34px}
+.a-name{font-family:'Instrument Serif',serif;font-size:30px;color:var(--g3);letter-spacing:0.5px}
+.a-by{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--t2);margin-top:4px}
+.a-tag{font-size:11px;color:var(--t2);margin-top:3px;letter-spacing:0.5px}
+.a-desc{font-size:13px;color:rgba(151,196,89,0.8);margin-top:14px;line-height:1.8;max-width:440px;margin-left:auto;margin-right:auto}
+.a-ver{display:inline-block;background:rgba(151,196,89,0.1);border:1px solid rgba(151,196,89,0.25);color:var(--g3);font-size:10px;font-weight:700;padding:5px 14px;border-radius:20px;margin-top:14px;letter-spacing:0.5px}
+
+.feat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:14px}
+@media(max-width:480px){.feat-grid{grid-template-columns:1fr}}
+.fcard{background:var(--white);border-radius:13px;border:1px solid var(--border);padding:16px}
+.ficon{font-size:22px;margin-bottom:7px}
+.ftit{font-size:13px;font-weight:700;color:var(--g8);margin-bottom:4px}
+.fdesc{font-size:11px;color:var(--muted);line-height:1.5}
+
+.tech-panel{background:var(--white);border-radius:14px;border:1px solid var(--border);padding:16px}
+.tech-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.tech-tags{display:flex;flex-wrap:wrap;gap:7px}
+.tt{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px}
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M12 3C8 3 5 7 5 11c0 3 1.5 5.5 4 7l3 2 3-2c2.5-1.5 4-4 4-7 0-4-3-8-7-8z" fill="#1a3a0a"/>
-        <path d="M9 11c0 1.66 1.34 3 3 3s3-1.34 3-3" stroke="#c8e87a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <circle cx="12" cy="11" r="1.8" fill="#c8e87a"/>
-      </svg>
-    </div>
-    <div class="logo-text">
-      <h1>SapuLidi</h1>
-      <p>Sistem Analisis &amp; Pengelolaan Limbah Cerdas</p>
-    </div>
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none">
+      <path d="M12 3C8.5 3 5.5 6.5 5.5 10.5c0 2.8 1.4 5.2 3.8 6.7L12 19l2.7-1.8c2.4-1.5 3.8-3.9 3.8-6.7C18.5 6.5 15.5 3 12 3z" fill="#1a3a0a"/>
+      <path d="M9.5 10.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5" stroke="#c8e87a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <circle cx="12" cy="10.5" r="1.6" fill="#c8e87a"/>
+    </svg>
   </div>
-  <div class="header-badge">S3 · Disertasi</div>
+  <div class="brand">
+    <span class="brand-name">SapuLidi</span>
+    <span class="by-navis">by Navis</span>
+  </div>
+  <div class="hdr-right">
+    <span class="brand-sub">Sistem Analisis Limbah Cerdas</span>
+    <div class="hdr-chip">S3 · Disertasi</div>
+  </div>
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showPage('detect',this)"><span class="nav-icon">🔍</span>Deteksi Sampah</button>
-  <button class="nav-btn" onclick="showPage('materi',this)"><span class="nav-icon">📚</span>Materi &amp; Video</button>
-  <button class="nav-btn" onclick="showPage('dashboard',this)"><span class="nav-icon">📊</span>Dashboard</button>
-  <button class="nav-btn" onclick="showPage('tentang',this)"><span class="nav-icon">ℹ️</span>Tentang</button>
+  <button class="nav-btn active" onclick="showPage('detect',this)">🔍 Deteksi Sampah</button>
+  <button class="nav-btn" onclick="showPage('materi',this)">📚 Materi & Video</button>
+  <button class="nav-btn" onclick="showPage('ig',this)">📱 Instagram</button>
+  <button class="nav-btn" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+  <button class="nav-btn" onclick="showPage('tentang',this)">ℹ️ Tentang</button>
 </div>
 
 <!-- DETECT -->
 <div id="page-detect" class="page active">
-  <div class="page-header">
+  <div class="pg-title">
     <h2>Deteksi Sampah AI</h2>
     <p>Upload foto sampah untuk identifikasi otomatis menggunakan Google Gemini Vision</p>
   </div>
-
-  <div class="detect-layout">
+  <div class="detect-wrap">
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-header-icon" style="background:var(--green-pale)">📸</div>
-        <div><h3>Upload Gambar</h3><p>JPG, PNG, WEBP · Max 10MB</p></div>
-      </div>
-      <div class="panel-body">
+      <div class="ph"><div class="ph-icon" style="background:var(--g1)">📸</div><div><h3>Upload Gambar</h3><p>JPG, PNG, WEBP · Maks 10MB</p></div></div>
+      <div class="pb">
         <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
-          <div class="upload-placeholder" id="up-placeholder">
-            <div class="up-icon">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#1a3a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </div>
+          <div class="up-ph" id="up-ph">
+            <div class="up-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#1a3a0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <h4>Klik untuk upload gambar</h4>
-            <p>atau drag &amp; drop file di sini</p>
+            <p>atau drag &amp; drop di sini</p>
           </div>
-          <img id="preview-img" src="" alt="preview">
+          <img id="preview-img" src="" alt="">
         </div>
         <input type="file" id="file-input" accept="image/*">
-        <button class="analyze-btn" id="analyze-btn" disabled onclick="analyzeWaste()">
+        <button class="go-btn" id="go-btn" disabled onclick="analyzeWaste()">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           Analisis dengan AI
         </button>
       </div>
     </div>
-
     <div class="panel">
-      <div class="panel-header">
-        <div class="panel-header-icon" style="background:var(--green-pale)">📋</div>
-        <div><h3>Hasil Deteksi</h3><p>Identifikasi jenis &amp; kategori sampah</p></div>
-      </div>
-      <div class="panel-body" id="result-panel">
-        <div class="result-empty" id="result-empty">
-          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <p>Belum ada hasil deteksi</p>
-          <span>Upload gambar dan klik Analisis dengan AI</span>
+      <div class="ph"><div class="ph-icon" style="background:var(--g1)">📋</div><div><h3>Hasil Deteksi</h3><p>Identifikasi jenis &amp; kategori sampah</p></div></div>
+      <div class="pb" id="result-panel">
+        <div class="r-empty" id="r-empty">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <p>Belum ada hasil</p><span>Upload gambar &amp; klik Analisis</span>
         </div>
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <p>Menganalisis gambar<span class="loading-dots"></span></p>
-        </div>
+        <div class="loading" id="loading"><div class="spin"></div><p>Menganalisis<span class="ld"></span></p></div>
         <div id="result-content"></div>
       </div>
     </div>
   </div>
-
-  <div style="margin-top:18px">
-    <div style="font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px">Panduan Kategori Sampah</div>
+  <div style="margin-top:16px">
+    <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Panduan Kategori</div>
     <div class="guide-grid">
-      <div class="guide-item guide-organik"><h4>🌿 Organik</h4><p>Sisa makanan, daun, ranting, sayuran, buah busuk, limbah dapur</p></div>
-      <div class="guide-item guide-anorganik"><h4>♻️ Anorganik</h4><p>Plastik, logam, kaca, kertas, kardus, botol, kaleng bekas</p></div>
-      <div class="guide-item guide-b3"><h4>⚠️ B3 Berbahaya</h4><p>Baterai, obat kadaluarsa, cat, pestisida, elektronik rusak</p></div>
-      <div class="guide-item guide-residu"><h4>🚫 Residu</h4><p>Pembalut, popok, puntung rokok, styrofoam, plastik berlapis</p></div>
+      <div class="guide g-o"><h4>🌿 Organik</h4><p>Sisa makanan, daun, ranting, sayuran, buah busuk</p></div>
+      <div class="guide g-a"><h4>♻️ Anorganik</h4><p>Plastik, logam, kaca, kertas, kardus, botol kaleng</p></div>
+      <div class="guide g-b"><h4>⚠️ B3 Berbahaya</h4><p>Baterai, obat kadaluarsa, cat, pestisida, elektronik</p></div>
+      <div class="guide g-r"><h4>🚫 Residu</h4><p>Pembalut, popok, puntung rokok, styrofoam</p></div>
     </div>
   </div>
 </div>
 
 <!-- MATERI -->
 <div id="page-materi" class="page">
-  <div class="page-header">
-    <h2>Materi &amp; Video Edukasi</h2>
-    <p>Konten pembelajaran pengelolaan sampah berbasis penelitian</p>
+  <div class="pg-title"><h2>Materi &amp; Video Edukasi</h2><p>Konten pembelajaran pengelolaan sampah berbasis riset untuk disertasi</p></div>
+  <div class="m-tabs">
+    <button class="mtab active" onclick="filterM('semua',this)">Semua</button>
+    <button class="mtab" onclick="filterM('video',this)">🎬 Video</button>
+    <button class="mtab" onclick="filterM('artikel',this)">📄 Artikel</button>
+    <button class="mtab" onclick="filterM('organik',this)">🌿 Organik</button>
+    <button class="mtab" onclick="filterM('anorganik',this)">♻️ Anorganik</button>
+    <button class="mtab" onclick="filterM('b3',this)">⚠️ B3</button>
   </div>
-  <div class="materi-tabs">
-    <button class="materi-tab active" onclick="filterMateri('semua',this)">Semua</button>
-    <button class="materi-tab" onclick="filterMateri('video',this)">🎬 Video</button>
-    <button class="materi-tab" onclick="filterMateri('artikel',this)">📄 Artikel</button>
-    <button class="materi-tab" onclick="filterMateri('organik',this)">🌿 Organik</button>
-    <button class="materi-tab" onclick="filterMateri('anorganik',this)">♻️ Anorganik</button>
-    <button class="materi-tab" onclick="filterMateri('b3',this)">⚠️ B3</button>
-  </div>
-  <div class="materi-grid" id="materi-grid"></div>
+  <div class="m-grid" id="m-grid"></div>
+</div>
+
+<!-- INSTAGRAM -->
+<div id="page-ig" class="page">
+  <div class="pg-title"><h2>Referensi Instagram</h2><p>Akun &amp; konten Instagram terpilih seputar pengelolaan sampah di Indonesia</p></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px" id="ig-grid"></div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
-  <div class="page-header">
-    <h2>Dashboard Riset</h2>
-    <p>Statistik dan visualisasi data hasil analisis sampah</p>
+  <div class="pg-title"><h2>Dashboard Riset</h2><p>Statistik &amp; visualisasi data hasil analisis sampah</p></div>
+  <div class="stats4">
+    <div class="scard"><div class="snum" id="s-total">0</div><div class="slabel">Total Analisis</div></div>
+    <div class="scard"><div class="snum" id="s-organik">0</div><div class="slabel">Organik</div></div>
+    <div class="scard"><div class="snum blue" id="s-anorganik">0</div><div class="slabel">Anorganik</div></div>
+    <div class="scard"><div class="snum coral" id="s-b3">0</div><div class="slabel">B3 &amp; Residu</div></div>
   </div>
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num green" id="s-total">0</div><div class="stat-label">Total Analisis</div></div>
-    <div class="stat-card"><div class="stat-num green" id="s-organik">0</div><div class="stat-label">Organik</div></div>
-    <div class="stat-card"><div class="stat-num blue" id="s-anorganik">0</div><div class="stat-label">Anorganik</div></div>
-    <div class="stat-card"><div class="stat-num coral" id="s-b3">0</div><div class="stat-label">B3 &amp; Residu</div></div>
-  </div>
-  <div class="chart-panel">
-    <div class="chart-label">Distribusi Kategori Sampah Terdeteksi</div>
-    <div id="chart-area"><div class="empty-state">Belum ada data. Lakukan analisis gambar terlebih dahulu.</div></div>
-  </div>
-  <div class="history-panel">
-    <div class="chart-label">Riwayat Analisis</div>
-    <div id="history-area"><div class="empty-state">Belum ada riwayat analisis.</div></div>
-  </div>
+  <div class="cpanel"><div class="ctitle">Distribusi Kategori Sampah Terdeteksi</div><div id="chart-area"><div class="empty">Belum ada data analisis.</div></div></div>
+  <div class="hpanel"><div class="ctitle">Riwayat Analisis</div><div id="hist-area"><div class="empty">Belum ada riwayat.</div></div></div>
 </div>
 
 <!-- TENTANG -->
 <div id="page-tentang" class="page">
   <div class="about-hero">
-    <div class="about-logo">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="M12 3C8 3 5 7 5 11c0 3 1.5 5.5 4 7l3 2 3-2c2.5-1.5 4-4 4-7 0-4-3-8-7-8z" fill="#1a3a0a"/>
-        <path d="M9 11c0 1.66 1.34 3 3 3s3-1.34 3-3" stroke="#c8e87a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-        <circle cx="12" cy="11" r="1.8" fill="#c8e87a"/>
-      </svg>
-    </div>
-    <div class="about-name">SapuLidi</div>
-    <div class="about-tagline">Sistem Analisis &amp; Pengelolaan Limbah Cerdas</div>
-    <div class="about-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan teknologi Google Gemini Vision untuk mendeteksi dan mengklasifikasi sampah secara otomatis dari gambar.</div>
-    <div class="about-ver">Versi 2.0 · Prototipe Disertasi S3</div>
+    <div class="a-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3C8.5 3 5.5 6.5 5.5 10.5c0 2.8 1.4 5.2 3.8 6.7L12 19l2.7-1.8c2.4-1.5 3.8-3.9 3.8-6.7C18.5 6.5 15.5 3 12 3z" fill="#1a3a0a"/><path d="M9.5 10.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5" stroke="#c8e87a" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="10.5" r="1.6" fill="#c8e87a"/></svg></div>
+    <div class="a-name">SapuLidi</div>
+    <div class="a-by">by Navis</div>
+    <div class="a-tag">Sistem Analisis &amp; Pengelolaan Limbah Cerdas</div>
+    <div class="a-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan Google Gemini Vision untuk mendeteksi dan mengklasifikasi sampah dari gambar secara otomatis.</div>
+    <div class="a-ver">Versi 2.1 · Prototipe Disertasi S3</div>
   </div>
-  <div class="features-grid">
-    <div class="feature-card"><div class="feat-icon">🔍</div><div class="feat-title">Deteksi AI Real-time</div><div class="feat-desc">Identifikasi jenis dan kategori sampah dari foto menggunakan Google Gemini 1.5 Flash dengan akurasi tinggi</div></div>
-    <div class="feature-card"><div class="feat-icon">📚</div><div class="feat-title">Edukasi Terstruktur</div><div class="feat-desc">Materi dan video pembelajaran pengelolaan sampah yang dikurasi dari sumber penelitian terpercaya</div></div>
-    <div class="feature-card"><div class="feat-icon">📊</div><div class="feat-title">Dashboard Riset</div><div class="feat-desc">Visualisasi data statistik hasil deteksi untuk mendukung analisis dan pelaporan penelitian</div></div>
-    <div class="feature-card"><div class="feat-icon">♻️</div><div class="feat-title">4 Kategori Sampah</div><div class="feat-desc">Klasifikasi komprehensif: Organik, Anorganik, B3 Berbahaya, dan Residu dengan panduan penanganan</div></div>
+  <div class="feat-grid">
+    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Google Gemini 2.0 Flash</div></div>
+    <div class="fcard"><div class="ficon">📚</div><div class="ftit">Edukasi Terstruktur</div><div class="fdesc">Video &amp; artikel dari sumber terpercaya untuk mendukung riset pengelolaan sampah</div></div>
+    <div class="fcard"><div class="ficon">📱</div><div class="ftit">Referensi Instagram</div><div class="fdesc">Kurasi akun Instagram terpilih sebagai referensi konten edukasi pengelolaan sampah</div></div>
+    <div class="fcard"><div class="ficon">📊</div><div class="ftit">Dashboard Riset</div><div class="fdesc">Visualisasi data &amp; statistik hasil deteksi untuk analisis dan pelaporan penelitian</div></div>
   </div>
   <div class="tech-panel">
-    <div class="tech-title">Teknologi yang Digunakan</div>
+    <div class="tech-label">Teknologi</div>
     <div class="tech-tags">
-      <span class="tech-tag" style="background:var(--green-pale);color:var(--green-dark)">Google Gemini 1.5 Flash</span>
-      <span class="tech-tag" style="background:var(--blue-light);color:var(--blue)">HTML5 / CSS3 / JavaScript</span>
-      <span class="tech-tag" style="background:var(--amber-light);color:#854f0b">Gemini Vision API</span>
-      <span class="tech-tag" style="background:#f1efee;color:#444">Vercel Hosting</span>
-      <span class="tech-tag" style="background:var(--coral-light);color:var(--coral)">GitHub CI/CD</span>
+      <span class="tt" style="background:var(--g1);color:var(--g8)">Google Gemini 2.0 Flash</span>
+      <span class="tt" style="background:var(--b1);color:var(--b7)">HTML5 / CSS3 / JavaScript</span>
+      <span class="tt" style="background:var(--a1);color:#7a4a00">Gemini Vision API</span>
+      <span class="tt" style="background:#f1efee;color:#444">Vercel Hosting</span>
+      <span class="tt" style="background:var(--c1);color:var(--c6)">GitHub CI/CD</span>
     </div>
   </div>
 </div>
 
 <!-- VIDEO MODAL -->
-<div class="modal-overlay" id="video-modal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeVideo()">✕</button>
-    <div class="iframe-wrap">
-      <iframe id="video-iframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
-    </div>
+<div class="vmodal" id="vmodal">
+  <div class="vbox">
+    <button class="vclose" onclick="closeV()">✕</button>
+    <div class="vwrap"><iframe id="vframe" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>
   </div>
 </div>
 
 <script>
-// ======= CONFIG =======
-const GEMINI_API_KEY = 'AIzaSyCQQNzv1ktAROBvXMshLAiBRPqxEnk4zH4';
+const GEMINI_KEY = 'PASTE_API_KEY_DISINI';
 
-// ======= DATA MATERI =======
+// ===== DATA MATERI =====
 const MATERI = [
-  {id:1,tipe:'video',kat:'organik',judul:'Pengomposan Sampah Organik Skala Rumah Tangga',desc:'Teknik pembuatan kompos dari sisa dapur dan limbah organik untuk mengurangi volume sampah ke TPA.',author:'Kementerian LHK',url:'https://www.youtube.com/embed/VIDEO_ID_1'},
-  {id:2,tipe:'artikel',kat:'anorganik',judul:'Panduan Pemilahan Plastik Berdasarkan Kode Resin',desc:'Memahami 7 jenis kode plastik, mana yang bisa didaur ulang dan cara pemilahan yang benar.',author:'KLHK Indonesia',url:''},
-  {id:3,tipe:'video',kat:'b3',judul:'Penanganan Limbah B3 Rumah Tangga yang Aman',desc:'Identifikasi limbah berbahaya di rumah tangga dan prosedur pembuangan yang sesuai regulasi.',author:'BRIN Pusat Riset Lingkungan',url:'https://www.youtube.com/embed/VIDEO_ID_2'},
-  {id:4,tipe:'video',kat:'organik',judul:'Bank Sampah: Solusi Ekonomi Sirkular Masyarakat',desc:'Model pengelolaan bank sampah berbasis komunitas sebagai pendekatan ekonomi sirkular di tingkat kelurahan.',author:'Ditjen PSLB3 KLHK',url:'https://www.youtube.com/embed/VIDEO_ID_3'},
-  {id:5,tipe:'artikel',kat:'anorganik',judul:'Extended Producer Responsibility (EPR) di Indonesia',desc:'Regulasi tanggung jawab produsen terhadap kemasan pasca konsumsi dan implementasinya di Indonesia.',author:'ICEL Indonesia',url:''},
-  {id:6,tipe:'video',kat:'b3',judul:'Teknologi Pengolahan Leachate TPA Modern',desc:'Sistem pengelolaan air lindi TPA menggunakan teknologi aerobik dan anaerobik untuk cegah pencemaran.',author:'Institut Teknologi Bandung',url:'https://www.youtube.com/embed/VIDEO_ID_4'},
-  {id:7,tipe:'artikel',kat:'organik',judul:'Biogas dari Sampah Organik: Potensi Energi Terbarukan',desc:'Teknologi konversi sampah organik menjadi biogas sebagai sumber energi terbarukan berskala komunitas.',author:'BPPT Indonesia',url:''},
-  {id:8,tipe:'video',kat:'anorganik',judul:'Inovasi Daur Ulang Plastik Menjadi Produk Bernilai',desc:'Proses transformasi sampah plastik menjadi produk bernilai ekonomi melalui teknologi daur ulang modern.',author:'Waste4Change',url:'https://www.youtube.com/embed/VIDEO_ID_5'},
+  {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Kompos dari Sampah Dapur',desc:'Tutorial lengkap pengomposan sampah organik rumah tangga menjadi pupuk kompos berkualitas tinggi.',author:'Waste4Change',url:'https://www.youtube.com/embed/pWiMFopZBOo'},
+  {id:2,tipe:'video',kat:'organik',judul:'Bank Sampah: Solusi Pengelolaan Sampah Masyarakat',desc:'Model bank sampah sebagai pendekatan ekonomi sirkular di tingkat kelurahan dan komunitas.',author:'KLHK Indonesia',url:'https://www.youtube.com/embed/xN5_lHHKGiE'},
+  {id:3,tipe:'video',kat:'anorganik',judul:'Inovasi Daur Ulang Plastik Indonesia',desc:'Teknologi transformasi sampah plastik menjadi produk bernilai ekonomi tinggi.',author:'Waste4Change',url:'https://www.youtube.com/embed/RS7IzU2VJIQ'},
+  {id:4,tipe:'video',kat:'b3',judul:'Penanganan Limbah B3 Rumah Tangga',desc:'Identifikasi dan penanganan limbah berbahaya dari lingkungan rumah tangga secara aman.',author:'BRIN Indonesia',url:'https://www.youtube.com/embed/VbiRNT_gWUQ'},
+  {id:5,tipe:'artikel',kat:'anorganik',judul:'Panduan Lengkap Pemilahan Sampah Plastik',desc:'7 jenis kode plastik dan cara pemilahan yang benar sebelum masuk ke fasilitas daur ulang.',author:'KLHK Indonesia',url:'https://waste4change.com/blog/cara-edukasi-manajemen-sampah-yang-bisa-dilakukan-di-sekolah/'},
+  {id:6,tipe:'artikel',kat:'b3',judul:'Extended Producer Responsibility di Indonesia',desc:'Regulasi tanggung jawab produsen terhadap kemasan pasca konsumsi dan implementasinya.',author:'ICEL Indonesia',url:'https://ptali.org/edukasi-tentang-pengelolaan-sampah-langkah-awal-menuju-lingkungan-yang-lebih-bersih/'},
+  {id:7,tipe:'video',kat:'organik',judul:'Zero Waste to Landfill: Gerakan Global',desc:'Gerakan mengurangi sampah ke TPA melalui pilah sampah, daur ulang, dan pengomposan.',author:'Waste4Change',url:'https://www.youtube.com/embed/Rw4HQSS-lB0'},
+  {id:8,tipe:'artikel',kat:'anorganik',judul:'Biogas dari Sampah Organik: Energi Terbarukan',desc:'Konversi sampah organik menjadi biogas sebagai sumber energi terbarukan skala komunitas.',author:'BPPT Indonesia',url:'https://dlh.bulelengkab.go.id/informasi/detail/artikel/pengertian-dan-pengelolaan-sampah-organik-dan-anorganik-13'},
 ];
 
-const CAT_COLOR = {organik:'badge-organik',anorganik:'badge-anorganik',b3:'badge-b3',residu:'badge-residu'};
-const CAT_FILL  = {organik:'#97c459',anorganik:'#378add',b3:'#d85a30',residu:'#ef9f27'};
-const CAT_LABEL = {organik:'Organik',anorganik:'Anorganik',b3:'B3 Berbahaya',residu:'Residu'};
-const THUMB_BG  = {organik:'thumb-artikel-organik',anorganik:'thumb-artikel-anorganik',b3:'thumb-artikel-b3'};
-const THUMB_EM  = {organik:'🌿',anorganik:'♻️',b3:'⚠️'};
+// ===== DATA INSTAGRAM =====
+const IG_DATA = [
+  {handle:'@zerowasteid',name:'Zero Waste Indonesia',desc:'Komunitas aktif edukasi gaya hidup minim sampah. Konten pilah sampah, tips zero waste, dan kampanye lingkungan yang relevan untuk referensi penelitian lapangan.',emoji:'♻️',url:'https://www.instagram.com/zerowasteid'},
+  {handle:'@waste4change',name:'Waste4Change',desc:'Platform pengelolaan sampah profesional. Infografis data sampah Indonesia, solusi bisnis berkelanjutan, dan konten edukasi berbasis riset yang cocok untuk disertasi.',emoji:'🔬',url:'https://www.instagram.com/waste4change'},
+  {handle:'@ditjenpslb3',name:'Ditjen PSLB3 KLHK',desc:'Akun resmi Direktorat Jenderal PSLB3 Kementerian LHK. Kebijakan terkini, data statistik sampah nasional, dan program pengelolaan limbah B3.',emoji:'🏛️',url:'https://www.instagram.com/ditjenpslb3'},
+  {handle:'@gringgoapp',name:'Gringgo Indonesia',desc:'Startup teknologi pengelolaan sampah berbasis AI. Inovasi pemilahan digital dan ekonomi sirkular, sangat relevan untuk bab teknologi dalam disertasi.',emoji:'🤖',url:'https://www.instagram.com/gringgoapp'},
+  {handle:'@kertabumirecycling',name:'Kertabumi Recycling',desc:'Platform daur ulang digital dan bank sampah. Konten edukasi jenis plastik, cara daur ulang, dan program drop-off sampah untuk referensi studi lapangan.',emoji:'🌱',url:'https://www.instagram.com/kertabumirecycling'},
+  {handle:'@indonesiaasri',name:'Indonesia Asri',desc:'Inisiatif lingkungan dari Chandra Asri Group. Kampanye Operasi Semut, data komposisi sampah Indonesia, dan upaya industri dalam EPR (Extended Producer Responsibility).',emoji:'🌿',url:'https://www.instagram.com/indonesiaasri_id'},
+];
 
-let imgData=null, imgType='image/jpeg';
-let catCount={organik:0,anorganik:0,b3:0,residu:0};
-let history=[];
+const CF={organik:'b-organik',anorganik:'b-anorganik',b3:'b-b3',residu:'b-residu'};
+const FF={organik:'#97c459',anorganik:'#378add',b3:'#d85a30',residu:'#ef9f27'};
+const CL={organik:'Organik',anorganik:'Anorganik',b3:'B3 Berbahaya',residu:'Residu'};
+const KE={organik:'🌿',anorganik:'♻️',b3:'⚠️',residu:'🚫'};
+const KBG={organik:'mt-o',anorganik:'mt-a',b3:'mt-b'};
 
-// ======= NAV =======
+let imgData=null,imgType='image/jpeg',catCnt={organik:0,anorganik:0,b3:0,residu:0},hist=[];
+
+// ===== NAV =====
 function showPage(p,btn){
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
   btn.classList.add('active');
-  if(p==='dashboard') updateDashboard();
+  if(p==='dashboard') updateDash();
+  if(p==='ig') renderIG();
 }
 
-// ======= UPLOAD =======
+// ===== UPLOAD =====
 document.getElementById('file-input').addEventListener('change',function(e){
-  const f=e.target.files[0]; if(!f) return;
+  const f=e.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=function(ev){
+  r.onload=ev=>{
     const img=document.getElementById('preview-img');
-    img.src=ev.target.result; img.style.display='block';
-    document.getElementById('up-placeholder').style.display='none';
-    document.getElementById('analyze-btn').disabled=false;
-    imgData=ev.target.result.split(',')[1];
-    imgType=f.type;
+    img.src=ev.target.result;img.style.display='block';
+    document.getElementById('up-ph').style.display='none';
+    document.getElementById('go-btn').disabled=false;
+    imgData=ev.target.result.split(',')[1];imgType=f.type;
   };
   r.readAsDataURL(f);
 });
 
-// ======= ANALYZE =======
+// ===== ANALYZE =====
 async function analyzeWaste(){
-  if(!imgData) return;
-  document.getElementById('result-empty').style.display='none';
+  if(!imgData)return;
+  document.getElementById('r-empty').style.display='none';
   document.getElementById('result-content').style.display='none';
   document.getElementById('loading').style.display='flex';
-  document.getElementById('analyze-btn').disabled=true;
-
+  document.getElementById('go-btn').disabled=true;
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        contents:[{parts:[
-          {inline_data:{mime_type:imgType,data:imgData}},
-          {text:`Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah. Analisis gambar ini dengan teliti dan identifikasi semua jenis sampah yang terlihat.
-
-Berikan respons HANYA dalam format JSON berikut, tanpa teks tambahan, tanpa markdown backticks:
-{
-  "items": [
-    {
-      "nama": "nama spesifik sampah dalam bahasa Indonesia",
-      "kategori": "organik atau anorganik atau b3 atau residu",
-      "confidence": angka_0_sampai_100,
-      "penanganan": "cara penanganan singkat dalam satu kalimat"
-    }
-  ],
-  "ringkasan": "deskripsi kondisi sampah dalam gambar, 1-2 kalimat",
-  "rekomendasi": "rekomendasi pengelolaan terbaik, 1 kalimat"
-}`}
-        ]}]
-      })
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[
+        {inline_data:{mime_type:imgType,data:imgData}},
+        {text:`Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":0-100,"penanganan":"cara penanganan singkat"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`}
+      ]}]})
     });
     const d=await res.json();
-    if(d.error) throw new Error(d.error.message);
+    if(d.error)throw new Error(d.error.message);
     const txt=d.candidates[0].content.parts[0].text;
-    const clean=txt.replace(/```json|```/g,'').trim();
-    const result=JSON.parse(clean);
+    const result=JSON.parse(txt.replace(/```json|```/g,'').trim());
     renderResult(result);
   }catch(err){
     document.getElementById('loading').style.display='none';
     document.getElementById('result-content').style.display='block';
-    document.getElementById('result-content').innerHTML=`<div class="error-box"><p>Gagal menganalisis gambar</p><span>${err.message||'Periksa API key dan koneksi internet'}</span></div>`;
-    document.getElementById('analyze-btn').disabled=false;
+    document.getElementById('result-content').innerHTML=`<div class="err-box"><p>Gagal menganalisis</p><span>${err.message||'Periksa API key & koneksi'}</span></div>`;
+    document.getElementById('go-btn').disabled=false;
   }
 }
 
 function renderResult(r){
   document.getElementById('loading').style.display='none';
-  const rc=document.getElementById('result-content');
-  rc.style.display='block';
+  const rc=document.getElementById('result-content');rc.style.display='block';
+  r.items.forEach(i=>{const k=i.kategori.toLowerCase();if(catCnt[k]!==undefined)catCnt[k]++;});
+  hist.unshift({time:new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}),count:r.items.length,cats:[...new Set(r.items.map(i=>i.kategori.toLowerCase()))]});
+  rc.innerHTML=`<div class="r-head">Terdeteksi <span class="r-count">${r.items.length} jenis</span></div>
+  ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div><div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
+  <div class="sum-box"><div class="sum-label">Ringkasan</div><p>${r.ringkasan}</p><div class="sum-rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div></div>`;
+  document.getElementById('go-btn').disabled=false;
+}
 
-  r.items.forEach(item=>{
-    const k=item.kategori.toLowerCase();
-    if(catCount[k]!==undefined) catCount[k]++;
-  });
-  history.unshift({time:new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}),count:r.items.length,cats:[...new Set(r.items.map(i=>i.kategori.toLowerCase()))]});
-
-  rc.innerHTML=`
-    <div class="result-title">
-      Terdeteksi <span class="result-count">${r.items.length} jenis sampah</span>
-    </div>
-    ${r.items.map(item=>`
-      <div class="waste-item">
-        <div class="waste-left">
-          <div class="waste-dot" style="background:${CAT_FILL[item.kategori.toLowerCase()]||'#aaa'}"></div>
-          <div class="waste-info">
-            <div class="waste-name">${item.nama}</div>
-            <div class="waste-handle">${item.penanganan}</div>
-            <div class="conf-row">
-              <div class="conf-bar"><div class="conf-fill" style="width:${item.confidence}%;background:${CAT_FILL[item.kategori.toLowerCase()]||'#aaa'}"></div></div>
-              <span class="conf-val">${item.confidence}%</span>
-            </div>
-          </div>
-        </div>
-        <span class="waste-badge ${CAT_COLOR[item.kategori.toLowerCase()]||'badge-residu'}">${CAT_LABEL[item.kategori.toLowerCase()]||item.kategori}</span>
+// ===== MATERI =====
+function renderM(filter){
+  const data=filter==='semua'?MATERI:MATERI.filter(m=>filter==='video'?m.tipe==='video':filter==='artikel'?m.tipe==='artikel':m.kat===filter);
+  document.getElementById('m-grid').innerHTML=data.map(m=>`
+    <div class="mcard" onclick="${m.tipe==='video'?`openV('${m.url}')`:m.url?`window.open('${m.url}','_blank')`:''}">
+      <div class="mthumb ${m.tipe==='video'?'mt-vid':KBG[m.kat]||'mt-o'}">
+        ${m.tipe==='video'?`<div style="text-align:center"><div style="font-size:34px;margin-bottom:8px">${KE[m.kat]||'📄'}</div><div class="play-ring"><svg viewBox="0 0 24 24" fill="var(--g8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="mtype mt-vid-badge">VIDEO</div>`:`<div style="font-size:42px">${KE[m.kat]||'📄'}</div><div class="mtype mt-art-badge">ARTIKEL</div>`}
       </div>
-    `).join('')}
-    <div class="summary-box">
-      <div class="sum-title">Ringkasan Analisis</div>
-      <p>${r.ringkasan}</p>
-      <div class="rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div>
-    </div>
-  `;
-  document.getElementById('analyze-btn').disabled=false;
+      <div class="mb"><div class="mcat">${m.kat.toUpperCase()}</div><div class="mtit">${m.judul}</div><div class="mdesc">${m.desc}</div></div>
+      <div class="mfoot"><div class="mauthor">${m.author}</div><button class="mcta">${m.tipe==='video'?'▶ Tonton':'Baca →'}</button></div>
+    </div>`).join('');
 }
+function filterM(f,btn){document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderM(f);}
 
-// ======= MATERI =======
-function renderMateri(filter){
-  const data=filter==='semua'?MATERI:MATERI.filter(m=>
-    filter==='video'?m.tipe==='video':
-    filter==='artikel'?m.tipe==='artikel':
-    m.kat===filter
-  );
-  document.getElementById('materi-grid').innerHTML=data.map(m=>`
-    <div class="materi-card">
-      <div class="thumb ${m.tipe==='video'?'thumb-video':THUMB_BG[m.kat]||'thumb-artikel-organik'}" onclick="${m.tipe==='video'&&m.url?`openVideo('${m.url}')`:''}" style="cursor:${m.tipe==='video'?'pointer':'default'}">
-        ${m.tipe==='video'?`
-          <div style="text-align:center">
-            <div style="font-size:36px;margin-bottom:10px">${THUMB_EM[m.kat]||'📄'}</div>
-            <div class="play-circle"><svg viewBox="0 0 24 24" fill="#1a3a0a"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
-          </div>
-          <div class="type-badge type-video">VIDEO</div>
-        `:`
-          <div style="font-size:44px">${THUMB_EM[m.kat]||'📄'}</div>
-          <div class="type-badge type-artikel">ARTIKEL</div>
-        `}
+// ===== INSTAGRAM =====
+function renderIG(){
+  document.getElementById('ig-grid').innerHTML=IG_DATA.map(ig=>`
+    <div class="ig-card">
+      <div class="ig-header">
+        <div class="ig-avatar">${ig.emoji}</div>
+        <div><div class="ig-name">${ig.name}</div><div class="ig-handle">${ig.handle}</div></div>
       </div>
-      <div class="materi-body">
-        <div class="materi-cat">${m.kat.toUpperCase()}</div>
-        <div class="materi-title">${m.judul}</div>
-        <div class="materi-desc">${m.desc}</div>
+      <div class="ig-body">
+        <div class="ig-desc">${ig.desc}</div>
+        <a class="ig-link" href="${ig.url}" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
+          Buka di Instagram
+        </a>
       </div>
-      <div class="materi-footer">
-        <div class="materi-author">${m.author}</div>
-        <button class="materi-cta" onclick="${m.tipe==='video'&&m.url?`openVideo('${m.url}')`:''}">${m.tipe==='video'?'▶ Tonton':'Baca →'}</button>
-      </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-function filterMateri(f,btn){
-  document.querySelectorAll('.materi-tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  renderMateri(f);
-}
+// ===== VIDEO MODAL =====
+function openV(url){document.getElementById('vframe').src=url;document.getElementById('vmodal').classList.add('open');}
+function closeV(){document.getElementById('vframe').src='';document.getElementById('vmodal').classList.remove('open');}
 
-function openVideo(url){
-  document.getElementById('video-iframe').src=url;
-  document.getElementById('video-modal').classList.add('open');
-}
-function closeVideo(){
-  document.getElementById('video-iframe').src='';
-  document.getElementById('video-modal').classList.remove('open');
-}
-
-// ======= DASHBOARD =======
-function updateDashboard(){
-  const total=Object.values(catCount).reduce((a,b)=>a+b,0);
-  document.getElementById('s-total').textContent=history.length;
-  document.getElementById('s-organik').textContent=catCount.organik;
-  document.getElementById('s-anorganik').textContent=catCount.anorganik;
-  document.getElementById('s-b3').textContent=catCount.b3+catCount.residu;
-
+// ===== DASHBOARD =====
+function updateDash(){
+  const total=Object.values(catCnt).reduce((a,b)=>a+b,0);
+  document.getElementById('s-total').textContent=hist.length;
+  document.getElementById('s-organik').textContent=catCnt.organik;
+  document.getElementById('s-anorganik').textContent=catCnt.anorganik;
+  document.getElementById('s-b3').textContent=catCnt.b3+catCnt.residu;
   const ca=document.getElementById('chart-area');
-  if(total===0){ca.innerHTML='<div class="empty-state">Belum ada data. Lakukan analisis gambar terlebih dahulu.</div>';}
-  else{ca.innerHTML=Object.entries(catCount).map(([k,v])=>`
-    <div class="bar-row">
-      <div class="bar-name">${CAT_LABEL[k]}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${Math.round(v/total*100)}%;background:${CAT_FILL[k]}"></div></div>
-      <div class="bar-num">${v}</div>
-    </div>`).join('');}
-
-  const ha=document.getElementById('history-area');
-  if(history.length===0){ha.innerHTML='<div class="empty-state">Belum ada riwayat analisis.</div>';}
-  else{ha.innerHTML=history.slice(0,10).map(h=>`
-    <div class="history-item">
-      <div class="h-icon">🔍</div>
-      <div class="h-info"><div class="h-title">Analisis ${h.count} jenis sampah</div><div class="h-time">Hari ini · ${h.time}</div></div>
-      <div class="h-cats">${h.cats.map(c=>`<span class="waste-badge ${CAT_COLOR[c]||'badge-residu'}">${CAT_LABEL[c]||c}</span>`).join('')}</div>
-    </div>`).join('');}
+  ca.innerHTML=total===0?'<div class="empty">Belum ada data analisis.</div>':Object.entries(catCnt).map(([k,v])=>`<div class="brow"><div class="bname">${CL[k]}</div><div class="btrack"><div class="bfill" style="width:${Math.round(v/total*100)}%;background:${FF[k]}"></div></div><div class="bval">${v}</div></div>`).join('');
+  const ha=document.getElementById('hist-area');
+  ha.innerHTML=hist.length===0?'<div class="empty">Belum ada riwayat.</div>':hist.slice(0,10).map(h=>`<div class="hitem"><div class="hico">🔍</div><div class="hinfo"><div class="htit">Analisis ${h.count} jenis sampah</div><div class="htime">Hari ini · ${h.time}</div></div><div class="hbadges">${h.cats.map(c=>`<span class="badge ${CF[c]||'b-residu'}">${CL[c]||c}</span>`).join('')}</div></div>`).join('');
 }
 
-// ======= INIT =======
-renderMateri('semua');
+// ===== INIT =====
+renderM('semua');
 </script>
 </body>
 </html>
