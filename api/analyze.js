@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   try {
     const { imageData, mimeType } = req.body;
-    if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing imageData or mimeType' });
+    if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing data' });
 
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         'X-Title': 'SapuLidi'
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.0-flash-exp:free',
+        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
         messages: [{
           role: 'user',
           content: [
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
             },
             {
               type: 'text',
-              text: `Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":0-100,"penanganan":"cara penanganan singkat"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`
+              text: `Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan apapun:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":85,"penanganan":"cara penanganan singkat"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`
             }
           ]
         }]
@@ -36,7 +36,8 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
+
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
     const text = data.choices[0].message.content;
     const clean = text.replace(/```json|```/g, '').trim();
