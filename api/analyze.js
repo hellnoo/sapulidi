@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         'X-Title': 'SapuLidi'
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
+        model: 'google/gemma-3-27b-it:free',
         messages: [{
           role: 'user',
           content: [
@@ -36,7 +36,6 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-
     if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
     const text = data.choices[0].message.content;
