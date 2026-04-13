@@ -443,7 +443,7 @@ async function analyzeWaste(){
   document.getElementById('loading').style.display='flex';
   document.getElementById('go-btn').disabled=true;
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/gemini-1.5-flash-latest:generateContent?key=${GEMINI_KEY}`,{
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{parts:[
         {inline_data:{mime_type:imgType,data:imgData}},
