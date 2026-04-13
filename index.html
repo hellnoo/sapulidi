@@ -379,7 +379,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 </div>
 
 <script>
-const GEMINI_KEY = 'AIzaSyDp78PiVAQiSzWWE2QTMI3gMwO5B_9tWEc';
+const GEMINI_KEY = 'PASTE_API_KEY_DISINI';
 
 // ===== DATA MATERI =====
 const MATERI = [
@@ -443,13 +443,7 @@ async function analyzeWaste(){
   document.getElementById('loading').style.display='flex';
   document.getElementById('go-btn').disabled=true;
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/gemini-pro-vision:generateContent?key=${GEMINI_KEY}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{parts:[
-        {inline_data:{mime_type:imgType,data:imgData}},
-        {text:`Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":0-100,"penanganan":"cara penanganan singkat"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`}
-      ]}]})
-    });
+    const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageData:imgData,mimeType:imgType})});
     const d=await res.json();
     if(d.error)throw new Error(d.error.message);
     const txt=d.candidates[0].content.parts[0].text;
