@@ -379,7 +379,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 </div>
 
 <script>
-const GEMINI_KEY = 'AIzaSyDp78PiVAQiSzWWE2QTMI3gMwO5B_9tWEc';
+const GEMINI_KEY = 'PASTE_API_KEY_DISINI';
 
 // ===== DATA MATERI =====
 const MATERI = [
@@ -445,10 +445,8 @@ async function analyzeWaste(){
   try{
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageData:imgData,mimeType:imgType})});
     const d=await res.json();
-    if(d.error)throw new Error(d.error.message);
-    const txt=d.candidates[0].content.parts[0].text;
-    const result=JSON.parse(txt.replace(/```json|```/g,'').trim());
-    renderResult(result);
+    if(d.error)throw new Error(d.error);
+    renderResult(d);
   }catch(err){
     document.getElementById('loading').style.display='none';
     document.getElementById('result-content').style.display='block';
