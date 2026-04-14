@@ -18,7 +18,7 @@ export default async function handler(req, res) {
         'X-Title': 'SapuLidi'
       },
       body: JSON.stringify({
-        model: 'google/gemma-3-27b-it:free',
+        model: 'meta-llama/llama-3.2-11b-vision-instruct:free',
         messages: [{
           role: 'user',
           content: [
