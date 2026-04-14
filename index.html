@@ -231,6 +231,31 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .tech-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 .tech-tags{display:flex;flex-wrap:wrap;gap:7px}
 .tt{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px}
+
+/* ===== DRAG & DROP ===== */
+.upload-zone.drag-over{border-color:var(--g5) !important;background:var(--g2) !important;transform:scale(1.01)}
+
+/* ===== CAMERA / CLEAR ===== */
+.cam-btn{width:100%;margin-top:8px;padding:10px;background:var(--white);color:var(--g7);border:1.5px solid var(--border);border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;justify-content:center;gap:7px}
+.cam-btn:hover{background:var(--g1);border-color:var(--g3)}
+.clear-link{display:none;text-align:center;margin-top:6px;font-size:11px;color:var(--muted);cursor:pointer;user-select:none}
+.clear-link:hover{color:var(--r5);text-decoration:underline}
+
+/* ===== NOTES ===== */
+.notes-wrap{margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.notes-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.notes-ta{width:100%;padding:9px 11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;border:1px solid var(--border);border-radius:9px;resize:vertical;background:var(--surface);color:var(--ink);line-height:1.5;transition:border-color 0.15s;min-height:60px}
+.notes-ta:focus{outline:none;border-color:var(--g4)}
+.notes-save{margin-top:6px;padding:7px 14px;background:var(--g8);color:var(--g3);border:none;border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:background 0.15s}
+.notes-save:hover{background:var(--g7)}
+
+/* ===== EXPORT / RESET ===== */
+.exp-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.exp-btn{padding:9px 16px;border-radius:9px;border:1.5px solid var(--border);background:var(--white);font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.exp-btn:hover{background:var(--g1);border-color:var(--g3);color:var(--g7)}
+.exp-btn.json:hover{background:var(--b1);border-color:var(--b2);color:var(--b5)}
+.reset-dash{margin-left:auto;padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s}
+.reset-dash:hover{border-color:var(--r5);color:var(--r5)}
 </style>
 </head>
 <body>
@@ -265,7 +290,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div id="page-detect" class="page active">
   <div class="pg-title">
     <h2>Deteksi Sampah AI</h2>
-    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Google Gemini Vision</p>
+    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Google Gemma 3 27B via OpenRouter</p>
   </div>
   <div class="detect-wrap">
     <div class="panel">
@@ -280,10 +305,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
           <img id="preview-img" src="" alt="">
         </div>
         <input type="file" id="file-input" accept="image/*">
+        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none">
         <button class="go-btn" id="go-btn" disabled onclick="analyzeWaste()">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           Analisis dengan AI
         </button>
+        <button class="cam-btn" onclick="document.getElementById('camera-input').click()">
+          📷 Gunakan Kamera
+        </button>
+        <div class="clear-link" id="clear-link" onclick="clearImage()">✕ Hapus gambar</div>
       </div>
     </div>
     <div class="panel">
@@ -340,6 +370,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   </div>
   <div class="cpanel"><div class="ctitle">Distribusi Kategori Sampah Terdeteksi</div><div id="chart-area"><div class="empty">Belum ada data analisis.</div></div></div>
   <div class="hpanel"><div class="ctitle">Riwayat Analisis</div><div id="hist-area"><div class="empty">Belum ada riwayat.</div></div></div>
+  <div class="exp-row">
+    <button class="exp-btn" onclick="exportCSV()">📥 Export CSV</button>
+    <button class="exp-btn json" onclick="exportJSON()">📥 Export JSON</button>
+    <button class="reset-dash" onclick="resetDash()">🗑 Reset Data</button>
+  </div>
 </div>
 
 <!-- TENTANG -->
@@ -353,7 +388,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
     <div class="a-ver">Versi 2.1 · Prototipe Disertasi S3</div>
   </div>
   <div class="feat-grid">
-    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Google Gemini 2.0 Flash</div></div>
+    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Google Gemma 3 27B via OpenRouter</div></div>
     <div class="fcard"><div class="ficon">📚</div><div class="ftit">Edukasi Terstruktur</div><div class="fdesc">Video &amp; artikel dari sumber terpercaya untuk mendukung riset pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📱</div><div class="ftit">Referensi Instagram</div><div class="fdesc">Kurasi akun Instagram terpilih sebagai referensi konten edukasi pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📊</div><div class="ftit">Dashboard Riset</div><div class="fdesc">Visualisasi data &amp; statistik hasil deteksi untuk analisis dan pelaporan penelitian</div></div>
@@ -361,9 +396,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="tech-panel">
     <div class="tech-label">Teknologi</div>
     <div class="tech-tags">
-      <span class="tt" style="background:var(--g1);color:var(--g8)">Google Gemini 2.0 Flash</span>
+      <span class="tt" style="background:var(--g1);color:var(--g8)">Google Gemma 3 27B</span>
       <span class="tt" style="background:var(--b1);color:var(--b7)">HTML5 / CSS3 / JavaScript</span>
-      <span class="tt" style="background:var(--a1);color:#7a4a00">Gemini Vision API</span>
+      <span class="tt" style="background:var(--a1);color:#7a4a00">OpenRouter API</span>
       <span class="tt" style="background:#f1efee;color:#444">Vercel Hosting</span>
       <span class="tt" style="background:var(--c1);color:var(--c6)">GitHub CI/CD</span>
     </div>
@@ -379,8 +414,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 </div>
 
 <script>
-const GEMINI_KEY = 'PASTE_API_KEY_DISINI';
-
 // ===== DATA MATERI =====
 const MATERI = [
   {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Kompos dari Sampah Dapur',desc:'Tutorial lengkap pengomposan sampah organik rumah tangga menjadi pupuk kompos berkualitas tinggi.',author:'Waste4Change',url:'https://www.youtube.com/embed/pWiMFopZBOo'},
@@ -409,7 +442,14 @@ const CL={organik:'Organik',anorganik:'Anorganik',b3:'B3 Berbahaya',residu:'Resi
 const KE={organik:'🌿',anorganik:'♻️',b3:'⚠️',residu:'🚫'};
 const KBG={organik:'mt-o',anorganik:'mt-a',b3:'mt-b'};
 
-let imgData=null,imgType='image/jpeg',catCnt={organik:0,anorganik:0,b3:0,residu:0},hist=[];
+let imgData=null,imgType='image/jpeg';
+let catCnt=JSON.parse(localStorage.getItem('sl_catCnt'))||{organik:0,anorganik:0,b3:0,residu:0};
+let hist=JSON.parse(localStorage.getItem('sl_hist'))||[];
+
+function saveLocal(){
+  localStorage.setItem('sl_catCnt',JSON.stringify(catCnt));
+  localStorage.setItem('sl_hist',JSON.stringify(hist));
+}
 
 // ===== NAV =====
 function showPage(p,btn){
@@ -421,19 +461,49 @@ function showPage(p,btn){
   if(p==='ig') renderIG();
 }
 
-// ===== UPLOAD =====
-document.getElementById('file-input').addEventListener('change',function(e){
-  const f=e.target.files[0];if(!f)return;
+// ===== HANDLE FILE =====
+function handleFile(f){
+  if(!f||!f.type.startsWith('image/'))return;
+  if(f.size>10*1024*1024){alert('Ukuran gambar maksimal 10MB');return;}
   const r=new FileReader();
   r.onload=ev=>{
     const img=document.getElementById('preview-img');
     img.src=ev.target.result;img.style.display='block';
     document.getElementById('up-ph').style.display='none';
     document.getElementById('go-btn').disabled=false;
+    document.getElementById('clear-link').style.display='block';
     imgData=ev.target.result.split(',')[1];imgType=f.type;
   };
   r.readAsDataURL(f);
+}
+
+// ===== UPLOAD & CAMERA =====
+document.getElementById('file-input').addEventListener('change',function(e){handleFile(e.target.files[0]);});
+document.getElementById('camera-input').addEventListener('change',function(e){handleFile(e.target.files[0]);});
+
+// ===== DRAG & DROP =====
+const zone=document.getElementById('upload-zone');
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+zone.addEventListener('dragleave',e=>{if(!zone.contains(e.relatedTarget))zone.classList.remove('drag-over');});
+zone.addEventListener('drop',e=>{
+  e.preventDefault();zone.classList.remove('drag-over');
+  handleFile(e.dataTransfer.files[0]);
 });
+
+// ===== CLEAR =====
+function clearImage(){
+  imgData=null;
+  const img=document.getElementById('preview-img');
+  img.src='';img.style.display='none';
+  document.getElementById('up-ph').style.display='';
+  document.getElementById('go-btn').disabled=true;
+  document.getElementById('clear-link').style.display='none';
+  document.getElementById('file-input').value='';
+  document.getElementById('camera-input').value='';
+  document.getElementById('r-empty').style.display='block';
+  document.getElementById('result-content').style.display='none';
+  document.getElementById('loading').style.display='none';
+}
 
 // ===== ANALYZE =====
 async function analyzeWaste(){
@@ -459,11 +529,29 @@ function renderResult(r){
   document.getElementById('loading').style.display='none';
   const rc=document.getElementById('result-content');rc.style.display='block';
   r.items.forEach(i=>{const k=i.kategori.toLowerCase();if(catCnt[k]!==undefined)catCnt[k]++;});
-  hist.unshift({time:new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}),count:r.items.length,cats:[...new Set(r.items.map(i=>i.kategori.toLowerCase()))]});
+  const ts=new Date();
+  hist.unshift({
+    time:ts.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}),
+    date:ts.toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}),
+    count:r.items.length,
+    cats:[...new Set(r.items.map(i=>i.kategori.toLowerCase()))],
+    note:''
+  });
+  saveLocal();
   rc.innerHTML=`<div class="r-head">Terdeteksi <span class="r-count">${r.items.length} jenis</span></div>
   ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div><div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
-  <div class="sum-box"><div class="sum-label">Ringkasan</div><p>${r.ringkasan}</p><div class="sum-rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div></div>`;
+  <div class="sum-box"><div class="sum-label">Ringkasan</div><p>${r.ringkasan}</p><div class="sum-rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div></div>
+  <div class="notes-wrap"><div class="notes-label">Catatan Peneliti</div><textarea class="notes-ta" id="notes-ta" rows="3" placeholder="Tambah catatan untuk analisis ini (lokasi, kondisi, konteks)..."></textarea><button class="notes-save" onclick="saveNote()">Simpan Catatan</button></div>`;
   document.getElementById('go-btn').disabled=false;
+}
+
+function saveNote(){
+  const ta=document.getElementById('notes-ta');
+  if(!ta||!hist.length)return;
+  hist[0].note=ta.value.trim();
+  saveLocal();
+  const btn=document.querySelector('.notes-save');
+  if(btn){btn.textContent='✓ Tersimpan';setTimeout(()=>{btn.textContent='Simpan Catatan';},1500);}
 }
 
 // ===== MATERI =====
@@ -502,6 +590,33 @@ function renderIG(){
 function openV(url){document.getElementById('vframe').src=url;document.getElementById('vmodal').classList.add('open');}
 function closeV(){document.getElementById('vframe').src='';document.getElementById('vmodal').classList.remove('open');}
 
+// ===== EXPORT =====
+function exportCSV(){
+  if(!hist.length){alert('Belum ada data untuk diekspor.');return;}
+  const header='Tanggal,Waktu,Jumlah Item,Kategori,Catatan\n';
+  const rows=hist.map(h=>`"${h.date||''}","${h.time}",${h.count},"${(h.cats||[]).join('; ')}","${(h.note||'').replace(/"/g,'""')}"`).join('\n');
+  dlFile('sapulidi-riwayat.csv','text/csv;charset=utf-8;','\ufeff'+header+rows);
+}
+
+function exportJSON(){
+  if(!hist.length){alert('Belum ada data untuk diekspor.');return;}
+  const payload={exportDate:new Date().toISOString(),totalAnalisis:hist.length,distribusiKategori:catCnt,riwayat:hist};
+  dlFile('sapulidi-data.json','application/json',JSON.stringify(payload,null,2));
+}
+
+function dlFile(name,type,content){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([content],{type}));
+  a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);document.body.removeChild(a);},200);
+}
+
+function resetDash(){
+  if(!confirm('Reset semua data dashboard? Pastikan sudah export data terlebih dahulu.'))return;
+  catCnt={organik:0,anorganik:0,b3:0,residu:0};hist=[];
+  saveLocal();updateDash();
+}
+
 // ===== DASHBOARD =====
 function updateDash(){
   const total=Object.values(catCnt).reduce((a,b)=>a+b,0);
@@ -512,7 +627,7 @@ function updateDash(){
   const ca=document.getElementById('chart-area');
   ca.innerHTML=total===0?'<div class="empty">Belum ada data analisis.</div>':Object.entries(catCnt).map(([k,v])=>`<div class="brow"><div class="bname">${CL[k]}</div><div class="btrack"><div class="bfill" style="width:${Math.round(v/total*100)}%;background:${FF[k]}"></div></div><div class="bval">${v}</div></div>`).join('');
   const ha=document.getElementById('hist-area');
-  ha.innerHTML=hist.length===0?'<div class="empty">Belum ada riwayat.</div>':hist.slice(0,10).map(h=>`<div class="hitem"><div class="hico">🔍</div><div class="hinfo"><div class="htit">Analisis ${h.count} jenis sampah</div><div class="htime">Hari ini · ${h.time}</div></div><div class="hbadges">${h.cats.map(c=>`<span class="badge ${CF[c]||'b-residu'}">${CL[c]||c}</span>`).join('')}</div></div>`).join('');
+  ha.innerHTML=hist.length===0?'<div class="empty">Belum ada riwayat.</div>':hist.slice(0,10).map(h=>`<div class="hitem"><div class="hico">🔍</div><div class="hinfo"><div class="htit">Analisis ${h.count} jenis sampah</div><div class="htime">${h.date?h.date+' · ':''}${h.time}${h.note?` · <em style="color:var(--g6)">${h.note}</em>`:''}</div></div><div class="hbadges">${(h.cats||[]).map(c=>`<span class="badge ${CF[c]||'b-residu'}">${CL[c]||c}</span>`).join('')}</div></div>`).join('');
 }
 
 // ===== INIT =====
