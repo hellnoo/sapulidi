@@ -8,15 +8,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --g9:#0d2206;--g8:#1a3a0a;--g7:#27500a;--g6:#3b6d11;--g5:#639922;
-  --g4:#97c459;--g3:#c0dd97;--g2:#dff0c0;--g1:#eaf3de;
+  --g9:#0d2206;--g8:#1a3a0a;--g7:#27500a;--g6:#3b6d11;--g5:#4d7a18;
+  --g4:#6aab2e;--g3:#aecb78;--g2:#d4eaac;--g1:#edf5de;
   --t8:#085041;--t5:#1d9e75;--t2:#9fe1cb;--t1:#e1f5ee;
-  --a5:#ef9f27;--a1:#faeeda;
-  --b7:#0c447c;--b5:#185fa5;--b2:#b5d4f4;--b1:#e6f1fb;
-  --c6:#993c1d;--c2:#f5c4b3;--c1:#faece7;
+  --a5:#c47d10;--a1:#f5e8d0;
+  --b7:#0c447c;--b5:#185fa5;--b2:#b5d4f4;--b1:#e8f2fb;
+  --c6:#8a3018;--c2:#f0bfaf;--c1:#faeee9;
   --r5:#a32d2d;--r1:#fcebeb;
-  --ink:#0f1a08;--ink2:#3b4a30;--muted:#7a8a6a;--border:#d6e8c0;
-  --surface:#f7faf2;--white:#fff;
+  --ink:#0f1a08;--ink2:#3b4a30;--muted:#7a8a6a;--border:#dde9cc;
+  --surface:#f8faf4;--white:#fff;
+  --shadow:0 1px 4px rgba(15,26,8,0.07),0 4px 16px rgba(15,26,8,0.04);
+  --shadow-sm:0 1px 3px rgba(15,26,8,0.08);
 }
 html{scroll-behavior:smooth}
 body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh}
@@ -53,14 +55,14 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .detect-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:700px){.detect-wrap{grid-template-columns:1fr}}
 
-.panel{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden}
+.panel{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
 .ph{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
 .ph-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
 .ph h3{font-size:13px;font-weight:700;color:var(--g8)}
 .ph p{font-size:11px;color:var(--muted);margin-top:1px}
 .pb{padding:16px}
 
-.upload-zone{border:2px dashed var(--g3);border-radius:12px;background:var(--g1);cursor:pointer;transition:all 0.2s;min-height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.upload-zone{border:1.5px dashed var(--g3);border-radius:12px;background:var(--g1);cursor:pointer;transition:all 0.2s;min-height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
 .upload-zone:hover{border-color:var(--g5);background:var(--g2)}
 .up-ph{text-align:center;padding:24px 12px}
 .up-icon{width:48px;height:48px;background:var(--g4);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px;box-shadow:0 3px 10px rgba(151,196,89,0.3)}
@@ -81,12 +83,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .r-empty p{font-size:13px;font-weight:500}
 .r-empty span{font-size:11px;color:#ccc}
 
-.loading{display:none;flex-direction:column;align-items:center;gap:12px;padding:36px 16px}
-.spin{width:38px;height:38px;border:3px solid var(--g1);border-top-color:var(--g5);border-radius:50%;animation:spin 0.7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{font-size:12px;color:var(--muted);font-weight:600}
-.ld::after{content:'';animation:ld 1.2s steps(3,end) infinite}
-@keyframes ld{0%,33%{content:'.'}34%,66%{content:'..'}67%,100%{content:'...'}}
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:32px 16px}
+.scan-rings{position:relative;width:76px;height:76px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-ring{position:absolute;border-radius:50%;border:1.5px solid var(--g4);animation:rpulse 2.1s ease-out infinite}
+.s-ring:nth-child(1){width:76px;height:76px;animation-delay:0s}
+.s-ring:nth-child(2){width:54px;height:54px;animation-delay:0.5s}
+.s-ring:nth-child(3){width:34px;height:34px;animation-delay:1s}
+.s-core{width:40px;height:40px;background:var(--g1);border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;z-index:1;box-shadow:0 0 0 4px rgba(106,171,46,0.08)}
+.s-core svg{width:20px;height:20px;animation:spin 3s linear infinite}
+@keyframes rpulse{0%{transform:scale(0.75);opacity:0.7}100%{transform:scale(1.5);opacity:0}}
+.ld-step{font-size:13px;font-weight:600;color:var(--g7);text-align:center;min-height:20px;letter-spacing:0.1px}
+.ld-bar{width:160px;height:3px;background:var(--g1);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--g5),var(--g4));border-radius:2px;transition:width 0.7s ease;width:0%}
+.ld-sub{font-size:11px;color:var(--muted);text-align:center}
 
 #result-content{display:none}
 .r-head{font-size:12px;font-weight:700;color:var(--g7);margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -136,8 +145,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .mtab:hover:not(.active){background:var(--g1);border-color:var(--g3);color:var(--g7)}
 
 .m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
-.mcard{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s;cursor:pointer}
-.mcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.07);border-color:var(--g3)}
+.mcard{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s;cursor:pointer;box-shadow:var(--shadow-sm)}
+.mcard:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,26,8,0.1);border-color:var(--g3)}
 
 .mthumb{height:125px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .mt-vid{background:var(--g9)}
@@ -162,17 +171,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .mcta{font-size:11px;font-weight:800;color:var(--b5);background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer}
 .mcta:hover{text-decoration:underline}
 
-/* ===== IG EMBED ===== */
-.ig-card{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s}
-.ig-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.07)}
-.ig-header{background:linear-gradient(135deg,#f09563,#e1306c,#833ab4);padding:16px;display:flex;align-items:center;gap:10px}
-.ig-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
-.ig-name{color:#fff;font-size:13px;font-weight:700}
-.ig-handle{color:rgba(255,255,255,0.7);font-size:10px}
-.ig-body{padding:14px}
-.ig-desc{font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:10px}
-.ig-link{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f09563,#e1306c);color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;transition:opacity 0.15s}
-.ig-link:hover{opacity:0.85}
 
 /* ===== VIDEO MODAL ===== */
 .vmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;padding:20px}
@@ -186,12 +184,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 /* ===== DASHBOARD ===== */
 .stats4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 @media(max-width:580px){.stats4{grid-template-columns:repeat(2,1fr)}}
-.scard{background:var(--white);border-radius:13px;border:1px solid var(--border);padding:16px 14px;text-align:center}
+.scard{background:var(--white);border-radius:13px;border:1px solid var(--border);padding:16px 14px;text-align:center;box-shadow:var(--shadow-sm)}
 .snum{font-family:'Instrument Serif',serif;font-size:30px;line-height:1;color:var(--g7)}
 .snum.blue{color:var(--b5)}.snum.coral{color:var(--c6)}.snum.amber{color:#7a4a00}
 .slabel{font-size:10px;font-weight:700;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.5px}
 
-.cpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px;margin-bottom:14px}
+.cpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
 .ctitle{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px}
 .brow{display:flex;align-items:center;gap:10px;margin-bottom:11px}
 .bname{font-size:12px;font-weight:600;color:var(--ink2);width:90px;flex-shrink:0}
@@ -199,7 +197,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .bfill{height:100%;border-radius:4px;transition:width 0.7s ease}
 .bval{font-size:10px;color:#aaa;font-weight:700;width:24px;text-align:right}
 
-.hpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px}
+.hpanel{background:var(--white);border-radius:16px;border:1px solid var(--border);padding:18px;box-shadow:var(--shadow-sm)}
 .hitem{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
 .hitem:last-child{border-bottom:none}
 .hico{width:34px;height:34px;border-radius:9px;background:var(--g1);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
@@ -231,6 +229,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .tech-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 .tech-tags{display:flex;flex-wrap:wrap;gap:7px}
 .tt{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px}
+
+/* ===== SEARCH ===== */
+.search-wrap{margin-bottom:20px}
+.search-input{width:100%;padding:12px 16px 12px 42px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);color:var(--ink);transition:border-color 0.15s;box-shadow:var(--shadow-sm);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8a6a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
+.search-input:focus{outline:none;border-color:var(--g5);box-shadow:0 0 0 3px rgba(74,122,24,0.08)}
+.search-filter{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.s-empty{text-align:center;padding:48px 16px;color:#bbb}
+.s-empty p{font-size:14px;font-weight:600;color:var(--muted)}
+.s-empty span{font-size:12px;margin-top:4px;display:block}
+
+/* ===== MASA URAI ===== */
+.urai-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--g1);color:var(--g7);margin-top:5px;white-space:nowrap}
+.urai-tag::before{content:'⏱';font-size:9px}
 
 /* ===== DRAG & DROP ===== */
 .upload-zone.drag-over{border-color:var(--g5) !important;background:var(--g2) !important;transform:scale(1.01)}
@@ -270,7 +281,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   </div>
   <div class="brand">
     <span class="brand-name">SapuLidi</span>
-    <span class="by-navis">by Navis</span>
   </div>
   <div class="hdr-right">
     <span class="brand-sub">Sistem Analisis Limbah Cerdas</span>
@@ -279,11 +289,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 </div>
 
 <div class="nav">
-  <button class="nav-btn active" onclick="showPage('detect',this)">🔍 Deteksi Sampah</button>
-  <button class="nav-btn" onclick="showPage('materi',this)">📚 Materi & Video</button>
-  <button class="nav-btn" onclick="showPage('ig',this)">📱 Instagram</button>
-  <button class="nav-btn" onclick="showPage('dashboard',this)">📊 Dashboard</button>
-  <button class="nav-btn" onclick="showPage('tentang',this)">ℹ️ Tentang</button>
+  <button class="nav-btn active" onclick="showPage('detect',this)">Deteksi Sampah</button>
+  <button class="nav-btn" onclick="showPage('materi',this)">Materi & Video</button>
+  <button class="nav-btn" onclick="showPage('cari',this)">Cari Konten</button>
+  <button class="nav-btn" onclick="showPage('dashboard',this)">Dashboard</button>
+  <button class="nav-btn" onclick="showPage('tentang',this)">Tentang</button>
 </div>
 
 <!-- DETECT -->
@@ -323,7 +333,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <p>Belum ada hasil</p><span>Upload gambar &amp; klik Analisis</span>
         </div>
-        <div class="loading" id="loading"><div class="spin"></div><p>Menganalisis<span class="ld"></span></p></div>
+        <div class="loading" id="loading">
+          <div class="scan-rings">
+            <div class="s-ring"></div>
+            <div class="s-ring"></div>
+            <div class="s-ring"></div>
+            <div class="s-core">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--g5)">
+                <path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="1"/>
+              </svg>
+            </div>
+          </div>
+          <div class="ld-step" id="ld-step">Mempersiapkan analisis...</div>
+          <div class="ld-bar"><div class="ld-fill" id="ld-fill"></div></div>
+          <div class="ld-sub" id="ld-sub">AI sedang bekerja</div>
+        </div>
         <div id="result-content"></div>
       </div>
     </div>
@@ -353,10 +377,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="m-grid" id="m-grid"></div>
 </div>
 
-<!-- INSTAGRAM -->
-<div id="page-ig" class="page">
-  <div class="pg-title"><h2>Referensi Instagram</h2><p>Akun &amp; konten Instagram terpilih seputar pengelolaan sampah di Indonesia</p></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px" id="ig-grid"></div>
+<!-- CARI KONTEN -->
+<div id="page-cari" class="page">
+  <div class="pg-title"><h2>Cari Konten</h2><p>Temukan video &amp; artikel pengelolaan sampah sesuai kebutuhan riset</p></div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" type="text" placeholder="Cari judul, topik, atau penulis..." oninput="doSearch(this.value)">
+    <div class="search-filter">
+      <button class="mtab active" onclick="setSearchFilter('semua',this)">Semua</button>
+      <button class="mtab" onclick="setSearchFilter('video',this)">Video</button>
+      <button class="mtab" onclick="setSearchFilter('artikel',this)">Artikel</button>
+      <button class="mtab" onclick="setSearchFilter('organik',this)">Organik</button>
+      <button class="mtab" onclick="setSearchFilter('anorganik',this)">Anorganik</button>
+      <button class="mtab" onclick="setSearchFilter('b3',this)">B3</button>
+    </div>
+  </div>
+  <div class="m-grid" id="search-grid"></div>
 </div>
 
 <!-- DASHBOARD -->
@@ -416,25 +451,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <script>
 // ===== DATA MATERI =====
 const MATERI = [
-  {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Kompos dari Sampah Dapur',desc:'Tutorial lengkap pengomposan sampah organik rumah tangga menjadi pupuk kompos berkualitas tinggi.',author:'Waste4Change',url:'https://www.youtube.com/embed/pWiMFopZBOo'},
-  {id:2,tipe:'video',kat:'organik',judul:'Bank Sampah: Solusi Pengelolaan Sampah Masyarakat',desc:'Model bank sampah sebagai pendekatan ekonomi sirkular di tingkat kelurahan dan komunitas.',author:'KLHK Indonesia',url:'https://www.youtube.com/embed/xN5_lHHKGiE'},
-  {id:3,tipe:'video',kat:'anorganik',judul:'Inovasi Daur Ulang Plastik Indonesia',desc:'Teknologi transformasi sampah plastik menjadi produk bernilai ekonomi tinggi.',author:'Waste4Change',url:'https://www.youtube.com/embed/RS7IzU2VJIQ'},
-  {id:4,tipe:'video',kat:'b3',judul:'Penanganan Limbah B3 Rumah Tangga',desc:'Identifikasi dan penanganan limbah berbahaya dari lingkungan rumah tangga secara aman.',author:'BRIN Indonesia',url:'https://www.youtube.com/embed/VbiRNT_gWUQ'},
-  {id:5,tipe:'artikel',kat:'anorganik',judul:'Panduan Lengkap Pemilahan Sampah Plastik',desc:'7 jenis kode plastik dan cara pemilahan yang benar sebelum masuk ke fasilitas daur ulang.',author:'KLHK Indonesia',url:'https://waste4change.com/blog/cara-edukasi-manajemen-sampah-yang-bisa-dilakukan-di-sekolah/'},
+  {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Pupuk Kompos dari Sampah Organik',desc:'Panduan praktis pembuatan kompos dari sisa sayuran dan buah untuk mengurangi sampah rumah tangga.',author:'Kementerian PUPR',url:'https://www.youtube.com/embed/GDcHKer8M-c'},
+  {id:2,tipe:'video',kat:'organik',judul:'Bank Sampah: Model Pengelolaan Sampah Berbasis Masyarakat',desc:'Bank sampah sebagai solusi ekonomi sirkular di tingkat kelurahan — dari sampah jadi tabungan.',author:'KLHK Indonesia',url:'https://www.youtube.com/embed/6xqntRiSp9I'},
+  {id:3,tipe:'video',kat:'anorganik',judul:'Mengenal Jenis Plastik dan Cara Daur Ulangnya',desc:'Klasifikasi 7 jenis plastik berdasarkan kode resin dan metode daur ulang yang tepat.',author:'Waste4Change',url:'https://www.youtube.com/embed/fYAuCn9bFOA'},
+  {id:4,tipe:'video',kat:'b3',judul:'Kenali dan Kelola Limbah B3 Rumah Tangga',desc:'Cara mengidentifikasi dan membuang sampah berbahaya seperti baterai, obat, dan elektronik bekas.',author:'BRIN Indonesia',url:'https://www.youtube.com/embed/YthP04_QUSE'},
+  {id:5,tipe:'artikel',kat:'anorganik',judul:'Panduan Lengkap Pemilahan Sampah Plastik',desc:'7 jenis kode plastik dan cara pemilahan yang benar sebelum masuk ke fasilitas daur ulang.',author:'Waste4Change',url:'https://waste4change.com/blog/cara-edukasi-manajemen-sampah-yang-bisa-dilakukan-di-sekolah/'},
   {id:6,tipe:'artikel',kat:'b3',judul:'Extended Producer Responsibility di Indonesia',desc:'Regulasi tanggung jawab produsen terhadap kemasan pasca konsumsi dan implementasinya.',author:'ICEL Indonesia',url:'https://ptali.org/edukasi-tentang-pengelolaan-sampah-langkah-awal-menuju-lingkungan-yang-lebih-bersih/'},
-  {id:7,tipe:'video',kat:'organik',judul:'Zero Waste to Landfill: Gerakan Global',desc:'Gerakan mengurangi sampah ke TPA melalui pilah sampah, daur ulang, dan pengomposan.',author:'Waste4Change',url:'https://www.youtube.com/embed/Rw4HQSS-lB0'},
-  {id:8,tipe:'artikel',kat:'anorganik',judul:'Biogas dari Sampah Organik: Energi Terbarukan',desc:'Konversi sampah organik menjadi biogas sebagai sumber energi terbarukan skala komunitas.',author:'BPPT Indonesia',url:'https://dlh.bulelengkab.go.id/informasi/detail/artikel/pengertian-dan-pengelolaan-sampah-organik-dan-anorganik-13'},
+  {id:7,tipe:'video',kat:'organik',judul:'Pengolahan Sampah Organik Menjadi Biogas',desc:'Konversi sampah organik menjadi energi biogas — teknologi sederhana skala rumah tangga dan komunitas.',author:'BPPT Indonesia',url:'https://www.youtube.com/embed/nthngdPbne8'},
+  {id:8,tipe:'artikel',kat:'anorganik',judul:'Sampah Organik vs Anorganik: Pengertian & Pengelolaan',desc:'Perbedaan mendasar sampah organik dan anorganik serta metode pengelolaan yang tepat untuk masing-masing.',author:'DLH Buleleng',url:'https://dlh.bulelengkab.go.id/informasi/detail/artikel/pengertian-dan-pengelolaan-sampah-organik-dan-anorganik-13'},
 ];
 
-// ===== DATA INSTAGRAM =====
-const IG_DATA = [
-  {handle:'@zerowasteid',name:'Zero Waste Indonesia',desc:'Komunitas aktif edukasi gaya hidup minim sampah. Konten pilah sampah, tips zero waste, dan kampanye lingkungan yang relevan untuk referensi penelitian lapangan.',emoji:'♻️',url:'https://www.instagram.com/zerowasteid'},
-  {handle:'@waste4change',name:'Waste4Change',desc:'Platform pengelolaan sampah profesional. Infografis data sampah Indonesia, solusi bisnis berkelanjutan, dan konten edukasi berbasis riset yang cocok untuk disertasi.',emoji:'🔬',url:'https://www.instagram.com/waste4change'},
-  {handle:'@ditjenpslb3',name:'Ditjen PSLB3 KLHK',desc:'Akun resmi Direktorat Jenderal PSLB3 Kementerian LHK. Kebijakan terkini, data statistik sampah nasional, dan program pengelolaan limbah B3.',emoji:'🏛️',url:'https://www.instagram.com/ditjenpslb3'},
-  {handle:'@gringgoapp',name:'Gringgo Indonesia',desc:'Startup teknologi pengelolaan sampah berbasis AI. Inovasi pemilahan digital dan ekonomi sirkular, sangat relevan untuk bab teknologi dalam disertasi.',emoji:'🤖',url:'https://www.instagram.com/gringgoapp'},
-  {handle:'@kertabumirecycling',name:'Kertabumi Recycling',desc:'Platform daur ulang digital dan bank sampah. Konten edukasi jenis plastik, cara daur ulang, dan program drop-off sampah untuk referensi studi lapangan.',emoji:'🌱',url:'https://www.instagram.com/kertabumirecycling'},
-  {handle:'@indonesiaasri',name:'Indonesia Asri',desc:'Inisiatif lingkungan dari Chandra Asri Group. Kampanye Operasi Semut, data komposisi sampah Indonesia, dan upaya industri dalam EPR (Extended Producer Responsibility).',emoji:'🌿',url:'https://www.instagram.com/indonesiaasri_id'},
-];
 
 const CF={organik:'b-organik',anorganik:'b-anorganik',b3:'b-b3',residu:'b-residu'};
 const FF={organik:'#97c459',anorganik:'#378add',b3:'#d85a30',residu:'#ef9f27'};
@@ -458,7 +484,7 @@ function showPage(p,btn){
   document.getElementById('page-'+p).classList.add('active');
   btn.classList.add('active');
   if(p==='dashboard') updateDash();
-  if(p==='ig') renderIG();
+  if(p==='cari') doSearch(document.getElementById('search-input')?.value||'');
 }
 
 // ===== HANDLE FILE =====
@@ -505,6 +531,40 @@ function clearImage(){
   document.getElementById('loading').style.display='none';
 }
 
+// ===== LOADING ANIMATION =====
+const LD_STEPS=[
+  {text:'Mengirim gambar ke AI...',pct:15,sub:'Menghubungi server OpenRouter'},
+  {text:'Mendeteksi objek dalam gambar...',pct:35,sub:'Model Gemma 3 27B memproses visual'},
+  {text:'Mengklasifikasi jenis sampah...',pct:55,sub:'Mencocokkan kategori limbah'},
+  {text:'Mengestimasi masa urai...',pct:72,sub:'Menghitung dampak lingkungan'},
+  {text:'Menyusun rekomendasi...',pct:88,sub:'Hampir selesai...'}
+];
+let _ldTimer=null;
+function startLoadingAnim(){
+  let i=0;
+  const step=document.getElementById('ld-step');
+  const fill=document.getElementById('ld-fill');
+  const sub=document.getElementById('ld-sub');
+  function tick(){
+    if(i<LD_STEPS.length){
+      step.textContent=LD_STEPS[i].text;
+      fill.style.width=LD_STEPS[i].pct+'%';
+      sub.textContent=LD_STEPS[i].sub;
+      i++;
+      _ldTimer=setTimeout(tick,1400+Math.random()*600);
+    }
+  }
+  step.textContent='Mempersiapkan analisis...';
+  fill.style.width='5%';
+  sub.textContent='AI sedang bekerja';
+  _ldTimer=setTimeout(tick,600);
+}
+function stopLoadingAnim(){
+  if(_ldTimer){clearTimeout(_ldTimer);_ldTimer=null;}
+  const fill=document.getElementById('ld-fill');
+  if(fill)fill.style.width='100%';
+}
+
 // ===== ANALYZE =====
 async function analyzeWaste(){
   if(!imgData)return;
@@ -512,12 +572,15 @@ async function analyzeWaste(){
   document.getElementById('result-content').style.display='none';
   document.getElementById('loading').style.display='flex';
   document.getElementById('go-btn').disabled=true;
+  startLoadingAnim();
   try{
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageData:imgData,mimeType:imgType})});
     const d=await res.json();
     if(d.error)throw new Error(d.error);
+    stopLoadingAnim();
     renderResult(d);
   }catch(err){
+    stopLoadingAnim();
     document.getElementById('loading').style.display='none';
     document.getElementById('result-content').style.display='block';
     document.getElementById('result-content').innerHTML=`<div class="err-box"><p>Gagal menganalisis</p><span>${err.message||'Periksa API key & koneksi'}</span></div>`;
@@ -539,7 +602,7 @@ function renderResult(r){
   });
   saveLocal();
   rc.innerHTML=`<div class="r-head">Terdeteksi <span class="r-count">${r.items.length} jenis</span></div>
-  ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div><div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
+  ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div>${i.masa_urai?`<span class="urai-tag">${i.masa_urai}</span>`:''}<div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
   <div class="sum-box"><div class="sum-label">Ringkasan</div><p>${r.ringkasan}</p><div class="sum-rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div></div>
   <div class="notes-wrap"><div class="notes-label">Catatan Peneliti</div><textarea class="notes-ta" id="notes-ta" rows="3" placeholder="Tambah catatan untuk analisis ini (lokasi, kondisi, konteks)..."></textarea><button class="notes-save" onclick="saveNote()">Simpan Catatan</button></div>`;
   document.getElementById('go-btn').disabled=false;
@@ -568,21 +631,39 @@ function renderM(filter){
 }
 function filterM(f,btn){document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderM(f);}
 
-// ===== INSTAGRAM =====
-function renderIG(){
-  document.getElementById('ig-grid').innerHTML=IG_DATA.map(ig=>`
-    <div class="ig-card">
-      <div class="ig-header">
-        <div class="ig-avatar">${ig.emoji}</div>
-        <div><div class="ig-name">${ig.name}</div><div class="ig-handle">${ig.handle}</div></div>
+// ===== SEARCH ENGINE =====
+let searchFilter='semua';
+function setSearchFilter(f,btn){
+  searchFilter=f;
+  document.querySelectorAll('.search-filter .mtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  doSearch(document.getElementById('search-input')?.value||'');
+}
+function doSearch(q){
+  const kw=q.trim().toLowerCase();
+  let data=MATERI;
+  if(searchFilter==='video') data=data.filter(m=>m.tipe==='video');
+  else if(searchFilter==='artikel') data=data.filter(m=>m.tipe==='artikel');
+  else if(['organik','anorganik','b3'].includes(searchFilter)) data=data.filter(m=>m.kat===searchFilter);
+  if(kw) data=data.filter(m=>
+    m.judul.toLowerCase().includes(kw)||
+    m.desc.toLowerCase().includes(kw)||
+    m.author.toLowerCase().includes(kw)||
+    m.kat.toLowerCase().includes(kw)
+  );
+  const grid=document.getElementById('search-grid');
+  if(!grid)return;
+  if(!data.length){
+    grid.innerHTML=`<div class="s-empty" style="grid-column:1/-1"><p>Tidak ada hasil untuk "${q}"</p><span>Coba kata kunci lain atau ubah filter</span></div>`;
+    return;
+  }
+  grid.innerHTML=data.map(m=>`
+    <div class="mcard" onclick="${m.tipe==='video'?`openV('${m.url}')`:m.url?`window.open('${m.url}','_blank')`:''}">
+      <div class="mthumb ${m.tipe==='video'?'mt-vid':KBG[m.kat]||'mt-o'}">
+        ${m.tipe==='video'?`<div style="text-align:center"><div style="font-size:34px;margin-bottom:8px">${KE[m.kat]||'📄'}</div><div class="play-ring"><svg viewBox="0 0 24 24" fill="var(--g8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="mtype mt-vid-badge">VIDEO</div>`:`<div style="font-size:42px">${KE[m.kat]||'📄'}</div><div class="mtype mt-art-badge">ARTIKEL</div>`}
       </div>
-      <div class="ig-body">
-        <div class="ig-desc">${ig.desc}</div>
-        <a class="ig-link" href="${ig.url}" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
-          Buka di Instagram
-        </a>
-      </div>
+      <div class="mb"><div class="mcat">${m.kat.toUpperCase()}</div><div class="mtit">${m.judul}</div><div class="mdesc">${m.desc}</div></div>
+      <div class="mfoot"><div class="mauthor">${m.author}</div><button class="mcta">${m.tipe==='video'?'▶ Tonton':'Baca →'}</button></div>
     </div>`).join('');
 }
 
@@ -632,6 +713,7 @@ function updateDash(){
 
 // ===== INIT =====
 renderM('semua');
+doSearch('');
 </script>
 </body>
 </html>
