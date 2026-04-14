@@ -83,12 +83,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .r-empty p{font-size:13px;font-weight:500}
 .r-empty span{font-size:11px;color:#ccc}
 
-.loading{display:none;flex-direction:column;align-items:center;gap:12px;padding:36px 16px}
-.spin{width:38px;height:38px;border:3px solid var(--g1);border-top-color:var(--g5);border-radius:50%;animation:spin 0.7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading p{font-size:12px;color:var(--muted);font-weight:600}
-.ld::after{content:'';animation:ld 1.2s steps(3,end) infinite}
-@keyframes ld{0%,33%{content:'.'}34%,66%{content:'..'}67%,100%{content:'...'}}
+.loading{display:none;flex-direction:column;align-items:center;gap:14px;padding:32px 16px}
+.scan-rings{position:relative;width:76px;height:76px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.s-ring{position:absolute;border-radius:50%;border:1.5px solid var(--g4);animation:rpulse 2.1s ease-out infinite}
+.s-ring:nth-child(1){width:76px;height:76px;animation-delay:0s}
+.s-ring:nth-child(2){width:54px;height:54px;animation-delay:0.5s}
+.s-ring:nth-child(3){width:34px;height:34px;animation-delay:1s}
+.s-core{width:40px;height:40px;background:var(--g1);border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;z-index:1;box-shadow:0 0 0 4px rgba(106,171,46,0.08)}
+.s-core svg{width:20px;height:20px;animation:spin 3s linear infinite}
+@keyframes rpulse{0%{transform:scale(0.75);opacity:0.7}100%{transform:scale(1.5);opacity:0}}
+.ld-step{font-size:13px;font-weight:600;color:var(--g7);text-align:center;min-height:20px;letter-spacing:0.1px}
+.ld-bar{width:160px;height:3px;background:var(--g1);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--g5),var(--g4));border-radius:2px;transition:width 0.7s ease;width:0%}
+.ld-sub{font-size:11px;color:var(--muted);text-align:center}
 
 #result-content{display:none}
 .r-head{font-size:12px;font-weight:700;color:var(--g7);margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -326,7 +333,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
           <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           <p>Belum ada hasil</p><span>Upload gambar &amp; klik Analisis</span>
         </div>
-        <div class="loading" id="loading"><div class="spin"></div><p>Menganalisis<span class="ld"></span></p></div>
+        <div class="loading" id="loading">
+          <div class="scan-rings">
+            <div class="s-ring"></div>
+            <div class="s-ring"></div>
+            <div class="s-ring"></div>
+            <div class="s-core">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--g5)">
+                <path d="M12 2a10 10 0 0 1 10 10"/><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="1"/>
+              </svg>
+            </div>
+          </div>
+          <div class="ld-step" id="ld-step">Mempersiapkan analisis...</div>
+          <div class="ld-bar"><div class="ld-fill" id="ld-fill"></div></div>
+          <div class="ld-sub" id="ld-sub">AI sedang bekerja</div>
+        </div>
         <div id="result-content"></div>
       </div>
     </div>
@@ -510,6 +531,40 @@ function clearImage(){
   document.getElementById('loading').style.display='none';
 }
 
+// ===== LOADING ANIMATION =====
+const LD_STEPS=[
+  {text:'Mengirim gambar ke AI...',pct:15,sub:'Menghubungi server OpenRouter'},
+  {text:'Mendeteksi objek dalam gambar...',pct:35,sub:'Model Gemma 3 27B memproses visual'},
+  {text:'Mengklasifikasi jenis sampah...',pct:55,sub:'Mencocokkan kategori limbah'},
+  {text:'Mengestimasi masa urai...',pct:72,sub:'Menghitung dampak lingkungan'},
+  {text:'Menyusun rekomendasi...',pct:88,sub:'Hampir selesai...'}
+];
+let _ldTimer=null;
+function startLoadingAnim(){
+  let i=0;
+  const step=document.getElementById('ld-step');
+  const fill=document.getElementById('ld-fill');
+  const sub=document.getElementById('ld-sub');
+  function tick(){
+    if(i<LD_STEPS.length){
+      step.textContent=LD_STEPS[i].text;
+      fill.style.width=LD_STEPS[i].pct+'%';
+      sub.textContent=LD_STEPS[i].sub;
+      i++;
+      _ldTimer=setTimeout(tick,1400+Math.random()*600);
+    }
+  }
+  step.textContent='Mempersiapkan analisis...';
+  fill.style.width='5%';
+  sub.textContent='AI sedang bekerja';
+  _ldTimer=setTimeout(tick,600);
+}
+function stopLoadingAnim(){
+  if(_ldTimer){clearTimeout(_ldTimer);_ldTimer=null;}
+  const fill=document.getElementById('ld-fill');
+  if(fill)fill.style.width='100%';
+}
+
 // ===== ANALYZE =====
 async function analyzeWaste(){
   if(!imgData)return;
@@ -517,12 +572,15 @@ async function analyzeWaste(){
   document.getElementById('result-content').style.display='none';
   document.getElementById('loading').style.display='flex';
   document.getElementById('go-btn').disabled=true;
+  startLoadingAnim();
   try{
     const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageData:imgData,mimeType:imgType})});
     const d=await res.json();
     if(d.error)throw new Error(d.error);
+    stopLoadingAnim();
     renderResult(d);
   }catch(err){
+    stopLoadingAnim();
     document.getElementById('loading').style.display='none';
     document.getElementById('result-content').style.display='block';
     document.getElementById('result-content').innerHTML=`<div class="err-box"><p>Gagal menganalisis</p><span>${err.message||'Periksa API key & koneksi'}</span></div>`;
