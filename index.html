@@ -164,17 +164,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .mcta{font-size:11px;font-weight:800;color:var(--b5);background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;cursor:pointer}
 .mcta:hover{text-decoration:underline}
 
-/* ===== IG EMBED ===== */
-.ig-card{background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all 0.2s;box-shadow:var(--shadow-sm)}
-.ig-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,26,8,0.1)}
-.ig-header{background:linear-gradient(135deg,#f09563,#e1306c,#833ab4);padding:16px;display:flex;align-items:center;gap:10px}
-.ig-avatar{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px}
-.ig-name{color:#fff;font-size:13px;font-weight:700}
-.ig-handle{color:rgba(255,255,255,0.7);font-size:10px}
-.ig-body{padding:14px}
-.ig-desc{font-size:12px;color:var(--ink2);line-height:1.6;margin-bottom:10px}
-.ig-link{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,#f09563,#e1306c);color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:20px;text-decoration:none;transition:opacity 0.15s}
-.ig-link:hover{opacity:0.85}
 
 /* ===== VIDEO MODAL ===== */
 .vmodal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;padding:20px}
@@ -234,6 +223,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .tech-tags{display:flex;flex-wrap:wrap;gap:7px}
 .tt{font-size:11px;font-weight:700;padding:5px 13px;border-radius:20px}
 
+/* ===== SEARCH ===== */
+.search-wrap{margin-bottom:20px}
+.search-input{width:100%;padding:12px 16px 12px 42px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);color:var(--ink);transition:border-color 0.15s;box-shadow:var(--shadow-sm);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8a6a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
+.search-input:focus{outline:none;border-color:var(--g5);box-shadow:0 0 0 3px rgba(74,122,24,0.08)}
+.search-filter{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.s-empty{text-align:center;padding:48px 16px;color:#bbb}
+.s-empty p{font-size:14px;font-weight:600;color:var(--muted)}
+.s-empty span{font-size:12px;margin-top:4px;display:block}
+
+/* ===== MASA URAI ===== */
+.urai-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--g1);color:var(--g7);margin-top:5px;white-space:nowrap}
+.urai-tag::before{content:'⏱';font-size:9px}
+
 /* ===== DRAG & DROP ===== */
 .upload-zone.drag-over{border-color:var(--g5) !important;background:var(--g2) !important;transform:scale(1.01)}
 
@@ -272,7 +274,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   </div>
   <div class="brand">
     <span class="brand-name">SapuLidi</span>
-    <span class="by-navis">by Navis</span>
   </div>
   <div class="hdr-right">
     <span class="brand-sub">Sistem Analisis Limbah Cerdas</span>
@@ -283,7 +284,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div class="nav">
   <button class="nav-btn active" onclick="showPage('detect',this)">Deteksi Sampah</button>
   <button class="nav-btn" onclick="showPage('materi',this)">Materi & Video</button>
-  <button class="nav-btn" onclick="showPage('ig',this)">Referensi</button>
+  <button class="nav-btn" onclick="showPage('cari',this)">Cari Konten</button>
   <button class="nav-btn" onclick="showPage('dashboard',this)">Dashboard</button>
   <button class="nav-btn" onclick="showPage('tentang',this)">Tentang</button>
 </div>
@@ -355,10 +356,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="m-grid" id="m-grid"></div>
 </div>
 
-<!-- INSTAGRAM -->
-<div id="page-ig" class="page">
-  <div class="pg-title"><h2>Referensi Instagram</h2><p>Akun &amp; konten Instagram terpilih seputar pengelolaan sampah di Indonesia</p></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px" id="ig-grid"></div>
+<!-- CARI KONTEN -->
+<div id="page-cari" class="page">
+  <div class="pg-title"><h2>Cari Konten</h2><p>Temukan video &amp; artikel pengelolaan sampah sesuai kebutuhan riset</p></div>
+  <div class="search-wrap">
+    <input class="search-input" id="search-input" type="text" placeholder="Cari judul, topik, atau penulis..." oninput="doSearch(this.value)">
+    <div class="search-filter">
+      <button class="mtab active" onclick="setSearchFilter('semua',this)">Semua</button>
+      <button class="mtab" onclick="setSearchFilter('video',this)">Video</button>
+      <button class="mtab" onclick="setSearchFilter('artikel',this)">Artikel</button>
+      <button class="mtab" onclick="setSearchFilter('organik',this)">Organik</button>
+      <button class="mtab" onclick="setSearchFilter('anorganik',this)">Anorganik</button>
+      <button class="mtab" onclick="setSearchFilter('b3',this)">B3</button>
+    </div>
+  </div>
+  <div class="m-grid" id="search-grid"></div>
 </div>
 
 <!-- DASHBOARD -->
@@ -428,15 +440,6 @@ const MATERI = [
   {id:8,tipe:'artikel',kat:'anorganik',judul:'Sampah Organik vs Anorganik: Pengertian & Pengelolaan',desc:'Perbedaan mendasar sampah organik dan anorganik serta metode pengelolaan yang tepat untuk masing-masing.',author:'DLH Buleleng',url:'https://dlh.bulelengkab.go.id/informasi/detail/artikel/pengertian-dan-pengelolaan-sampah-organik-dan-anorganik-13'},
 ];
 
-// ===== DATA INSTAGRAM =====
-const IG_DATA = [
-  {handle:'@zerowasteid',name:'Zero Waste Indonesia',desc:'Komunitas aktif edukasi gaya hidup minim sampah. Konten pilah sampah, tips zero waste, dan kampanye lingkungan yang relevan untuk referensi penelitian lapangan.',emoji:'♻️',url:'https://www.instagram.com/zerowasteid'},
-  {handle:'@waste4change',name:'Waste4Change',desc:'Platform pengelolaan sampah profesional. Infografis data sampah Indonesia, solusi bisnis berkelanjutan, dan konten edukasi berbasis riset yang cocok untuk disertasi.',emoji:'🔬',url:'https://www.instagram.com/waste4change'},
-  {handle:'@ditjenpslb3',name:'Ditjen PSLB3 KLHK',desc:'Akun resmi Direktorat Jenderal PSLB3 Kementerian LHK. Kebijakan terkini, data statistik sampah nasional, dan program pengelolaan limbah B3.',emoji:'🏛️',url:'https://www.instagram.com/ditjenpslb3'},
-  {handle:'@gringgoapp',name:'Gringgo Indonesia',desc:'Startup teknologi pengelolaan sampah berbasis AI. Inovasi pemilahan digital dan ekonomi sirkular, sangat relevan untuk bab teknologi dalam disertasi.',emoji:'🤖',url:'https://www.instagram.com/gringgoapp'},
-  {handle:'@kertabumirecycling',name:'Kertabumi Recycling',desc:'Platform daur ulang digital dan bank sampah. Konten edukasi jenis plastik, cara daur ulang, dan program drop-off sampah untuk referensi studi lapangan.',emoji:'🌱',url:'https://www.instagram.com/kertabumirecycling'},
-  {handle:'@indonesiaasri',name:'Indonesia Asri',desc:'Inisiatif lingkungan dari Chandra Asri Group. Kampanye Operasi Semut, data komposisi sampah Indonesia, dan upaya industri dalam EPR (Extended Producer Responsibility).',emoji:'🌿',url:'https://www.instagram.com/indonesiaasri_id'},
-];
 
 const CF={organik:'b-organik',anorganik:'b-anorganik',b3:'b-b3',residu:'b-residu'};
 const FF={organik:'#97c459',anorganik:'#378add',b3:'#d85a30',residu:'#ef9f27'};
@@ -460,7 +463,7 @@ function showPage(p,btn){
   document.getElementById('page-'+p).classList.add('active');
   btn.classList.add('active');
   if(p==='dashboard') updateDash();
-  if(p==='ig') renderIG();
+  if(p==='cari') doSearch(document.getElementById('search-input')?.value||'');
 }
 
 // ===== HANDLE FILE =====
@@ -541,7 +544,7 @@ function renderResult(r){
   });
   saveLocal();
   rc.innerHTML=`<div class="r-head">Terdeteksi <span class="r-count">${r.items.length} jenis</span></div>
-  ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div><div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
+  ${r.items.map(i=>`<div class="wi"><div class="wl"><div class="wd" style="background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div><div class="wi-info"><div class="wi-name">${i.nama}</div><div class="wi-handle">${i.penanganan}</div>${i.masa_urai?`<span class="urai-tag">${i.masa_urai}</span>`:''}<div class="cbar"><div class="ctrack"><div class="cfill" style="width:${i.confidence}%;background:${FF[i.kategori.toLowerCase()]||'#aaa'}"></div></div><span class="cval">${i.confidence}%</span></div></div></div><span class="badge ${CF[i.kategori.toLowerCase()]||'b-residu'}">${CL[i.kategori.toLowerCase()]||i.kategori}</span></div>`).join('')}
   <div class="sum-box"><div class="sum-label">Ringkasan</div><p>${r.ringkasan}</p><div class="sum-rec"><p><strong>Rekomendasi:</strong> ${r.rekomendasi}</p></div></div>
   <div class="notes-wrap"><div class="notes-label">Catatan Peneliti</div><textarea class="notes-ta" id="notes-ta" rows="3" placeholder="Tambah catatan untuk analisis ini (lokasi, kondisi, konteks)..."></textarea><button class="notes-save" onclick="saveNote()">Simpan Catatan</button></div>`;
   document.getElementById('go-btn').disabled=false;
@@ -570,21 +573,39 @@ function renderM(filter){
 }
 function filterM(f,btn){document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderM(f);}
 
-// ===== INSTAGRAM =====
-function renderIG(){
-  document.getElementById('ig-grid').innerHTML=IG_DATA.map(ig=>`
-    <div class="ig-card">
-      <div class="ig-header">
-        <div class="ig-avatar">${ig.emoji}</div>
-        <div><div class="ig-name">${ig.name}</div><div class="ig-handle">${ig.handle}</div></div>
+// ===== SEARCH ENGINE =====
+let searchFilter='semua';
+function setSearchFilter(f,btn){
+  searchFilter=f;
+  document.querySelectorAll('.search-filter .mtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  doSearch(document.getElementById('search-input')?.value||'');
+}
+function doSearch(q){
+  const kw=q.trim().toLowerCase();
+  let data=MATERI;
+  if(searchFilter==='video') data=data.filter(m=>m.tipe==='video');
+  else if(searchFilter==='artikel') data=data.filter(m=>m.tipe==='artikel');
+  else if(['organik','anorganik','b3'].includes(searchFilter)) data=data.filter(m=>m.kat===searchFilter);
+  if(kw) data=data.filter(m=>
+    m.judul.toLowerCase().includes(kw)||
+    m.desc.toLowerCase().includes(kw)||
+    m.author.toLowerCase().includes(kw)||
+    m.kat.toLowerCase().includes(kw)
+  );
+  const grid=document.getElementById('search-grid');
+  if(!grid)return;
+  if(!data.length){
+    grid.innerHTML=`<div class="s-empty" style="grid-column:1/-1"><p>Tidak ada hasil untuk "${q}"</p><span>Coba kata kunci lain atau ubah filter</span></div>`;
+    return;
+  }
+  grid.innerHTML=data.map(m=>`
+    <div class="mcard" onclick="${m.tipe==='video'?`openV('${m.url}')`:m.url?`window.open('${m.url}','_blank')`:''}">
+      <div class="mthumb ${m.tipe==='video'?'mt-vid':KBG[m.kat]||'mt-o'}">
+        ${m.tipe==='video'?`<div style="text-align:center"><div style="font-size:34px;margin-bottom:8px">${KE[m.kat]||'📄'}</div><div class="play-ring"><svg viewBox="0 0 24 24" fill="var(--g8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="mtype mt-vid-badge">VIDEO</div>`:`<div style="font-size:42px">${KE[m.kat]||'📄'}</div><div class="mtype mt-art-badge">ARTIKEL</div>`}
       </div>
-      <div class="ig-body">
-        <div class="ig-desc">${ig.desc}</div>
-        <a class="ig-link" href="${ig.url}" target="_blank" rel="noopener">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/></svg>
-          Buka di Instagram
-        </a>
-      </div>
+      <div class="mb"><div class="mcat">${m.kat.toUpperCase()}</div><div class="mtit">${m.judul}</div><div class="mdesc">${m.desc}</div></div>
+      <div class="mfoot"><div class="mauthor">${m.author}</div><button class="mcta">${m.tipe==='video'?'▶ Tonton':'Baca →'}</button></div>
     </div>`).join('');
 }
 
@@ -634,6 +655,7 @@ function updateDash(){
 
 // ===== INIT =====
 renderM('semua');
+doSearch('');
 </script>
 </body>
 </html>
