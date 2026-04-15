@@ -245,7 +245,25 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .yt-channel{font-size:11px;color:var(--muted)}
 .yt-loading{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 0;color:var(--muted);font-size:13px}
 .yt-spin{width:28px;height:28px;border:2.5px solid var(--g2);border-top-color:var(--g5);border-radius:50%;animation:spin 0.8s linear infinite}
-#search-status{font-size:12px;color:var(--muted);margin-bottom:8px;min-height:16px}
+#search-status,#jurnal-status{font-size:12px;color:var(--muted);margin-bottom:8px;min-height:16px}
+.cari-tabs{display:flex;gap:8px;margin-bottom:16px}
+.cari-tab{padding:8px 20px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:600;cursor:pointer;color:var(--muted);transition:all 0.2s}
+.cari-tab.active{background:var(--g5);color:#fff;border-color:var(--g5)}
+.cari-panel{display:block}
+.jurnal-list{display:flex;flex-direction:column;gap:12px}
+.jurnal-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:14px 16px;transition:all 0.2s;box-shadow:var(--shadow-sm)}
+.jurnal-card:hover{border-color:var(--g3);box-shadow:0 4px 16px rgba(15,26,8,0.08)}
+.jurnal-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.jurnal-year{font-size:11px;font-weight:700;color:var(--g5);background:var(--g1);padding:2px 8px;border-radius:6px}
+.jurnal-venue{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.jurnal-oa{font-size:10px;font-weight:700;color:#16a34a;background:#dcfce7;padding:2px 7px;border-radius:6px}
+.jurnal-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4}
+.jurnal-authors{font-size:12px;color:var(--muted);margin-bottom:6px}
+.jurnal-abstract{font-size:12px;color:#555;line-height:1.5;margin-bottom:10px}
+.jurnal-footer{display:flex;gap:8px}
+.jurnal-link{font-size:12px;font-weight:600;color:var(--g5);text-decoration:none;padding:4px 12px;border:1.5px solid var(--g3);border-radius:8px;transition:all 0.2s}
+.jurnal-link:hover{background:var(--g1)}
+.jurnal-loading{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 0;color:var(--muted);font-size:13px}
 .search-input{width:100%;padding:12px 16px 12px 42px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;border:1.5px solid var(--border);border-radius:12px;background:var(--white);color:var(--ink);transition:border-color 0.15s;box-shadow:var(--shadow-sm);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8a6a' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='M21 21l-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:14px center}
 .search-input:focus{outline:none;border-color:var(--g5);box-shadow:0 0 0 3px rgba(74,122,24,0.08)}
 .search-filter{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
@@ -393,24 +411,53 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 <!-- CARI KONTEN -->
 <div id="page-cari" class="page">
-  <div class="pg-title"><h2>Cari Konten</h2><p>Cari video YouTube seputar pengelolaan sampah &amp; lingkungan</p></div>
-  <div class="search-wrap">
-    <div class="search-row">
-      <input class="search-input" id="search-input" type="text" placeholder="Cari topik sampah di YouTube..." onkeydown="if(event.key==='Enter')doSearch()">
-      <button class="search-btn" onclick="doSearch()">Cari</button>
+  <div class="pg-title"><h2>Cari Konten</h2><p>Cari video YouTube &amp; jurnal ilmiah pengelolaan sampah</p></div>
+  <div class="cari-tabs">
+    <button class="cari-tab active" onclick="switchCariTab('yt',this)">Video YouTube</button>
+    <button class="cari-tab" onclick="switchCariTab('jurnal',this)">Jurnal Ilmiah</button>
+  </div>
+
+  <!-- YouTube Panel -->
+  <div id="cari-yt" class="cari-panel">
+    <div class="search-wrap">
+      <div class="search-row">
+        <input class="search-input" id="search-input" type="text" placeholder="Cari topik sampah di YouTube..." onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-btn" onclick="doSearch()">Cari</button>
+      </div>
+      <div class="search-filter">
+        <button class="mtab active" onclick="setSearchFilter('',this)">Bebas</button>
+        <button class="mtab" onclick="setSearchFilter('sampah organik kompos',this)">Organik</button>
+        <button class="mtab" onclick="setSearchFilter('sampah anorganik plastik daur ulang',this)">Anorganik</button>
+        <button class="mtab" onclick="setSearchFilter('limbah B3 berbahaya beracun',this)">B3</button>
+        <button class="mtab" onclick="setSearchFilter('bank sampah pengelolaan lingkungan',this)">Bank Sampah</button>
+        <button class="mtab" onclick="setSearchFilter('zero waste daur ulang',this)">Zero Waste</button>
+      </div>
     </div>
-    <div class="search-filter">
-      <button class="mtab active" onclick="setSearchFilter('',this)">Bebas</button>
-      <button class="mtab" onclick="setSearchFilter('sampah organik kompos',this)">Organik</button>
-      <button class="mtab" onclick="setSearchFilter('sampah anorganik plastik daur ulang',this)">Anorganik</button>
-      <button class="mtab" onclick="setSearchFilter('limbah B3 berbahaya beracun',this)">B3</button>
-      <button class="mtab" onclick="setSearchFilter('bank sampah pengelolaan lingkungan',this)">Bank Sampah</button>
-      <button class="mtab" onclick="setSearchFilter('zero waste daur ulang',this)">Zero Waste</button>
+    <div id="search-status"></div>
+    <div class="yt-grid" id="search-grid">
+      <div class="s-empty" style="grid-column:1/-1"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil pencarian dari YouTube akan tampil di sini</span></div>
     </div>
   </div>
-  <div id="search-status"></div>
-  <div class="yt-grid" id="search-grid">
-    <div class="s-empty" style="grid-column:1/-1"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil pencarian dari YouTube akan tampil di sini</span></div>
+
+  <!-- Jurnal Panel -->
+  <div id="cari-jurnal" class="cari-panel" style="display:none">
+    <div class="search-wrap">
+      <div class="search-row">
+        <input class="search-input" id="jurnal-input" type="text" placeholder="Cari judul, topik, atau kata kunci jurnal..." onkeydown="if(event.key==='Enter')doJurnalSearch()">
+        <button class="search-btn" onclick="doJurnalSearch()">Cari</button>
+      </div>
+      <div class="search-filter">
+        <button class="mtab active" onclick="setJurnalFilter('waste management',this)">Semua</button>
+        <button class="mtab" onclick="setJurnalFilter('organic waste composting',this)">Organik</button>
+        <button class="mtab" onclick="setJurnalFilter('plastic waste recycling',this)">Anorganik</button>
+        <button class="mtab" onclick="setJurnalFilter('hazardous waste B3',this)">B3</button>
+        <button class="mtab" onclick="setJurnalFilter('circular economy waste',this)">Sirkular</button>
+      </div>
+    </div>
+    <div id="jurnal-status"></div>
+    <div class="jurnal-list" id="jurnal-grid">
+      <div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil dari Semantic Scholar (jutaan jurnal ilmiah)</span></div>
+    </div>
   </div>
 </div>
 
@@ -697,7 +744,62 @@ async function doSearch(){
 function openV(url){document.getElementById('vframe').src=url;document.getElementById('vmodal').classList.add('open');}
 function closeV(){document.getElementById('vframe').src='';document.getElementById('vmodal').classList.remove('open');}
 
-// ===== EXPORT =====
+// ===== JURNAL SEARCH =====
+let jurnalSuffix='waste management';
+function switchCariTab(tab,btn){
+  document.querySelectorAll('.cari-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cari-yt').style.display=tab==='yt'?'block':'none';
+  document.getElementById('cari-jurnal').style.display=tab==='jurnal'?'block':'none';
+}
+function setJurnalFilter(suffix,btn){
+  jurnalSuffix=suffix;
+  document.querySelectorAll('#cari-jurnal .search-filter .mtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+async function doJurnalSearch(){
+  const raw=document.getElementById('jurnal-input')?.value.trim()||'';
+  const grid=document.getElementById('jurnal-grid');
+  const status=document.getElementById('jurnal-status');
+  if(!grid)return;
+  if(!raw){
+    grid.innerHTML=`<div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil dari Semantic Scholar (jutaan jurnal ilmiah)</span></div>`;
+    if(status)status.textContent='';return;
+  }
+  const q=(raw+' '+jurnalSuffix).trim();
+  grid.innerHTML=`<div class="jurnal-loading"><div class="yt-spin"></div><span>Mencari jurnal ilmiah...</span></div>`;
+  if(status)status.textContent='';
+  try{
+    const res=await fetch('/api/journals?q='+encodeURIComponent(q));
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    if(!data.results||!data.results.length){
+      grid.innerHTML=`<div class="s-empty"><p>Tidak ada hasil untuk "${raw}"</p><span>Coba kata kunci dalam bahasa Inggris</span></div>`;
+      if(status)status.textContent='';return;
+    }
+    if(status)status.textContent=(data.total?data.total.toLocaleString()+' total — ':'')+data.results.length+' jurnal ditampilkan · Sumber: Semantic Scholar';
+    grid.innerHTML=data.results.map(p=>`
+      <div class="jurnal-card">
+        <div class="jurnal-meta">
+          ${p.year?`<span class="jurnal-year">${p.year}</span>`:''}
+          ${p.venue?`<span class="jurnal-venue">${p.venue}</span>`:''}
+          ${p.openAccess?`<span class="jurnal-oa">Open Access</span>`:''}
+        </div>
+        <div class="jurnal-title">${p.title}</div>
+        ${p.authors?`<div class="jurnal-authors">${p.authors}</div>`:''}
+        ${p.abstract?`<div class="jurnal-abstract">${p.abstract}</div>`:''}
+        <div class="jurnal-footer">
+          ${p.url?`<a class="jurnal-link" href="${p.url}" target="_blank" rel="noopener">Baca Jurnal</a>`:''}
+          ${p.doi?`<a class="jurnal-link" href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>`:''}
+        </div>
+      </div>`).join('');
+  }catch(err){
+    grid.innerHTML=`<div class="s-empty"><p>Gagal memuat jurnal</p><span>${err.message||'Periksa koneksi internet'}</span></div>`;
+    if(status)status.textContent='';
+  }
+}
+
+
 function exportCSV(){
   if(!hist.length){alert('Belum ada data untuk diekspor.');return;}
   const header='Tanggal,Waktu,Jumlah Item,Kategori,Catatan\n';
