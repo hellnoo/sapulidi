@@ -1,11 +1,9 @@
 const PROMPT = `Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan apapun:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":85,"penanganan":"cara penanganan singkat","masa_urai":"estimasi masa urai contoh: 2-4 minggu atau 450 tahun"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`;
 
 const GEMINI_MODELS = [
-  { model: 'gemini-2.0-flash',      ver: 'v1beta' },
-  { model: 'gemini-2.0-flash-lite', ver: 'v1beta' },
-  { model: 'gemini-1.5-flash',      ver: 'v1'     },
-  { model: 'gemini-1.5-flash',      ver: 'v1beta' },
-  { model: 'gemini-1.0-pro-vision', ver: 'v1beta' },
+  { model: 'gemini-2.5-flash', ver: 'v1' },
+  { model: 'gemini-2.0-flash', ver: 'v1' },
+  { model: 'gemini-2.0-flash-lite', ver: 'v1' },
 ];
 
 async function callGemini(model, ver, key, imageData, mimeType) {
