@@ -9,36 +9,41 @@ export default async function handler(req, res) {
   if (!q || !q.trim()) return res.status(400).json({ error: 'Missing query' });
 
   try {
-    const url = new URL('https://api.semanticscholar.org/graph/v1/paper/search');
-    url.searchParams.set('query', q.trim());
-    url.searchParams.set('fields', 'title,authors,year,abstract,url,openAccessPdf,externalIds,venue');
-    url.searchParams.set('limit', '10');
+    const url = new URL('https://api.openalex.org/works');
+    url.searchParams.set('search', q.trim());
+    url.searchParams.set('per-page', '10');
+    url.searchParams.set('select', 'id,title,authorships,publication_year,abstract_inverted_index,open_access,doi,primary_location,cited_by_count');
+    url.searchParams.set('mailto', 'sapulidi@research.app');
 
-    const response = await fetch(url.toString(), {
-      headers: {
-        'User-Agent': 'SapuLidi/1.0 (waste-research-app)',
-        'x-api-key': process.env.SEMANTIC_SCHOLAR_KEY || ''
-      }
-    });
+    const response = await fetch(url.toString());
     const data = await response.json();
 
-    if (data.error) return res.status(400).json({ error: data.error, raw: data });
-    if (!response.ok) return res.status(response.status).json({ error: `API error ${response.status}`, raw: data });
+    if (!response.ok) return res.status(response.status).json({ error: data.message || 'API error' });
 
-    const papers = data.data || data.papers || [];
-    const results = papers.map(p => ({
-      id: p.paperId,
+    function toAbstract(inv) {
+      if (!inv) return '';
+      const words = [];
+      for (const [word, positions] of Object.entries(inv)) {
+        for (const pos of positions) words[pos] = word;
+      }
+      const text = words.join(' ');
+      return text.length > 200 ? text.slice(0, 200) + '...' : text;
+    }
+
+    const results = (data.results || []).map(p => ({
+      id: p.id,
       title: p.title || 'Untitled',
-      authors: (p.authors || []).map(a => a.name).join(', ') || 'Unknown',
-      year: p.year || '',
-      abstract: p.abstract ? p.abstract.slice(0, 200) + (p.abstract.length > 200 ? '...' : '') : '',
-      venue: p.venue || '',
-      url: p.openAccessPdf?.url || p.url || '',
-      doi: p.externalIds?.DOI || '',
-      openAccess: !!p.openAccessPdf?.url
+      authors: (p.authorships || []).slice(0, 3).map(a => a.author?.display_name).filter(Boolean).join(', ') || 'Unknown',
+      year: p.publication_year || '',
+      abstract: toAbstract(p.abstract_inverted_index),
+      venue: p.primary_location?.source?.display_name || '',
+      url: p.open_access?.oa_url || (p.doi ? `https://doi.org/${p.doi}` : ''),
+      doi: p.doi || '',
+      openAccess: !!p.open_access?.is_oa,
+      citations: p.cited_by_count || 0
     }));
 
-    res.status(200).json({ results, total: data.total || 0, debug: results.length === 0 ? data : undefined });
+    res.status(200).json({ results, total: data.meta?.count || 0 });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
