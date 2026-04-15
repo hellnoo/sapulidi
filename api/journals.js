@@ -15,13 +15,18 @@ export default async function handler(req, res) {
     url.searchParams.set('limit', '10');
 
     const response = await fetch(url.toString(), {
-      headers: { 'User-Agent': 'SapuLidi/1.0 (waste-research-app)' }
+      headers: {
+        'User-Agent': 'SapuLidi/1.0 (waste-research-app)',
+        'x-api-key': process.env.SEMANTIC_SCHOLAR_KEY || ''
+      }
     });
     const data = await response.json();
 
-    if (data.error) return res.status(400).json({ error: data.error });
+    if (data.error) return res.status(400).json({ error: data.error, raw: data });
+    if (!response.ok) return res.status(response.status).json({ error: `API error ${response.status}`, raw: data });
 
-    const results = (data.data || []).map(p => ({
+    const papers = data.data || data.papers || [];
+    const results = papers.map(p => ({
       id: p.paperId,
       title: p.title || 'Untitled',
       authors: (p.authors || []).map(a => a.name).join(', ') || 'Unknown',
@@ -33,7 +38,7 @@ export default async function handler(req, res) {
       openAccess: !!p.openAccessPdf?.url
     }));
 
-    res.status(200).json({ results, total: data.total || 0 });
+    res.status(200).json({ results, total: data.total || 0, debug: results.length === 0 ? data : undefined });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
