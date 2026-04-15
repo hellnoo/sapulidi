@@ -1,29 +1,35 @@
 const PROMPT = `Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan apapun:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":85,"penanganan":"cara penanganan singkat","masa_urai":"estimasi masa urai contoh: 2-4 minggu atau 450 tahun"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`;
 
-const GEMINI_MODELS = [
-  { model: 'gemini-2.5-flash', ver: 'v1' },
-  { model: 'gemini-2.0-flash', ver: 'v1' },
-  { model: 'gemini-2.0-flash-lite', ver: 'v1' },
+const MODELS = [
+  'google/gemma-3-27b-it:free',
+  'google/gemma-4-31b-it:free',
+  'google/gemma-4-9b-it:free',
+  'meta-llama/llama-3.2-90b-vision-instruct:free',
 ];
 
-async function callGemini(model, ver, key, imageData, mimeType) {
-  const url = `https://generativelanguage.googleapis.com/${ver}/models/${model}:generateContent?key=${key}`;
-  const response = await fetch(url, {
+async function callModel(model, key, imageData, mimeType) {
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Authorization': `Bearer ${key}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://sapulidi-two.vercel.app',
+      'X-Title': 'SapuLidi'
+    },
     body: JSON.stringify({
-      contents: [{
-        parts: [
-          { inline_data: { mime_type: mimeType, data: imageData } },
-          { text: PROMPT }
+      model,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image_url', image_url: { url: `data:${mimeType};base64,${imageData}` } },
+          { type: 'text', text: PROMPT }
         ]
-      }],
-      generationConfig: { temperature: 0.2 }
+      }]
     })
   });
   const data = await response.json();
   if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-  return data.candidates[0].content.parts[0].text;
+  return data.choices[0].message.content;
 }
 
 export default async function handler(req, res) {
@@ -33,28 +39,25 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const key = process.env.GOOGLE_API_KEY;
-  if (!key) return res.status(500).json({ error: 'Google API key not configured' });
+  const key = process.env.OPENROUTER_KEY;
+  if (!key) return res.status(500).json({ error: 'OpenRouter API key not configured' });
 
   const { imageData, mimeType } = req.body;
   if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing data' });
 
-  let lastError = 'Gagal menghubungi Gemini API';
   const errors = [];
-  for (const { model, ver } of GEMINI_MODELS) {
+  for (const model of MODELS) {
     try {
-      const text = await callGemini(model, ver, key, imageData, mimeType);
+      const text = await callModel(model, key, imageData, mimeType);
       const clean = text.replace(/```json|```/g, '').trim();
       const result = JSON.parse(clean);
       return res.status(200).json(result);
     } catch (err) {
-      const msg = `[${ver}/${model}] ${err.message}`;
+      const msg = `[${model}] ${err.message}`;
       errors.push(msg);
       console.error(msg);
-      lastError = msg;
-      continue;
     }
   }
 
-  res.status(500).json({ error: lastError, tried: errors });
+  res.status(500).json({ error: errors[errors.length - 1], tried: errors });
 }
