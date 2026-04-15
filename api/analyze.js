@@ -42,6 +42,7 @@ export default async function handler(req, res) {
   if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing data' });
 
   let lastError = 'Gagal menghubungi Gemini API';
+  const errors = [];
   for (const { model, ver } of GEMINI_MODELS) {
     try {
       const text = await callGemini(model, ver, key, imageData, mimeType);
@@ -49,10 +50,13 @@ export default async function handler(req, res) {
       const result = JSON.parse(clean);
       return res.status(200).json(result);
     } catch (err) {
-      lastError = err.message;
+      const msg = `[${ver}/${model}] ${err.message}`;
+      errors.push(msg);
+      console.error(msg);
+      lastError = msg;
       continue;
     }
   }
 
-  res.status(500).json({ error: lastError });
+  res.status(500).json({ error: lastError, tried: errors });
 }
