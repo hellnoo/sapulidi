@@ -21,7 +21,7 @@ export default async function handler(req, res) {
         'X-Title': 'SapuLidi'
       },
       body: JSON.stringify({
-        model: 'qwen/qwen2-vl-7b-instruct:free',
+        model: 'google/gemma-3-27b-it:free',
         messages: [{
           role: 'user',
           content: [
