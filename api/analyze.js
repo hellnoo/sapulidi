@@ -5,6 +5,9 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+  const key = process.env.OPENROUTER_KEY;
+  if (!key) return res.status(500).json({ error: 'OpenRouter API key not configured' });
+
   try {
     const { imageData, mimeType } = req.body;
     if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing data' });
@@ -12,7 +15,7 @@ export default async function handler(req, res) {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENROUTER_KEY}`,
+        'Authorization': `Bearer ${key}`,
         'Content-Type': 'application/json',
         'HTTP-Referer': 'https://sapulidi-two.vercel.app',
         'X-Title': 'SapuLidi'

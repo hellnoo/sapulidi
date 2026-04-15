@@ -25,8 +25,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 /* ===== HEADER ===== */
 .header{background:var(--g9);padding:0 28px;height:60px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(192,221,151,0.1)}
-.logo-mark{width:34px;height:34px;background:var(--g4);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-mark svg{width:19px;height:19px}
+.logo-mark{width:34px;height:34px;background:#f0e6d8;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-mark svg{width:22px;height:22px}
 .brand{flex:1;display:flex;align-items:baseline;gap:8px}
 .brand-name{font-family:'Instrument Serif',serif;font-size:21px;color:var(--g3);letter-spacing:0.3px;line-height:1}
 .brand-sub{font-size:10px;color:var(--t2);letter-spacing:0.5px;font-weight:500}
@@ -210,8 +210,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 /* ===== TENTANG ===== */
 .about-hero{background:linear-gradient(150deg,var(--g9) 0%,#1e4a10 60%,#0a2a05 100%);border-radius:20px;padding:36px 28px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
 .about-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(151,196,89,0.08),transparent 70%);pointer-events:none}
-.a-logo{width:60px;height:60px;background:var(--g4);border-radius:17px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 22px rgba(151,196,89,0.3)}
-.a-logo svg{width:34px;height:34px}
+.a-logo{width:60px;height:60px;background:#f0e6d8;border-radius:17px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 8px 22px rgba(155,117,96,0.25)}
+.a-logo svg{width:38px;height:38px}
 .a-name{font-family:'Instrument Serif',serif;font-size:30px;color:var(--g3);letter-spacing:0.5px}
 .a-by{font-family:'Instrument Serif',serif;font-style:italic;font-size:14px;color:var(--t2);margin-top:4px}
 .a-tag{font-size:11px;color:var(--t2);margin-top:3px;letter-spacing:0.5px}
@@ -271,6 +271,13 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .s-empty p{font-size:14px;font-weight:600;color:var(--muted)}
 .s-empty span{font-size:12px;margin-top:4px;display:block}
 
+/* ===== MATERI ARTICLE SEARCH ===== */
+.materi-search-section{margin-top:28px;padding-top:24px;border-top:1.5px solid var(--border)}
+.materi-search-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.materi-search-icon{width:40px;height:40px;background:var(--g1);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.materi-search-title{font-size:15px;font-weight:700;color:var(--g8)}
+.materi-search-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
 /* ===== MASA URAI ===== */
 .urai-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--g1);color:var(--g7);margin-top:5px;white-space:nowrap}
 .urai-tag::before{content:'⏱';font-size:9px}
@@ -305,10 +312,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 <div class="header">
   <div class="logo-mark">
-    <svg viewBox="0 0 24 24" fill="none">
-      <path d="M12 3C8.5 3 5.5 6.5 5.5 10.5c0 2.8 1.4 5.2 3.8 6.7L12 19l2.7-1.8c2.4-1.5 3.8-3.9 3.8-6.7C18.5 6.5 15.5 3 12 3z" fill="#1a3a0a"/>
-      <path d="M9.5 10.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5" stroke="#c8e87a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <circle cx="12" cy="10.5" r="1.6" fill="#c8e87a"/>
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="10.5" y1="18" x2="3"  y2="1.5" stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="6"  y2="1"   stroke="#9B7560" stroke-width="1"   stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="9"  y2="0.8" stroke="#B08870" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="12" y2="0.8" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="15" y2="1"   stroke="#B08870" stroke-width="1"   stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="18" y2="1.5" stroke="#9B7560" stroke-width="1"   stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="20" y2="2"   stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="10.5" y1="18" x2="22" y2="3.5" stroke="#7D5A40" stroke-width="0.8" stroke-linecap="round"/>
+      <rect x="8" y="15.5" width="5" height="3.5" rx="1.5" fill="#C4956A"/>
+      <line x1="8.5" y1="17.2" x2="12.5" y2="17.2" stroke="#EDD5B8" stroke-width="0.9" stroke-linecap="round"/>
+      <path d="M9 19 Q10.5 21.5 12 19 L11.5 22.5 Q10.5 23 9.5 22.5 Z" fill="#6B4A32"/>
     </svg>
   </div>
   <div class="brand">
@@ -332,7 +347,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div id="page-detect" class="page active">
   <div class="pg-title">
     <h2>Deteksi Sampah AI</h2>
-    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Google Gemma 3 27B via OpenRouter</p>
+    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Llama 3.2 Vision via OpenRouter</p>
   </div>
   <div class="detect-wrap">
     <div class="panel">
@@ -407,6 +422,33 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
     <button class="mtab" onclick="filterM('b3',this)">⚠️ B3</button>
   </div>
   <div class="m-grid" id="m-grid"></div>
+
+  <div class="materi-search-section">
+    <div class="materi-search-header">
+      <div class="materi-search-icon">🔎</div>
+      <div>
+        <div class="materi-search-title">Cari Artikel dari Internet</div>
+        <div class="materi-search-sub">Temukan artikel &amp; jurnal ilmiah pengelolaan sampah dari Semantic Scholar</div>
+      </div>
+    </div>
+    <div class="search-wrap" style="margin-bottom:12px">
+      <div class="search-row">
+        <input class="search-input" id="materi-artikel-input" type="text" placeholder="Cari topik artikel, misal: kompos organik, daur ulang plastik..." onkeydown="if(event.key==='Enter')doMateriArtikelSearch()">
+        <button class="search-btn" onclick="doMateriArtikelSearch()">Cari</button>
+      </div>
+      <div class="search-filter">
+        <button class="mtab active" onclick="setMateriArtikelFilter('waste management',this)">Semua</button>
+        <button class="mtab" onclick="setMateriArtikelFilter('organic waste composting',this)">🌿 Organik</button>
+        <button class="mtab" onclick="setMateriArtikelFilter('plastic waste recycling',this)">♻️ Anorganik</button>
+        <button class="mtab" onclick="setMateriArtikelFilter('hazardous waste B3',this)">⚠️ B3</button>
+        <button class="mtab" onclick="setMateriArtikelFilter('circular economy zero waste',this)">Zero Waste</button>
+      </div>
+    </div>
+    <div id="materi-artikel-status" style="font-size:12px;color:var(--muted);margin-bottom:8px;min-height:16px"></div>
+    <div class="jurnal-list" id="materi-artikel-grid">
+      <div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil artikel ilmiah dari Semantic Scholar</span></div>
+    </div>
+  </div>
 </div>
 
 <!-- CARI KONTEN -->
@@ -482,15 +524,26 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <!-- TENTANG -->
 <div id="page-tentang" class="page">
   <div class="about-hero">
-    <div class="a-logo"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3C8.5 3 5.5 6.5 5.5 10.5c0 2.8 1.4 5.2 3.8 6.7L12 19l2.7-1.8c2.4-1.5 3.8-3.9 3.8-6.7C18.5 6.5 15.5 3 12 3z" fill="#1a3a0a"/><path d="M9.5 10.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5" stroke="#c8e87a" stroke-width="1.4" fill="none" stroke-linecap="round"/><circle cx="12" cy="10.5" r="1.6" fill="#c8e87a"/></svg></div>
+    <div class="a-logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="12" y1="19" x2="3"  y2="2"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="6"  y2="1.5" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="9"  y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="12" y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="15" y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="18" y2="1.5" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12" y1="19" x2="21" y2="2"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
+      <rect x="9.5" y="17" width="5" height="2.5" rx="1" fill="#C4956A"/>
+      <rect x="10"  y="17.8" width="4" height="1" rx="0.5" fill="#EDD5B8" opacity="0.9"/>
+      <path d="M10 19.5 Q12 22 14 19.5 L13.5 22.5 Q12 23 10.5 22.5 Z" fill="#8B6347"/>
+    </svg></div>
     <div class="a-name">SapuLidi</div>
     <div class="a-by">by Navis</div>
     <div class="a-tag">Sistem Analisis &amp; Pengelolaan Limbah Cerdas</div>
-    <div class="a-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan Google Gemma 3 27B via OpenRouter untuk mendeteksi dan mengklasifikasi sampah dari gambar secara otomatis.</div>
+    <div class="a-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan Llama 3.2 Vision via OpenRouter untuk mendeteksi dan mengklasifikasi sampah dari gambar secara otomatis.</div>
     <div class="a-ver">Versi 2.1 · Prototipe Disertasi S3</div>
   </div>
   <div class="feat-grid">
-    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Google Gemma 3 27B via OpenRouter</div></div>
+    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Llama 3.2 Vision via OpenRouter</div></div>
     <div class="fcard"><div class="ficon">📚</div><div class="ftit">Edukasi Terstruktur</div><div class="fdesc">Video &amp; artikel dari sumber terpercaya untuk mendukung riset pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📱</div><div class="ftit">Referensi Instagram</div><div class="fdesc">Kurasi akun Instagram terpilih sebagai referensi konten edukasi pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📊</div><div class="ftit">Dashboard Riset</div><div class="fdesc">Visualisasi data &amp; statistik hasil deteksi untuk analisis dan pelaporan penelitian</div></div>
@@ -498,7 +551,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="tech-panel">
     <div class="tech-label">Teknologi</div>
     <div class="tech-tags">
-      <span class="tt" style="background:var(--g1);color:var(--g8)">Google Gemma 3 27B</span>
+      <span class="tt" style="background:var(--g1);color:var(--g8)">Llama 3.2 Vision</span>
       <span class="tt" style="background:var(--b1);color:var(--b7)">HTML5 / CSS3 / JavaScript</span>
       <span class="tt" style="background:var(--a1);color:#7a4a00">OpenRouter API</span>
       <span class="tt" style="background:#f1efee;color:#444">Vercel Hosting</span>
@@ -601,7 +654,7 @@ function clearImage(){
 // ===== LOADING ANIMATION =====
 const LD_STEPS=[
   {text:'Mengirim gambar ke AI...',pct:15,sub:'Menghubungi server OpenRouter'},
-  {text:'Mendeteksi objek dalam gambar...',pct:35,sub:'Model Gemma 3 27B memproses visual'},
+  {text:'Mendeteksi objek dalam gambar...',pct:35,sub:'Model Llama 3.2 Vision memproses visual'},
   {text:'Mengklasifikasi jenis sampah...',pct:55,sub:'Mencocokkan kategori limbah'},
   {text:'Mengestimasi masa urai...',pct:72,sub:'Menghitung dampak lingkungan'},
   {text:'Menyusun rekomendasi...',pct:88,sub:'Hampir selesai...'}
@@ -799,6 +852,55 @@ async function doJurnalSearch(){
   }
 }
 
+
+// ===== MATERI ARTIKEL SEARCH =====
+let materiArtikelSuffix='waste management';
+function setMateriArtikelFilter(suffix,btn){
+  materiArtikelSuffix=suffix;
+  document.querySelectorAll('#page-materi .search-filter .mtab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+async function doMateriArtikelSearch(){
+  const raw=document.getElementById('materi-artikel-input')?.value.trim()||'';
+  const grid=document.getElementById('materi-artikel-grid');
+  const status=document.getElementById('materi-artikel-status');
+  if(!grid)return;
+  if(!raw){
+    grid.innerHTML=`<div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil artikel ilmiah dari Semantic Scholar</span></div>`;
+    if(status)status.textContent='';return;
+  }
+  const q=(raw+' '+materiArtikelSuffix).trim();
+  grid.innerHTML=`<div class="jurnal-loading"><div class="yt-spin"></div><span>Mencari artikel...</span></div>`;
+  if(status)status.textContent='';
+  try{
+    const res=await fetch('/api/journals?q='+encodeURIComponent(q));
+    const data=await res.json();
+    if(data.error)throw new Error(data.error);
+    if(!data.results||!data.results.length){
+      grid.innerHTML=`<div class="s-empty"><p>Tidak ada hasil untuk "${raw}"</p><span>Coba kata kunci dalam bahasa Inggris</span></div>`;
+      if(status)status.textContent='';return;
+    }
+    if(status)status.textContent=(data.total?data.total.toLocaleString()+' total — ':'')+data.results.length+' artikel ditemukan · Semantic Scholar';
+    grid.innerHTML=data.results.map(p=>`
+      <div class="jurnal-card">
+        <div class="jurnal-meta">
+          ${p.year?`<span class="jurnal-year">${p.year}</span>`:''}
+          ${p.venue?`<span class="jurnal-venue">${p.venue}</span>`:''}
+          ${p.openAccess?`<span class="jurnal-oa">Open Access</span>`:''}
+        </div>
+        <div class="jurnal-title">${p.title}</div>
+        ${p.authors?`<div class="jurnal-authors">${p.authors}</div>`:''}
+        ${p.abstract?`<div class="jurnal-abstract">${p.abstract}</div>`:''}
+        <div class="jurnal-footer">
+          ${p.url?`<a class="jurnal-link" href="${p.url}" target="_blank" rel="noopener">Baca Artikel</a>`:''}
+          ${p.doi?`<a class="jurnal-link" href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>`:''}
+        </div>
+      </div>`).join('');
+  }catch(err){
+    grid.innerHTML=`<div class="s-empty"><p>Gagal memuat artikel</p><span>${err.message||'Periksa koneksi internet'}</span></div>`;
+    if(status)status.textContent='';
+  }
+}
 
 function exportCSV(){
   if(!hist.length){alert('Belum ada data untuk diekspor.');return;}
