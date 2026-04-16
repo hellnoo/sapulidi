@@ -1,15 +1,5 @@
 [
   {
-    "id": 6,
-    "tipe": "artikel",
-    "kat": "b3",
-    "judul": "Extended Producer Responsibility di Indonesia",
-    "desc": "Regulasi tanggung jawab produsen terhadap kemasan pasca konsumsi dan implementasinya.",
-    "author": "ICEL Indonesia",
-    "url": "https://ptali.org/edukasi-tentang-pengelolaan-sampah-langkah-awal-menuju-lingkungan-yang-lebih-bersih/",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 7,
     "tipe": "video",
     "kat": "organik",
