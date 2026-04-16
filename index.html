@@ -614,16 +614,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 <script>
 // ===== DATA MATERI =====
-let MATERI = [
-  {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Pupuk Kompos dari Sampah Organik',desc:'Panduan praktis pembuatan kompos dari sisa sayuran dan buah untuk mengurangi sampah rumah tangga.',author:'Kementerian PUPR',url:'https://www.youtube.com/embed/GDcHKer8M-c'},
-  {id:2,tipe:'video',kat:'organik',judul:'Bank Sampah: Model Pengelolaan Sampah Berbasis Masyarakat',desc:'Bank sampah sebagai solusi ekonomi sirkular di tingkat kelurahan — dari sampah jadi tabungan.',author:'KLHK Indonesia',url:'https://www.youtube.com/embed/6xqntRiSp9I'},
-  {id:3,tipe:'video',kat:'anorganik',judul:'Mengenal Jenis Plastik dan Cara Daur Ulangnya',desc:'Klasifikasi 7 jenis plastik berdasarkan kode resin dan metode daur ulang yang tepat.',author:'Waste4Change',url:'https://www.youtube.com/embed/fYAuCn9bFOA'},
-  {id:4,tipe:'video',kat:'b3',judul:'Kenali dan Kelola Limbah B3 Rumah Tangga',desc:'Cara mengidentifikasi dan membuang sampah berbahaya seperti baterai, obat, dan elektronik bekas.',author:'BRIN Indonesia',url:'https://www.youtube.com/embed/YthP04_QUSE'},
-  {id:5,tipe:'artikel',kat:'anorganik',judul:'Panduan Lengkap Pemilahan Sampah Plastik',desc:'7 jenis kode plastik dan cara pemilahan yang benar sebelum masuk ke fasilitas daur ulang.',author:'Waste4Change',url:'https://waste4change.com/blog/cara-edukasi-manajemen-sampah-yang-bisa-dilakukan-di-sekolah/'},
-  {id:6,tipe:'artikel',kat:'b3',judul:'Extended Producer Responsibility di Indonesia',desc:'Regulasi tanggung jawab produsen terhadap kemasan pasca konsumsi dan implementasinya.',author:'ICEL Indonesia',url:'https://ptali.org/edukasi-tentang-pengelolaan-sampah-langkah-awal-menuju-lingkungan-yang-lebih-bersih/'},
-  {id:7,tipe:'video',kat:'organik',judul:'Pengolahan Sampah Organik Menjadi Biogas',desc:'Konversi sampah organik menjadi energi biogas — teknologi sederhana skala rumah tangga dan komunitas.',author:'BPPT Indonesia',url:'https://www.youtube.com/embed/nthngdPbne8'},
-  {id:8,tipe:'artikel',kat:'anorganik',judul:'Sampah Organik vs Anorganik: Pengertian & Pengelolaan',desc:'Perbedaan mendasar sampah organik dan anorganik serta metode pengelolaan yang tepat untuk masing-masing.',author:'DLH Buleleng',url:'https://dlh.bulelengkab.go.id/informasi/detail/artikel/pengertian-dan-pengelolaan-sampah-organik-dan-anorganik-13'},
-];
+let MATERI = [];
 
 
 const CF={organik:'b-organik',anorganik:'b-anorganik',b3:'b-b3',residu:'b-residu'};
@@ -795,6 +786,10 @@ function saveNote(){
 // ===== MATERI =====
 function renderM(filter){
   const data=filter==='semua'?MATERI:MATERI.filter(m=>filter==='video'?m.tipe==='video':filter==='artikel'?m.tipe==='artikel':m.kat===filter);
+  if(!data.length){
+    document.getElementById('m-grid').innerHTML=`<div class="empty" style="grid-column:1/-1;padding:40px 0;color:var(--muted);text-align:center"><div style="font-size:36px;margin-bottom:8px">📂</div><p style="font-size:13px;font-weight:600">Belum ada konten</p><p style="font-size:12px;margin-top:4px">${adminToken?'Klik tombol + untuk menambah konten':'Konten akan tampil di sini setelah ditambahkan admin'}</p></div>`;
+    return;
+  }
   document.getElementById('m-grid').innerHTML=data.map(m=>`
     <div class="mcard" onclick="${m.tipe==='video'?`openV('${m.url}')`:m.url?`window.open('${m.url}','_blank')`:''}">
       <button class="mcard-del${adminToken?' visible':''}" onclick="event.stopPropagation();deleteMateri(${m.id},this)">✕ Hapus</button>
