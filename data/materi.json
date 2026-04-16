@@ -1,15 +1,5 @@
 [
   {
-    "id": 2,
-    "tipe": "video",
-    "kat": "organik",
-    "judul": "Bank Sampah: Model Pengelolaan Sampah Berbasis Masyarakat",
-    "desc": "Bank sampah sebagai solusi ekonomi sirkular di tingkat kelurahan — dari sampah jadi tabungan.",
-    "author": "KLHK Indonesia",
-    "url": "https://www.youtube.com/embed/6xqntRiSp9I",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 3,
     "tipe": "video",
     "kat": "anorganik",
