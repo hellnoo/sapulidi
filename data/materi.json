@@ -1,15 +1,5 @@
 [
   {
-    "id": 3,
-    "tipe": "video",
-    "kat": "anorganik",
-    "judul": "Mengenal Jenis Plastik dan Cara Daur Ulangnya",
-    "desc": "Klasifikasi 7 jenis plastik berdasarkan kode resin dan metode daur ulang yang tepat.",
-    "author": "Waste4Change",
-    "url": "https://www.youtube.com/embed/fYAuCn9bFOA",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 4,
     "tipe": "video",
     "kat": "b3",
