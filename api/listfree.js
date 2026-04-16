@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   });
   const data = await r.json();
   const free = (data.data || [])
-    .filter(m => m.id.endsWith(':free') && (m.architecture?.modality === 'text->text' || !m.architecture?.modality?.includes('image')))
-    .map(m => ({ id: m.id, ctx: m.context_length }));
+    .filter(m => m.id.endsWith(':free'))
+    .map(m => ({ id: m.id, modality: m.architecture?.modality || '?', ctx: m.context_length }));
   res.status(200).json({ count: free.length, models: free });
 }
