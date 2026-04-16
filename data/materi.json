@@ -1,15 +1,5 @@
 [
   {
-    "id": 5,
-    "tipe": "artikel",
-    "kat": "anorganik",
-    "judul": "Panduan Lengkap Pemilahan Sampah Plastik",
-    "desc": "7 jenis kode plastik dan cara pemilahan yang benar sebelum masuk ke fasilitas daur ulang.",
-    "author": "Waste4Change",
-    "url": "https://waste4change.com/blog/cara-edukasi-manajemen-sampah-yang-bisa-dilakukan-di-sekolah/",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 6,
     "tipe": "artikel",
     "kat": "b3",
