@@ -322,6 +322,36 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
 .chat-sug{font-size:11px;padding:5px 12px;border:1.5px solid var(--border);border-radius:20px;background:var(--white);cursor:pointer;color:var(--ink2);transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif}
 .chat-sug:hover{border-color:var(--g4);background:var(--g1);color:var(--g7)}
+
+/* ===== ADMIN ===== */
+.admin-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:14px;padding:4px 8px;border-radius:8px;cursor:pointer;transition:all 0.18s;line-height:1}
+.admin-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
+.admin-btn.logged-in{color:var(--g3);border-color:rgba(151,196,89,0.4)}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:18px;padding:24px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal h3{font-family:'Instrument Serif',serif;font-size:20px;color:var(--g8);margin-bottom:4px}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:18px}
+.modal-field{margin-bottom:12px}
+.modal-field label{display:block;font-size:11px;font-weight:700;color:var(--ink2);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--surface);outline:none;transition:border 0.15s}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:var(--g4)}
+.modal-field textarea{resize:vertical;min-height:70px}
+.modal-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.modal-submit{flex:1;padding:11px;background:var(--g8);color:var(--g3);border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.18s}
+.modal-submit:hover{background:var(--g7)}
+.modal-cancel{padding:11px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;color:var(--muted)}
+.modal-err{font-size:12px;color:var(--r5);margin-top:8px;display:none}
+
+.upload-fab{position:fixed;bottom:24px;right:24px;width:52px;height:52px;background:var(--g8);color:var(--g3);border:none;border-radius:50%;font-size:22px;cursor:pointer;box-shadow:0 4px 18px rgba(27,58,10,0.35);transition:all 0.18s;display:none;z-index:100;align-items:center;justify-content:center}
+.upload-fab.visible{display:flex}
+.upload-fab:hover{background:var(--g7);transform:scale(1.08)}
+
+.mcard-del{position:absolute;top:8px;right:8px;background:rgba(163,45,45,0.85);color:#fff;border:none;border-radius:6px;font-size:10px;padding:3px 7px;cursor:pointer;display:none;font-weight:700}
+.mcard:hover .mcard-del.visible{display:block}
+.mcard{position:relative}
 </style>
 </head>
 <body>
@@ -347,6 +377,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="hdr-right">
     <span class="brand-sub">Sistem Analisis Limbah Cerdas</span>
     <div class="hdr-chip">S3 · Disertasi</div>
+    <button class="admin-btn" id="admin-btn" onclick="openAdminLogin()" title="Admin Login">🔐</button>
   </div>
 </div>
 
@@ -583,7 +614,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 <script>
 // ===== DATA MATERI =====
-const MATERI = [
+let MATERI = [
   {id:1,tipe:'video',kat:'organik',judul:'Cara Membuat Pupuk Kompos dari Sampah Organik',desc:'Panduan praktis pembuatan kompos dari sisa sayuran dan buah untuk mengurangi sampah rumah tangga.',author:'Kementerian PUPR',url:'https://www.youtube.com/embed/GDcHKer8M-c'},
   {id:2,tipe:'video',kat:'organik',judul:'Bank Sampah: Model Pengelolaan Sampah Berbasis Masyarakat',desc:'Bank sampah sebagai solusi ekonomi sirkular di tingkat kelurahan — dari sampah jadi tabungan.',author:'KLHK Indonesia',url:'https://www.youtube.com/embed/6xqntRiSp9I'},
   {id:3,tipe:'video',kat:'anorganik',judul:'Mengenal Jenis Plastik dan Cara Daur Ulangnya',desc:'Klasifikasi 7 jenis plastik berdasarkan kode resin dan metode daur ulang yang tepat.',author:'Waste4Change',url:'https://www.youtube.com/embed/fYAuCn9bFOA'},
@@ -766,6 +797,7 @@ function renderM(filter){
   const data=filter==='semua'?MATERI:MATERI.filter(m=>filter==='video'?m.tipe==='video':filter==='artikel'?m.tipe==='artikel':m.kat===filter);
   document.getElementById('m-grid').innerHTML=data.map(m=>`
     <div class="mcard" onclick="${m.tipe==='video'?`openV('${m.url}')`:m.url?`window.open('${m.url}','_blank')`:''}">
+      <button class="mcard-del${adminToken?' visible':''}" onclick="event.stopPropagation();deleteMateri(${m.id},this)">✕ Hapus</button>
       <div class="mthumb ${m.tipe==='video'?'mt-vid':KBG[m.kat]||'mt-o'}">
         ${m.tipe==='video'?`<div style="text-align:center"><div style="font-size:34px;margin-bottom:8px">${KE[m.kat]||'📄'}</div><div class="play-ring"><svg viewBox="0 0 24 24" fill="var(--g8)"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="mtype mt-vid-badge">VIDEO</div>`:`<div style="font-size:42px">${KE[m.kat]||'📄'}</div><div class="mtype mt-art-badge">ARTIKEL</div>`}
       </div>
@@ -956,8 +988,222 @@ async function sendChat(){
   input.focus();
 }
 
+// ===== ADMIN =====
+let adminToken = sessionStorage.getItem('sl_admin_token') || null;
+
+function updateAdminUI() {
+  const btn = document.getElementById('admin-btn');
+  const fab = document.getElementById('upload-fab');
+  if (adminToken) {
+    btn.textContent = '✓ Admin';
+    btn.classList.add('logged-in');
+    btn.onclick = logoutAdmin;
+    if (fab) fab.classList.add('visible');
+  } else {
+    btn.textContent = '🔐';
+    btn.classList.remove('logged-in');
+    btn.onclick = openAdminLogin;
+    if (fab) fab.classList.remove('visible');
+  }
+  document.querySelectorAll('.mcard-del').forEach(el => {
+    adminToken ? el.classList.add('visible') : el.classList.remove('visible');
+  });
+}
+
+function openAdminLogin() {
+  document.getElementById('modal-login').classList.add('open');
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+  setTimeout(() => document.getElementById('login-pass').focus(), 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('modal-login').classList.remove('open');
+}
+
+async function submitLogin() {
+  const pass = document.getElementById('login-pass').value.trim();
+  const err = document.getElementById('login-err');
+  const btn = document.getElementById('login-submit');
+  if (!pass) return;
+  btn.textContent = 'Memverifikasi...'; btn.disabled = true;
+  err.style.display = 'none';
+  try {
+    const res = await fetch('/api/admin-auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pass })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal');
+    adminToken = data.token;
+    sessionStorage.setItem('sl_admin_token', adminToken);
+    closeAdminLogin();
+    updateAdminUI();
+  } catch (e) {
+    err.textContent = e.message;
+    err.style.display = 'block';
+  } finally {
+    btn.textContent = 'Masuk'; btn.disabled = false;
+  }
+}
+
+function logoutAdmin() {
+  adminToken = null;
+  sessionStorage.removeItem('sl_admin_token');
+  updateAdminUI();
+}
+
+function openUpload() {
+  document.getElementById('modal-upload').classList.add('open');
+  document.getElementById('up-err').style.display = 'none';
+  document.getElementById('up-submit').textContent = 'Simpan';
+}
+
+function closeUpload() {
+  document.getElementById('modal-upload').classList.remove('open');
+}
+
+async function submitUpload() {
+  const judul = document.getElementById('up-judul').value.trim();
+  const desc = document.getElementById('up-desc').value.trim();
+  const tipe = document.getElementById('up-tipe').value;
+  const kat = document.getElementById('up-kat').value;
+  const author = document.getElementById('up-author').value.trim();
+  const urlVal = document.getElementById('up-url').value.trim();
+  const err = document.getElementById('up-err');
+  const btn = document.getElementById('up-submit');
+
+  if (!judul || !desc || !author || !urlVal) {
+    err.textContent = 'Semua field wajib diisi'; err.style.display = 'block'; return;
+  }
+
+  // Normalize YouTube URL to embed
+  let finalUrl = urlVal;
+  if (tipe === 'video') {
+    const ytMatch = urlVal.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+    if (ytMatch) finalUrl = `https://www.youtube.com/embed/${ytMatch[1]}`;
+  }
+
+  btn.textContent = 'Menyimpan...'; btn.disabled = true;
+  err.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/content', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${adminToken}`
+      },
+      body: JSON.stringify({ item: { judul, desc, tipe, kat, author, url: finalUrl } })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Gagal menyimpan');
+    MATERI.push(data.item);
+    closeUpload();
+    renderM('semua');
+    document.querySelector('.mtab.active')?.click();
+  } catch (e) {
+    err.textContent = e.message; err.style.display = 'block';
+  } finally {
+    btn.textContent = 'Simpan'; btn.disabled = false;
+  }
+}
+
+async function deleteMateri(id, el) {
+  if (!adminToken) return;
+  if (!confirm('Hapus konten ini?')) return;
+  try {
+    const res = await fetch('/api/content', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+      body: JSON.stringify({ id })
+    });
+    if (!res.ok) throw new Error('Gagal hapus');
+    MATERI = MATERI.filter(m => m.id != id);
+    renderM('semua');
+  } catch (e) { alert(e.message); }
+}
+
 // ===== INIT =====
-renderM('semua');
+async function loadMateri() {
+  try {
+    const res = await fetch('/api/content');
+    const data = await res.json();
+    if (data.items && data.items.length) MATERI = data.items;
+  } catch (e) { /* use hardcoded fallback */ }
+  renderM('semua');
+  updateAdminUI();
+}
+loadMateri();
 </script>
+
+<!-- Admin Login Modal -->
+<div class="modal-overlay" id="modal-login" onclick="if(event.target===this)closeAdminLogin()">
+  <div class="modal">
+    <h3>Login Admin</h3>
+    <p>Masuk untuk mengelola konten Materi & Video</p>
+    <div class="modal-field">
+      <label>Password Admin</label>
+      <input type="password" id="login-pass" placeholder="Masukkan password admin" onkeydown="if(event.key==='Enter')submitLogin()">
+    </div>
+    <div id="login-err" class="modal-err"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeAdminLogin()">Batal</button>
+      <button class="modal-submit" id="login-submit" onclick="submitLogin()">Masuk</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-overlay" id="modal-upload" onclick="if(event.target===this)closeUpload()">
+  <div class="modal">
+    <h3>Upload Konten</h3>
+    <p>Tambah video atau artikel ke halaman Materi</p>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label>Tipe</label>
+        <select id="up-tipe">
+          <option value="video">🎬 Video</option>
+          <option value="artikel">📄 Artikel</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Kategori</label>
+        <select id="up-kat">
+          <option value="organik">🌿 Organik</option>
+          <option value="anorganik">♻️ Anorganik</option>
+          <option value="b3">⚠️ B3</option>
+          <option value="residu">🚫 Residu</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Judul</label>
+      <input type="text" id="up-judul" placeholder="Judul konten">
+    </div>
+    <div class="modal-field">
+      <label>Deskripsi</label>
+      <textarea id="up-desc" placeholder="Deskripsi singkat konten..."></textarea>
+    </div>
+    <div class="modal-field">
+      <label>Sumber / Author</label>
+      <input type="text" id="up-author" placeholder="Nama channel, penulis, atau lembaga">
+    </div>
+    <div class="modal-field">
+      <label>URL (YouTube link atau link artikel)</label>
+      <input type="url" id="up-url" placeholder="https://...">
+    </div>
+    <div id="up-err" class="modal-err"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeUpload()">Batal</button>
+      <button class="modal-submit" id="up-submit" onclick="submitUpload()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload FAB -->
+<button class="upload-fab" id="upload-fab" onclick="openUpload()" title="Tambah Konten">＋</button>
+
 </body>
 </html>
