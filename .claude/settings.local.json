@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /c/Users/User/sapulidi/.claude/worktrees/intelligent-poincare log --oneline)",
+      "Bash(gh pr create --title 'Fix API key, update logo, add article search in Materi' --body ':*)",
+      "Bash(where gh:*)",
+      "Bash(winget list:*)",
+      "WebSearch"
+    ]
+  }
+}
