@@ -271,12 +271,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .s-empty p{font-size:14px;font-weight:600;color:var(--muted)}
 .s-empty span{font-size:12px;margin-top:4px;display:block}
 
-/* ===== MATERI ARTICLE SEARCH ===== */
-.materi-search-section{margin-top:28px;padding-top:24px;border-top:1.5px solid var(--border)}
-.materi-search-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.materi-search-icon{width:40px;height:40px;background:var(--g1);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.materi-search-title{font-size:15px;font-weight:700;color:var(--g8)}
-.materi-search-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
 /* ===== MASA URAI ===== */
 .urai-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--g1);color:var(--g7);margin-top:5px;white-space:nowrap}
@@ -306,6 +300,28 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .exp-btn.json:hover{background:var(--b1);border-color:var(--b2);color:var(--b5)}
 .reset-dash{margin-left:auto;padding:8px 14px;background:transparent;border:1px solid var(--border);border-radius:8px;font-family:'Plus Jakarta Sans',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;transition:all 0.15s}
 .reset-dash:hover{border-color:var(--r5);color:var(--r5)}
+
+/* ===== CHAT ===== */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 200px);min-height:400px;background:var(--white);border-radius:16px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.chat-bubble{max-width:80%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6}
+.chat-bubble.user{align-self:flex-end;background:var(--g8);color:var(--g2);border-bottom-right-radius:4px}
+.chat-bubble.bot{align-self:flex-start;background:var(--surface);border:1px solid var(--border);color:var(--ink);border-bottom-left-radius:4px}
+.chat-bubble.bot.thinking{color:var(--muted);font-style:italic}
+.chat-bottom{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);background:var(--white)}
+.chat-input{flex:1;padding:10px 14px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;border:1.5px solid var(--border);border-radius:11px;background:var(--surface);color:var(--ink);transition:border-color 0.15s}
+.chat-input:focus{outline:none;border-color:var(--g5)}
+.chat-send{padding:10px 18px;background:var(--g8);color:var(--g3);border:none;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background 0.15s;flex-shrink:0}
+.chat-send:hover{background:var(--g7)}
+.chat-send:disabled{opacity:0.5;cursor:not-allowed}
+.chat-intro{text-align:center;padding:32px 16px;color:var(--muted)}
+.chat-intro .ci-icon{font-size:36px;margin-bottom:10px}
+.chat-intro p{font-size:13px;line-height:1.7;max-width:360px;margin:0 auto}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.chat-sug{font-size:11px;padding:5px 12px;border:1.5px solid var(--border);border-radius:20px;background:var(--white);cursor:pointer;color:var(--ink2);transition:all 0.15s;font-family:'Plus Jakarta Sans',sans-serif}
+.chat-sug:hover{border-color:var(--g4);background:var(--g1);color:var(--g7)}
 </style>
 </head>
 <body>
@@ -313,17 +329,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div class="header">
   <div class="logo-mark">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="10.5" y1="18" x2="3"  y2="1.5" stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="6"  y2="1"   stroke="#9B7560" stroke-width="1"   stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="9"  y2="0.8" stroke="#B08870" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="12" y2="0.8" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="15" y2="1"   stroke="#B08870" stroke-width="1"   stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="18" y2="1.5" stroke="#9B7560" stroke-width="1"   stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="20" y2="2"   stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
-      <line x1="10.5" y1="18" x2="22" y2="3.5" stroke="#7D5A40" stroke-width="0.8" stroke-linecap="round"/>
-      <rect x="8" y="15.5" width="5" height="3.5" rx="1.5" fill="#C4956A"/>
-      <line x1="8.5" y1="17.2" x2="12.5" y2="17.2" stroke="#EDD5B8" stroke-width="0.9" stroke-linecap="round"/>
-      <path d="M9 19 Q10.5 21.5 12 19 L11.5 22.5 Q10.5 23 9.5 22.5 Z" fill="#6B4A32"/>
+      <!-- Shadow/depth sticks (slightly offset, darker) -->
+      <line x1="11" y1="18.5" x2="2.5" y2="2"   stroke="#6B4A32" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="11" y1="18.5" x2="21.5" y2="4"   stroke="#6B4A32" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- Main lidi sticks - fan spread -->
+      <line x1="11"  y1="18.5" x2="4"   y2="1.5" stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="11"  y1="18.5" x2="6.5" y2="1"   stroke="#A07858" stroke-width="1"   stroke-linecap="round"/>
+      <line x1="11"  y1="18.5" x2="9"   y2="0.8" stroke="#B08868" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="11.5" y1="18.5" x2="12" y2="0.8" stroke="#9B7560" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="15" y2="1"    stroke="#B08868" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="17.5" y2="1.5" stroke="#A07858" stroke-width="1" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="20" y2="2.5"  stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <!-- Binding band -->
+      <rect x="8.5" y="16" width="5.5" height="3.5" rx="1.5" fill="#C4956A"/>
+      <!-- White band highlight -->
+      <line x1="9" y1="17.5" x2="13.5" y2="17.5" stroke="#EDD5B8" stroke-width="1" stroke-linecap="round"/>
+      <!-- Handle/bundle tip -->
+      <path d="M9.5 19.5 Q11 21.8 12.5 19.5 L12 23 Q11 23.5 10 23 Z" fill="#6B4A32"/>
     </svg>
   </div>
   <div class="brand">
@@ -340,6 +362,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <button class="nav-btn" onclick="showPage('materi',this)">Materi & Video</button>
   <button class="nav-btn" onclick="showPage('cari',this)">Cari Konten</button>
   <button class="nav-btn" onclick="showPage('dashboard',this)">Dashboard</button>
+  <button class="nav-btn" onclick="showPage('chat',this)">💬 Asisten</button>
   <button class="nav-btn" onclick="showPage('tentang',this)">Tentang</button>
 </div>
 
@@ -423,32 +446,6 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   </div>
   <div class="m-grid" id="m-grid"></div>
 
-  <div class="materi-search-section">
-    <div class="materi-search-header">
-      <div class="materi-search-icon">🔎</div>
-      <div>
-        <div class="materi-search-title">Cari Artikel dari Internet</div>
-        <div class="materi-search-sub">Temukan artikel &amp; jurnal ilmiah pengelolaan sampah dari Semantic Scholar</div>
-      </div>
-    </div>
-    <div class="search-wrap" style="margin-bottom:12px">
-      <div class="search-row">
-        <input class="search-input" id="materi-artikel-input" type="text" placeholder="Cari topik artikel, misal: kompos organik, daur ulang plastik..." onkeydown="if(event.key==='Enter')doMateriArtikelSearch()">
-        <button class="search-btn" onclick="doMateriArtikelSearch()">Cari</button>
-      </div>
-      <div class="search-filter">
-        <button class="mtab active" onclick="setMateriArtikelFilter('waste management',this)">Semua</button>
-        <button class="mtab" onclick="setMateriArtikelFilter('organic waste composting',this)">🌿 Organik</button>
-        <button class="mtab" onclick="setMateriArtikelFilter('plastic waste recycling',this)">♻️ Anorganik</button>
-        <button class="mtab" onclick="setMateriArtikelFilter('hazardous waste B3',this)">⚠️ B3</button>
-        <button class="mtab" onclick="setMateriArtikelFilter('circular economy zero waste',this)">Zero Waste</button>
-      </div>
-    </div>
-    <div id="materi-artikel-status" style="font-size:12px;color:var(--muted);margin-bottom:8px;min-height:16px"></div>
-    <div class="jurnal-list" id="materi-artikel-grid">
-      <div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil artikel ilmiah dari Semantic Scholar</span></div>
-    </div>
-  </div>
 </div>
 
 <!-- CARI KONTEN -->
@@ -503,6 +500,29 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   </div>
 </div>
 
+<!-- CHAT -->
+<div id="page-chat" class="page">
+  <div class="pg-title"><h2>Asisten Riset</h2><p>Tanya seputar pengelolaan sampah, regulasi, &amp; metode penelitian</p></div>
+  <div class="chat-wrap">
+    <div class="chat-msgs" id="chat-msgs">
+      <div class="chat-intro" id="chat-intro">
+        <div class="ci-icon">🧹</div>
+        <p>Halo! Saya asisten riset SapuLidi. Tanya apapun seputar pengelolaan sampah, limbah B3, kompos, daur ulang, atau metodologi penelitian disertasi kamu.</p>
+        <div class="chat-suggestions">
+          <button class="chat-sug" onclick="suggestChat(this)">Apa itu limbah B3?</button>
+          <button class="chat-sug" onclick="suggestChat(this)">Metode pengelolaan sampah organik</button>
+          <button class="chat-sug" onclick="suggestChat(this)">Regulasi sampah di Indonesia</button>
+          <button class="chat-sug" onclick="suggestChat(this)">Circular economy dalam riset sampah</button>
+        </div>
+      </div>
+    </div>
+    <div class="chat-bottom">
+      <input class="chat-input" id="chat-input" type="text" placeholder="Ketik pertanyaan..." onkeydown="if(event.key==='Enter'&&!event.shiftKey)sendChat()">
+      <button class="chat-send" id="chat-send" onclick="sendChat()">Kirim</button>
+    </div>
+  </div>
+</div>
+
 <!-- DASHBOARD -->
 <div id="page-dashboard" class="page">
   <div class="pg-title"><h2>Dashboard Riset</h2><p>Statistik &amp; visualisasi data hasil analisis sampah</p></div>
@@ -525,16 +545,23 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div id="page-tentang" class="page">
   <div class="about-hero">
     <div class="a-logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <line x1="12" y1="19" x2="3"  y2="2"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="6"  y2="1.5" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="9"  y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="12" y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="15" y2="1"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="18" y2="1.5" stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <line x1="12" y1="19" x2="21" y2="2"   stroke="#9B7560" stroke-width="1.1" stroke-linecap="round"/>
-      <rect x="9.5" y="17" width="5" height="2.5" rx="1" fill="#C4956A"/>
-      <rect x="10"  y="17.8" width="4" height="1" rx="0.5" fill="#EDD5B8" opacity="0.9"/>
-      <path d="M10 19.5 Q12 22 14 19.5 L13.5 22.5 Q12 23 10.5 22.5 Z" fill="#8B6347"/>
+      <!-- Shadow/depth sticks (slightly offset, darker) -->
+      <line x1="11" y1="18.5" x2="2.5" y2="2"   stroke="#6B4A32" stroke-width="0.8" stroke-linecap="round"/>
+      <line x1="11" y1="18.5" x2="21.5" y2="4"   stroke="#6B4A32" stroke-width="0.8" stroke-linecap="round"/>
+      <!-- Main lidi sticks - fan spread -->
+      <line x1="11"  y1="18.5" x2="4"   y2="1.5" stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <line x1="11"  y1="18.5" x2="6.5" y2="1"   stroke="#A07858" stroke-width="1"   stroke-linecap="round"/>
+      <line x1="11"  y1="18.5" x2="9"   y2="0.8" stroke="#B08868" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="11.5" y1="18.5" x2="12" y2="0.8" stroke="#9B7560" stroke-width="1.2" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="15" y2="1"    stroke="#B08868" stroke-width="1.1" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="17.5" y2="1.5" stroke="#A07858" stroke-width="1" stroke-linecap="round"/>
+      <line x1="12"  y1="18.5" x2="20" y2="2.5"  stroke="#7D5A40" stroke-width="0.9" stroke-linecap="round"/>
+      <!-- Binding band -->
+      <rect x="8.5" y="16" width="5.5" height="3.5" rx="1.5" fill="#C4956A"/>
+      <!-- White band highlight -->
+      <line x1="9" y1="17.5" x2="13.5" y2="17.5" stroke="#EDD5B8" stroke-width="1" stroke-linecap="round"/>
+      <!-- Handle/bundle tip -->
+      <path d="M9.5 19.5 Q11 21.8 12.5 19.5 L12 23 Q11 23.5 10 23 Z" fill="#6B4A32"/>
     </svg></div>
     <div class="a-name">SapuLidi</div>
     <div class="a-by">by Navis</div>
@@ -864,54 +891,6 @@ async function doJurnalSearch(){
 }
 
 
-// ===== MATERI ARTIKEL SEARCH =====
-let materiArtikelSuffix='waste management';
-function setMateriArtikelFilter(suffix,btn){
-  materiArtikelSuffix=suffix;
-  document.querySelectorAll('#page-materi .search-filter .mtab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-}
-async function doMateriArtikelSearch(){
-  const raw=document.getElementById('materi-artikel-input')?.value.trim()||'';
-  const grid=document.getElementById('materi-artikel-grid');
-  const status=document.getElementById('materi-artikel-status');
-  if(!grid)return;
-  if(!raw){
-    grid.innerHTML=`<div class="s-empty"><p>Masukkan kata kunci lalu tekan Cari</p><span>Hasil artikel ilmiah dari Semantic Scholar</span></div>`;
-    if(status)status.textContent='';return;
-  }
-  const q=(raw+' '+materiArtikelSuffix).trim();
-  grid.innerHTML=`<div class="jurnal-loading"><div class="yt-spin"></div><span>Mencari artikel...</span></div>`;
-  if(status)status.textContent='';
-  try{
-    const res=await fetch('/api/journals?q='+encodeURIComponent(q));
-    const data=await res.json();
-    if(data.error)throw new Error(data.error);
-    if(!data.results||!data.results.length){
-      grid.innerHTML=`<div class="s-empty"><p>Tidak ada hasil untuk "${raw}"</p><span>Coba kata kunci dalam bahasa Inggris</span></div>`;
-      if(status)status.textContent='';return;
-    }
-    if(status)status.textContent=(data.total?data.total.toLocaleString()+' total — ':'')+data.results.length+' artikel ditemukan · Semantic Scholar';
-    grid.innerHTML=data.results.map(p=>`
-      <div class="jurnal-card">
-        <div class="jurnal-meta">
-          ${p.year?`<span class="jurnal-year">${p.year}</span>`:''}
-          ${p.venue?`<span class="jurnal-venue">${p.venue}</span>`:''}
-          ${p.openAccess?`<span class="jurnal-oa">Open Access</span>`:''}
-        </div>
-        <div class="jurnal-title">${p.title}</div>
-        ${p.authors?`<div class="jurnal-authors">${p.authors}</div>`:''}
-        ${p.abstract?`<div class="jurnal-abstract">${p.abstract}</div>`:''}
-        <div class="jurnal-footer">
-          ${p.url?`<a class="jurnal-link" href="${p.url}" target="_blank" rel="noopener">Baca Artikel</a>`:''}
-          ${p.doi?`<a class="jurnal-link" href="https://doi.org/${p.doi}" target="_blank" rel="noopener">DOI</a>`:''}
-        </div>
-      </div>`).join('');
-  }catch(err){
-    grid.innerHTML=`<div class="s-empty"><p>Gagal memuat artikel</p><span>${err.message||'Periksa koneksi internet'}</span></div>`;
-    if(status)status.textContent='';
-  }
-}
 
 function exportCSV(){
   if(!hist.length){alert('Belum ada data untuk diekspor.');return;}
@@ -950,6 +929,45 @@ function updateDash(){
   ca.innerHTML=total===0?'<div class="empty">Belum ada data analisis.</div>':Object.entries(catCnt).map(([k,v])=>`<div class="brow"><div class="bname">${CL[k]}</div><div class="btrack"><div class="bfill" style="width:${Math.round(v/total*100)}%;background:${FF[k]}"></div></div><div class="bval">${v}</div></div>`).join('');
   const ha=document.getElementById('hist-area');
   ha.innerHTML=hist.length===0?'<div class="empty">Belum ada riwayat.</div>':hist.slice(0,10).map(h=>`<div class="hitem"><div class="hico">🔍</div><div class="hinfo"><div class="htit">Analisis ${h.count} jenis sampah</div><div class="htime">${h.date?h.date+' · ':''}${h.time}${h.note?` · <em style="color:var(--g6)">${h.note}</em>`:''}</div></div><div class="hbadges">${(h.cats||[]).map(c=>`<span class="badge ${CF[c]||'b-residu'}">${CL[c]||c}</span>`).join('')}</div></div>`).join('');
+}
+
+// ===== CHAT =====
+let chatHistory=[];
+function suggestChat(btn){
+  document.getElementById('chat-input').value=btn.textContent;
+  sendChat();
+}
+async function sendChat(){
+  const input=document.getElementById('chat-input');
+  const send=document.getElementById('chat-send');
+  const msgs=document.getElementById('chat-msgs');
+  const intro=document.getElementById('chat-intro');
+  const text=input.value.trim();
+  if(!text||send.disabled)return;
+  if(intro)intro.style.display='none';
+  input.value='';send.disabled=true;
+  // User bubble
+  msgs.innerHTML+=`<div class="chat-bubble user">${text}</div>`;
+  // Thinking bubble
+  const thinkId='think-'+Date.now();
+  msgs.innerHTML+=`<div class="chat-bubble bot thinking" id="${thinkId}">Sedang berpikir...</div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  chatHistory.push({role:'user',content:text});
+  try{
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory})});
+    const d=await res.json();
+    if(d.error)throw new Error(d.error);
+    chatHistory.push({role:'assistant',content:d.reply});
+    document.getElementById(thinkId)?.remove();
+    msgs.innerHTML+=`<div class="chat-bubble bot">${d.reply.replace(/\n/g,'<br>')}</div>`;
+  }catch(err){
+    document.getElementById(thinkId)?.remove();
+    msgs.innerHTML+=`<div class="chat-bubble bot" style="color:var(--r5)">Gagal: ${err.message}</div>`;
+    chatHistory.pop();
+  }
+  send.disabled=false;
+  msgs.scrollTop=msgs.scrollHeight;
+  input.focus();
 }
 
 // ===== INIT =====
