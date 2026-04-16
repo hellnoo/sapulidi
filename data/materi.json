@@ -1,15 +1,5 @@
 [
   {
-    "id": 7,
-    "tipe": "video",
-    "kat": "organik",
-    "judul": "Pengolahan Sampah Organik Menjadi Biogas",
-    "desc": "Konversi sampah organik menjadi energi biogas — teknologi sederhana skala rumah tangga dan komunitas.",
-    "author": "BPPT Indonesia",
-    "url": "https://www.youtube.com/embed/nthngdPbne8",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 8,
     "tipe": "artikel",
     "kat": "anorganik",
