@@ -9,11 +9,11 @@ const SYSTEM = `Kamu adalah asisten riset cerdas untuk aplikasi SapuLidi, menduk
 Jawab dalam Bahasa Indonesia, ringkas, akurat, dan akademis. Gunakan bullet points jika perlu.`;
 
 const MODELS = [
+  'google/gemini-2.0-flash-001',
+  'meta-llama/llama-3.3-70b-instruct',
+  'google/gemini-1.5-flash',
   'openai/gpt-oss-20b:free',
   'meta-llama/llama-3.3-70b-instruct:free',
-  'nousresearch/hermes-3-llama-3.1-405b:free',
-  'nvidia/nemotron-3-super-120b-a12b:free',
-  'meta-llama/llama-3.2-3b-instruct:free',
 ];
 
 export default async function handler(req, res) {
