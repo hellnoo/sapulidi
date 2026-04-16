@@ -1,10 +1,9 @@
 const PROMPT = `Kamu adalah sistem deteksi sampah cerdas untuk penelitian pengelolaan limbah S3. Analisis gambar ini dan identifikasi semua jenis sampah yang terlihat.\n\nBerikan respons HANYA dalam format JSON berikut tanpa teks tambahan apapun:\n{"items":[{"nama":"nama spesifik sampah","kategori":"organik|anorganik|b3|residu","confidence":85,"penanganan":"cara penanganan singkat","masa_urai":"estimasi masa urai contoh: 2-4 minggu atau 450 tahun"}],"ringkasan":"deskripsi 1-2 kalimat","rekomendasi":"rekomendasi utama 1 kalimat"}`;
 
 const MODELS = [
-  'google/gemma-3-27b-it:free',
+  'google/gemma-4-26b-a4b-it:free',
   'google/gemma-4-31b-it:free',
-  'google/gemma-4-9b-it:free',
-  'meta-llama/llama-3.2-90b-vision-instruct:free',
+  'google/gemma-3-27b-it:free',
 ];
 
 async function callModel(model, key, imageData, mimeType) {
