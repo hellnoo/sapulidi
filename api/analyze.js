@@ -45,7 +45,7 @@ export default async function handler(req, res) {
   const { imageData, mimeType } = req.body;
   if (!imageData || !mimeType) return res.status(400).json({ error: 'Missing data' });
 
-  const errors = [];
+  let lastError = 'Semua model gagal';
   for (const model of MODELS) {
     try {
       const text = await callModel(model, key, imageData, mimeType);
@@ -53,11 +53,9 @@ export default async function handler(req, res) {
       const result = JSON.parse(clean);
       return res.status(200).json(result);
     } catch (err) {
-      const msg = `[${model}] ${err.message}`;
-      errors.push(msg);
-      console.error(msg);
+      lastError = err.message;
     }
   }
 
-  res.status(500).json({ error: errors[errors.length - 1], tried: errors });
+  res.status(500).json({ error: lastError });
 }

@@ -347,7 +347,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 <div id="page-detect" class="page active">
   <div class="pg-title">
     <h2>Deteksi Sampah AI</h2>
-    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Gemma 4 via OpenRouter via OpenRouter</p>
+    <p>Upload foto sampah untuk identifikasi otomatis menggunakan Gemma 4 via OpenRouter</p>
   </div>
   <div class="detect-wrap">
     <div class="panel">
@@ -539,11 +539,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
     <div class="a-name">SapuLidi</div>
     <div class="a-by">by Navis</div>
     <div class="a-tag">Sistem Analisis &amp; Pengelolaan Limbah Cerdas</div>
-    <div class="a-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan Gemma 4 via OpenRouter via OpenRouter untuk mendeteksi dan mengklasifikasi sampah dari gambar secara otomatis.</div>
+    <div class="a-desc">Aplikasi berbasis kecerdasan buatan untuk mendukung penelitian disertasi S3 dalam bidang pengelolaan sampah terpadu. Menggunakan Gemma 4 via OpenRouter untuk mendeteksi dan mengklasifikasi sampah dari gambar secara otomatis.</div>
     <div class="a-ver">Versi 2.1 · Prototipe Disertasi S3</div>
   </div>
   <div class="feat-grid">
-    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Gemma 4 via OpenRouter via OpenRouter</div></div>
+    <div class="fcard"><div class="ficon">🔍</div><div class="ftit">Deteksi AI Real-time</div><div class="fdesc">Identifikasi jenis &amp; kategori sampah dari foto menggunakan Gemma 4 via OpenRouter</div></div>
     <div class="fcard"><div class="ficon">📚</div><div class="ftit">Edukasi Terstruktur</div><div class="fdesc">Video &amp; artikel dari sumber terpercaya untuk mendukung riset pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📱</div><div class="ftit">Referensi Instagram</div><div class="fdesc">Kurasi akun Instagram terpilih sebagai referensi konten edukasi pengelolaan sampah</div></div>
     <div class="fcard"><div class="ficon">📊</div><div class="ftit">Dashboard Riset</div><div class="fdesc">Visualisasi data &amp; statistik hasil deteksi untuk analisis dan pelaporan penelitian</div></div>
@@ -613,12 +613,23 @@ function handleFile(f){
   if(f.size>10*1024*1024){alert('Ukuran gambar maksimal 10MB');return;}
   const r=new FileReader();
   r.onload=ev=>{
-    const img=document.getElementById('preview-img');
-    img.src=ev.target.result;img.style.display='block';
+    const preview=document.getElementById('preview-img');
+    preview.src=ev.target.result;preview.style.display='block';
     document.getElementById('up-ph').style.display='none';
     document.getElementById('go-btn').disabled=false;
     document.getElementById('clear-link').style.display='block';
-    imgData=ev.target.result.split(',')[1];imgType=f.type;
+    // Kompres gambar ke max 1024px, JPEG 85%
+    const src=new Image();
+    src.onload=()=>{
+      const MAX=1024;
+      let w=src.width,h=src.height;
+      if(w>MAX||h>MAX){const s=Math.min(MAX/w,MAX/h);w=Math.round(w*s);h=Math.round(h*s);}
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      c.getContext('2d').drawImage(src,0,0,w,h);
+      const compressed=c.toDataURL('image/jpeg',0.85);
+      imgData=compressed.split(',')[1];imgType='image/jpeg';
+    };
+    src.src=ev.target.result;
   };
   r.readAsDataURL(f);
 }
