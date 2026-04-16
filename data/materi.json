@@ -1,15 +1,5 @@
 [
   {
-    "id": 4,
-    "tipe": "video",
-    "kat": "b3",
-    "judul": "Kenali dan Kelola Limbah B3 Rumah Tangga",
-    "desc": "Cara mengidentifikasi dan membuang sampah berbahaya seperti baterai, obat, dan elektronik bekas.",
-    "author": "BRIN Indonesia",
-    "url": "https://www.youtube.com/embed/YthP04_QUSE",
-    "tanggal": "2026-04-17"
-  },
-  {
     "id": 5,
     "tipe": "artikel",
     "kat": "anorganik",
