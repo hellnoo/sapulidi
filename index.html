@@ -346,6 +346,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .admin-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.6);font-size:14px;padding:4px 8px;border-radius:8px;cursor:pointer;transition:all 0.18s;line-height:1}
 .admin-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
 .admin-btn.logged-in{color:var(--g3);border-color:rgba(151,196,89,0.4)}
+.install-btn{display:none;align-items:center;gap:6px;background:rgba(106,171,46,0.15);border:1px solid rgba(106,171,46,0.35);color:var(--g3);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;cursor:pointer;transition:all 0.18s;font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:0.2px}
+.install-btn:hover{background:rgba(106,171,46,0.25);border-color:rgba(106,171,46,0.6)}
+.install-btn svg{width:13px;height:13px;flex-shrink:0}
+.install-btn.visible{display:flex}
+@keyframes installPulse{0%,100%{box-shadow:0 0 0 0 rgba(106,171,46,0.3)}50%{box-shadow:0 0 0 6px rgba(106,171,46,0)}}
+.install-btn.visible{animation:installPulse 2.5s ease-in-out infinite}
 
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;padding:16px}
 .modal-overlay.open{display:flex}
@@ -482,6 +488,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
   <div class="hdr-right">
     <span class="brand-sub">Sistem Analisis Limbah Cerdas</span>
     <div class="hdr-chip">S3 · Disertasi</div>
+    <button class="install-btn" id="install-btn" onclick="installApp()" title="Install Aplikasi">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v13M7 11l5 5 5-5"/><path d="M5 21h14"/>
+      </svg>
+      Install App
+    </button>
     <button class="admin-btn" id="admin-btn" onclick="openAdminLogin()" title="Admin Login">🔐</button>
   </div>
 </div>
@@ -1352,6 +1364,36 @@ async function loadMateri() {
   updateAdminUI();
 }
 loadMateri();
+
+// ===== PWA INSTALL =====
+let _installPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _installPrompt = e;
+  const btn = document.getElementById('install-btn');
+  if (btn) btn.classList.add('visible');
+});
+window.addEventListener('appinstalled', () => {
+  _installPrompt = null;
+  const btn = document.getElementById('install-btn');
+  if (btn) btn.classList.remove('visible');
+});
+function installApp() {
+  if (!_installPrompt) return;
+  _installPrompt.prompt();
+  _installPrompt.userChoice.then(r => {
+    if (r.outcome === 'accepted') {
+      const btn = document.getElementById('install-btn');
+      if (btn) btn.classList.remove('visible');
+    }
+    _installPrompt = null;
+  });
+}
+
+// ===== SERVICE WORKER =====
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
 </script>
 
 <!-- Admin Login Modal -->
