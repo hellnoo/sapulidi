@@ -392,36 +392,61 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 /* ===== ANIMATIONS ===== */
 
-/* 1. Page transitions */
-@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.page.active{animation:pageIn 0.25s ease-out}
+/* Page transitions - lebih dramatis */
+@keyframes pageIn{from{opacity:0;transform:translateY(24px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.page.active{animation:pageIn 0.35s cubic-bezier(0.22,1,0.36,1)}
 
-/* 2. Materi card stagger */
-@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.mcard{animation:cardIn 0.3s ease-out both}
+/* Card stagger */
+@keyframes cardIn{from{opacity:0;transform:translateY(28px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.mcard{animation:cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;transition:transform 0.2s ease,box-shadow 0.2s ease}
+.mcard:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 12px 32px rgba(15,26,8,0.12)}
 
-/* 5. Chat bubble entrance */
-@keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.chat-bubble{animation:bubbleIn 0.2s ease-out}
+/* Chat bubble */
+@keyframes bubbleIn{from{opacity:0;transform:translateY(12px) scale(0.94)}to{opacity:1;transform:translateY(0) scale(1)}}
+.chat-bubble{animation:bubbleIn 0.25s cubic-bezier(0.22,1,0.36,1)}
 
-/* 6. Modal animation */
-@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-overlay.open .modal{animation:modalIn 0.2s ease-out}
+/* Modal */
+@keyframes modalIn{from{opacity:0;transform:scale(0.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-overlay.open .modal{animation:modalIn 0.3s cubic-bezier(0.22,1,0.36,1)}
+@keyframes overlayIn{from{opacity:0}to{opacity:1}}
+.modal-overlay.open{animation:overlayIn 0.2s ease}
 
-/* 7. Upload FAB entrance */
-@keyframes fabIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
-.upload-fab.visible{animation:fabIn 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+/* FAB spring */
+@keyframes fabIn{from{opacity:0;transform:scale(0) rotate(-90deg)}to{opacity:1;transform:scale(1) rotate(0deg)}}
+.upload-fab.visible{animation:fabIn 0.4s cubic-bezier(0.34,1.56,0.64,1)}
+.upload-fab:active{transform:scale(0.92)!important}
 
-/* 8. Navbar active indicator smooth slide */
+/* Navbar */
 .nav-btn{transition:all 0.18s,border-bottom-color 0.2s}
 
-/* 9. Logo subtle pulse on load */
-@keyframes logoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.logo-mark{animation:logoPulse 2s ease-in-out 0.5s 1}
+/* Header gradient shimmer */
+@keyframes headerShimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.header{background:linear-gradient(120deg,#0d2206,#1a3a0a,#0d2206,#27500a);background-size:300% 300%;animation:headerShimmer 8s ease infinite}
 
-/* 10. Skeleton loading shimmer */
-@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
-.mcard-skeleton{border-radius:16px;height:200px;background:linear-gradient(90deg,#e8f0dc 25%,#f0f5e8 50%,#e8f0dc 75%);background-size:800px 100%;animation:shimmer 1.4s infinite;border:1px solid var(--border)}
+/* Logo glow pulse */
+@keyframes logoGlow{0%,100%{box-shadow:0 0 0 0 rgba(106,171,46,0)}50%{box-shadow:0 0 0 6px rgba(106,171,46,0.2)}}
+.logo-mark{animation:logoGlow 3s ease-in-out infinite}
+
+/* Skeleton shimmer */
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+.mcard-skeleton{border-radius:16px;height:220px;background:linear-gradient(90deg,#e8f0dc 25%,#f5f8ef 50%,#e8f0dc 75%);background-size:1200px 100%;animation:shimmer 1.6s ease-in-out infinite;border:1px solid var(--border)}
+
+/* Panel cards hover */
+.panel{transition:box-shadow 0.2s ease}
+.panel:hover{box-shadow:0 4px 24px rgba(15,26,8,0.1)}
+
+/* Result items */
+@keyframes resultIn{from{opacity:0;transform:translateX(-16px)}to{opacity:1;transform:translateX(0)}}
+
+/* Buttons ripple feel */
+.go-btn{transition:all 0.18s cubic-bezier(0.22,1,0.36,1)}
+.go-btn:active:not(:disabled){transform:scale(0.97)!important}
+.search-btn{transition:all 0.15s ease}
+.search-btn:active{transform:scale(0.95)}
+
+/* Upload zone pulse when empty */
+@keyframes zonePulse{0%,100%{border-color:var(--g3)}50%{border-color:var(--g5)}}
+.upload-zone:not(:has(img[style*="block"])){animation:zonePulse 3s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -848,8 +873,8 @@ function renderResult(r){
   <div class="notes-wrap"><div class="notes-label">Catatan Peneliti</div><textarea class="notes-ta" id="notes-ta" rows="3" placeholder="Tambah catatan untuk analisis ini (lokasi, kondisi, konteks)..."></textarea><button class="notes-save" onclick="saveNote()">💾 Simpan dengan Catatan</button></div>`;
   // 3. Stagger animation for result items (.wi)
   document.querySelectorAll('#result-content .wi').forEach((el,i)=>{
-    el.style.animation='cardIn 0.3s ease-out both';
-    el.style.animationDelay=(i*0.06)+'s';
+    el.style.animation='resultIn 0.4s cubic-bezier(0.22,1,0.36,1) both';
+    el.style.animationDelay=(i*0.08)+'s';
   });
   document.getElementById('go-btn').disabled=false;
 }
