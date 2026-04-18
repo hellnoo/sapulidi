@@ -389,6 +389,39 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 /* ===== SHARE BUTTON ===== */
 .share-btn{margin-top:8px;padding:8px 14px;background:var(--surface);color:var(--ink2);border:1.5px solid var(--border);border-radius:9px;font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
 .share-btn:hover{background:var(--b1);border-color:var(--b2);color:var(--b5)}
+
+/* ===== ANIMATIONS ===== */
+
+/* 1. Page transitions */
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:pageIn 0.25s ease-out}
+
+/* 2. Materi card stagger */
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.mcard{animation:cardIn 0.3s ease-out both}
+
+/* 5. Chat bubble entrance */
+@keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.chat-bubble{animation:bubbleIn 0.2s ease-out}
+
+/* 6. Modal animation */
+@keyframes modalIn{from{opacity:0;transform:scale(0.95) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-overlay.open .modal{animation:modalIn 0.2s ease-out}
+
+/* 7. Upload FAB entrance */
+@keyframes fabIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+.upload-fab.visible{animation:fabIn 0.3s cubic-bezier(0.34,1.56,0.64,1)}
+
+/* 8. Navbar active indicator smooth slide */
+.nav-btn{transition:all 0.18s,border-bottom-color 0.2s}
+
+/* 9. Logo subtle pulse on load */
+@keyframes logoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+.logo-mark{animation:logoPulse 2s ease-in-out 0.5s 1}
+
+/* 10. Skeleton loading shimmer */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.mcard-skeleton{border-radius:16px;height:200px;background:linear-gradient(90deg,#e8f0dc 25%,#f0f5e8 50%,#e8f0dc 75%);background-size:800px 100%;animation:shimmer 1.4s infinite;border:1px solid var(--border)}
 </style>
 </head>
 <body>
@@ -813,6 +846,11 @@ function renderResult(r){
     <button class="share-btn print-btn" onclick="window.print()">🖨️ Cetak / Export PDF</button>
   </div>
   <div class="notes-wrap"><div class="notes-label">Catatan Peneliti</div><textarea class="notes-ta" id="notes-ta" rows="3" placeholder="Tambah catatan untuk analisis ini (lokasi, kondisi, konteks)..."></textarea><button class="notes-save" onclick="saveNote()">💾 Simpan dengan Catatan</button></div>`;
+  // 3. Stagger animation for result items (.wi)
+  document.querySelectorAll('#result-content .wi').forEach((el,i)=>{
+    el.style.animation='cardIn 0.3s ease-out both';
+    el.style.animationDelay=(i*0.06)+'s';
+  });
   document.getElementById('go-btn').disabled=false;
 }
 
@@ -869,6 +907,8 @@ function renderM(filter){
       <div class="mb"><div class="mcat">${m.kat.toUpperCase()}</div><div class="mtit">${m.judul}</div><div class="mdesc">${m.desc}</div></div>
       <div class="mfoot"><div class="mauthor">${m.author}</div><button class="mcta">${m.tipe==='video'?'▶ Tonton':'Baca →'}</button></div>
     </div>`).join('');
+  // 2. Stagger animation for mcard elements
+  document.querySelectorAll('#m-grid .mcard').forEach((el,i)=>{el.style.animationDelay=(i*0.06)+'s';});
 }
 function filterM(f,btn){document.querySelectorAll('.mtab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');renderM(f);}
 
@@ -1001,13 +1041,31 @@ function resetDash(){
   saveLocal();updateDash();
 }
 
+// ===== COUNT-UP ANIMATION =====
+function countUp(el,target){
+  if(!el)return;
+  const duration=600;
+  const start=performance.now();
+  const from=parseInt(el.textContent)||0;
+  if(from===target){el.textContent=target;return;}
+  function step(now){
+    const elapsed=now-start;
+    const progress=Math.min(elapsed/duration,1);
+    const eased=1-Math.pow(1-progress,3);
+    el.textContent=Math.round(from+(target-from)*eased);
+    if(progress<1)requestAnimationFrame(step);
+    else el.textContent=target;
+  }
+  requestAnimationFrame(step);
+}
+
 // ===== DASHBOARD =====
 function updateDash(){
   const total=Object.values(catCnt).reduce((a,b)=>a+b,0);
-  document.getElementById('s-total').textContent=hist.length;
-  document.getElementById('s-organik').textContent=catCnt.organik;
-  document.getElementById('s-anorganik').textContent=catCnt.anorganik;
-  document.getElementById('s-b3').textContent=catCnt.b3+catCnt.residu;
+  countUp(document.getElementById('s-total'),hist.length);
+  countUp(document.getElementById('s-organik'),catCnt.organik);
+  countUp(document.getElementById('s-anorganik'),catCnt.anorganik);
+  countUp(document.getElementById('s-b3'),catCnt.b3+catCnt.residu);
   const ca=document.getElementById('chart-area');
   ca.innerHTML=total===0?'<div class="empty">Belum ada data analisis.</div>':Object.entries(catCnt).map(([k,v])=>`<div class="brow"><div class="bname">${CL[k]}</div><div class="btrack"><div class="bfill" style="width:${Math.round(v/total*100)}%;background:${FF[k]}"></div></div><div class="bval">${v}</div></div>`).join('');
   const ha=document.getElementById('hist-area');
@@ -1242,6 +1300,9 @@ async function deleteMateri(id, el) {
 
 // ===== INIT =====
 async function loadMateri() {
+  // 10. Skeleton loading placeholders
+  const grid=document.getElementById('m-grid');
+  if(grid)grid.innerHTML='<div class="mcard-skeleton"></div><div class="mcard-skeleton"></div><div class="mcard-skeleton"></div>';
   try {
     const res = await fetch('/api/content');
     const data = await res.json();
