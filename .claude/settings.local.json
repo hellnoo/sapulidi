@@ -13,7 +13,8 @@
       "Bash(where node:*)",
       "Bash(cmd /c \"where node\")",
       "Bash(cmd /c \"where npx\")",
-      "Bash(cmd /c \"where python3\")"
+      "Bash(cmd /c \"where python3\")",
+      "Bash(git add:*)"
     ]
   }
 }
