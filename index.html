@@ -95,26 +95,31 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .loading{display:none;flex-direction:column;align-items:center;gap:16px;padding:28px 16px}
 
 @keyframes spin{to{transform:rotate(360deg)}}
+@keyframes corePulse{0%,100%{box-shadow:0 0 0 0 rgba(106,171,46,0.3)}50%{box-shadow:0 0 0 12px rgba(106,171,46,0)}}
+@keyframes textFade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ringExpand{0%{transform:scale(0.7);opacity:0.8}100%{transform:scale(1.6);opacity:0}}
 
-/* Orbit animation */
-@keyframes orbit1{from{transform:rotate(0deg) translateX(46px)}to{transform:rotate(360deg) translateX(46px)}}
-@keyframes orbit2{from{transform:rotate(120deg) translateX(36px)}to{transform:rotate(480deg) translateX(36px)}}
-@keyframes orbit3{from{transform:rotate(240deg) translateX(28px)}to{transform:rotate(600deg) translateX(28px)}}
-@keyframes corePulse{0%,100%{box-shadow:0 0 0 0 rgba(106,171,46,0.3),0 0 16px rgba(106,171,46,0.15)}50%{box-shadow:0 0 0 10px rgba(106,171,46,0),0 0 24px rgba(106,171,46,0.25)}}
-@keyframes textFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+/* Wrapper-based orbit — reliable across browsers */
+.ld-orbit{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ld-ring{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--g3);animation:ringExpand 2s ease-out infinite}
+.ld-ring:nth-child(2){animation-delay:0.66s}
+.ld-ring:nth-child(3){animation-delay:1.33s}
+.ld-wrap{position:absolute;inset:0;border-radius:50%;animation:spin linear infinite}
+.ld-wrap:nth-child(4){animation-duration:2s}
+.ld-wrap:nth-child(5){animation-duration:3.2s;animation-direction:reverse}
+.ld-wrap:nth-child(6){animation-duration:1.7s}
+.ld-ball{position:absolute;border-radius:50%}
+.ld-wrap:nth-child(4) .ld-ball{width:10px;height:10px;background:var(--g4);top:4px;left:calc(50% - 5px)}
+.ld-wrap:nth-child(5) .ld-ball{width:8px;height:8px;background:var(--t5);top:8px;left:calc(50% - 4px)}
+.ld-wrap:nth-child(6) .ld-ball{width:7px;height:7px;background:var(--g5);top:12px;left:calc(50% - 3.5px)}
+.ld-core{width:64px;height:64px;background:var(--white);border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;font-size:26px;animation:corePulse 2s ease-in-out infinite;transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1)}
+.ld-core.pop{transform:scale(1.2)}
 
-.ld-orbit{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.ld-dot{position:absolute;top:50%;left:50%;border-radius:50%;transform-origin:0 0}
-.ld-dot:nth-child(1){width:9px;height:9px;margin:-4.5px;background:var(--g4);animation:orbit1 2s linear infinite}
-.ld-dot:nth-child(2){width:7px;height:7px;margin:-3.5px;background:var(--g5);animation:orbit2 2.8s linear infinite}
-.ld-dot:nth-child(3){width:5px;height:5px;margin:-2.5px;background:var(--t5);animation:orbit3 1.8s linear infinite}
-.ld-core{width:62px;height:62px;background:var(--g1);border-radius:50%;border:2px solid var(--g3);display:flex;align-items:center;justify-content:center;font-size:26px;animation:corePulse 2s ease-in-out infinite;z-index:1;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1)}
-.ld-core.pop{transform:scale(1.18)}
-
-.ld-step{font-size:13px;font-weight:700;color:var(--g7);text-align:center;min-height:22px;letter-spacing:0.1px;animation:textFade 0.3s ease}
-.ld-bar{width:180px;height:4px;background:var(--g1);border-radius:4px;overflow:hidden}
-.ld-fill{height:100%;background:linear-gradient(90deg,var(--g7),var(--g5),var(--g4));border-radius:4px;transition:width 0.9s cubic-bezier(0.22,1,0.36,1);width:0%;box-shadow:0 0 8px rgba(106,171,46,0.6)}
-.ld-sub{font-size:11px;color:var(--muted);text-align:center;animation:textFade 0.3s ease}
+.ld-step{font-size:13px;font-weight:700;color:var(--g7);text-align:center;min-height:22px;letter-spacing:0.1px}
+.ld-step.fade,.ld-sub.fade{animation:textFade 0.3s ease both}
+.ld-bar{width:190px;height:5px;background:var(--g1);border-radius:6px;overflow:hidden}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--g8),var(--g5),var(--g4));border-radius:6px;transition:width 0.9s cubic-bezier(0.22,1,0.36,1);width:0%;box-shadow:0 0 10px rgba(106,171,46,0.5)}
+.ld-sub{font-size:11px;color:var(--muted);text-align:center}
 
 #result-content{display:none}
 .r-head{font-size:12px;font-weight:700;color:var(--g7);margin-bottom:10px;display:flex;align-items:center;gap:6px}
@@ -534,9 +539,12 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
         </div>
         <div class="loading" id="loading">
           <div class="ld-orbit">
-            <div class="ld-dot"></div>
-            <div class="ld-dot"></div>
-            <div class="ld-dot"></div>
+            <div class="ld-ring"></div>
+            <div class="ld-ring"></div>
+            <div class="ld-ring"></div>
+            <div class="ld-wrap"><div class="ld-ball"></div></div>
+            <div class="ld-wrap"><div class="ld-ball"></div></div>
+            <div class="ld-wrap"><div class="ld-ball"></div></div>
             <div class="ld-core" id="ld-icon">🔍</div>
           </div>
           <div class="ld-step" id="ld-step">Mempersiapkan analisis...</div>
@@ -814,18 +822,13 @@ function startLoadingAnim(){
   const sub=document.getElementById('ld-sub');
   const icon=document.getElementById('ld-icon');
   function setStep(s){
-    step.style.animation='none';sub.style.animation='none';
-    requestAnimationFrame(()=>{
-      step.style.animation='';sub.style.animation='';
-      step.textContent=s.text;
-      sub.textContent=s.sub;
-      fill.style.width=s.pct+'%';
-      if(icon){
-        icon.classList.add('pop');
-        icon.textContent=s.icon;
-        setTimeout(()=>icon.classList.remove('pop'),300);
-      }
-    });
+    step.classList.remove('fade');sub.classList.remove('fade');
+    void step.offsetWidth;
+    step.classList.add('fade');sub.classList.add('fade');
+    step.textContent=s.text;
+    sub.textContent=s.sub;
+    fill.style.width=s.pct+'%';
+    if(icon){icon.classList.add('pop');icon.textContent=s.icon;setTimeout(()=>icon.classList.remove('pop'),300);}
   }
   function tick(){
     if(i<LD_STEPS.length){setStep(LD_STEPS[i]);i++;_ldTimer=setTimeout(tick,1400+Math.random()*600);}
