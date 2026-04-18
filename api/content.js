@@ -52,7 +52,7 @@ async function writeFile(githubToken, items, sha, message) {
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   if (req.method === 'OPTIONS') return res.status(200).end();
 
@@ -92,6 +92,32 @@ export default async function handler(req, res) {
       items.push(newItem);
       await writeFile(githubToken, items, sha, `Add content: ${item.judul}`);
       return res.status(200).json({ ok: true, item: newItem });
+    } catch (err) {
+      return res.status(500).json({ error: err.message });
+    }
+  }
+
+  // PUT — update item by id
+  if (req.method === 'PUT') {
+    const authHeader = req.headers.authorization || '';
+    const token = authHeader.replace('Bearer ', '');
+    if (!adminPass || !verifyToken(token, adminPass)) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id, item } = req.body;
+    if (!id || !item || !item.judul || !item.tipe || !item.kat) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+      const { items, sha } = await readFile(githubToken);
+      const idx = items.findIndex(i => i.id == id);
+      if (idx === -1) return res.status(404).json({ error: 'Item not found' });
+      const updated = { ...items[idx], ...item, id: items[idx].id, tanggal: items[idx].tanggal };
+      items[idx] = updated;
+      await writeFile(githubToken, items, sha, `Update content id:${id}`);
+      return res.status(200).json({ ok: true, item: updated });
     } catch (err) {
       return res.status(500).json({ error: err.message });
     }
