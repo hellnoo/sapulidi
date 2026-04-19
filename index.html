@@ -1646,7 +1646,7 @@ if('serviceWorker' in navigator){
   });
 }
 
-// ===== FALLING DRY LEAVES =====
+// ===== FALLING DRY LEAVES (3D) =====
 (function(){
   if(window.innerWidth < 768) return;
   const canvas = document.getElementById('particles-canvas');
@@ -1659,147 +1659,206 @@ if('serviceWorker' in navigator){
   window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
   window.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
 
-  const COLORS = ['#C4956A','#D4A46A','#A8733A','#8B5E2A','#B8860B','#c9a55a','#d4874e'];
+  // front color, back color (underside of leaf — paler)
+  const PALETTE = [
+    {f:'#C4956A', b:'#e8c99a'},
+    {f:'#B8860B', b:'#ddb84a'},
+    {f:'#A8733A', b:'#d4a870'},
+    {f:'#8B5E2A', b:'#c09060'},
+    {f:'#c9a55a', b:'#e8cc8e'},
+    {f:'#9e6b2e', b:'#c8986a'},
+  ];
 
   class Leaf {
     constructor(delayed){ this.init(delayed); }
 
     init(delayed){
-      this.x  = Math.random() * canvas.width;
-      this.y  = delayed ? -(Math.random() * canvas.height * 0.6) - 20 : -20;
-      this.vx = (Math.random()-0.5) * 1.0;
-      this.vy = 0.55 + Math.random() * 0.7;
-      this.rot    = Math.random() * Math.PI * 2;
-      this.vrot   = (Math.random()-0.5) * 0.055;
-      this.w      = 20 + Math.random() * 16;
-      this.color  = COLORS[Math.floor(Math.random()*COLORS.length)];
-      this.alpha  = 0;
-      this.state  = 'FALLING';
-      // where it will rest (roughly inside content area)
-      this.restY  = canvas.height * (0.28 + Math.random() * 0.58);
-      this.restRot = 0;
+      const pal      = PALETTE[Math.floor(Math.random()*PALETTE.length)];
+      this.colorF    = pal.f;   // front face
+      this.colorB    = pal.b;   // back face (underside — paler)
+      this.x         = Math.random() * canvas.width;
+      this.y         = delayed ? -(Math.random() * canvas.height * 0.5) - 20 : -20;
+      this.vx        = (Math.random()-0.5) * 1.0;
+      this.vy        = 0.5 + Math.random() * 0.65;
+      this.rot       = Math.random() * Math.PI * 2;   // Z rotation
+      this.vrot      = (Math.random()-0.5) * 0.05;
+      this.rotY      = Math.random() * Math.PI * 2;   // Y-axis (3D flip angle)
+      this.vrotY     = (Math.random()-0.5) * 0.07;   // Y-axis spin speed
+      this.w         = 22 + Math.random() * 18;       // size = depth layer feel
+      this.alpha     = 0;
+      this.state     = 'FALLING';
+      this.restY     = canvas.height * (0.25 + Math.random() * 0.60);
+      this.restRot   = 0;
       this.swayPhase = Math.random() * Math.PI * 2;
-      this.swaySpeed = 0.016 + Math.random() * 0.014;
-      this.swayAmp   = 0.35 + Math.random() * 0.55;
+      this.swaySpeed = 0.014 + Math.random() * 0.012;
+      this.swayAmp   = 0.3 + Math.random() * 0.5;
       this.idleTimer = 0;
     }
 
     update(t){
       if(this.state === 'FALLING'){
-        this.alpha = Math.min(this.alpha + 0.022, 0.88);
-        // pendulum sway — the core of realistic leaf fall
-        this.vx += Math.sin(t * this.swaySpeed + this.swayPhase) * this.swayAmp * 0.038;
-        this.vx *= 0.975;
+        this.alpha = Math.min(this.alpha + 0.02, 0.92);
+        // pendulum sway + Y-axis spin while falling
+        this.vx += Math.sin(t * this.swaySpeed + this.swayPhase) * this.swayAmp * 0.035;
+        this.vx *= 0.974;
         this.x  += this.vx;
         this.y  += this.vy;
-        this.rot += this.vrot + Math.sin(t * this.swaySpeed * 0.7 + this.swayPhase) * 0.012;
+        this.rot  += this.vrot + Math.sin(t * this.swaySpeed * 0.6 + this.swayPhase) * 0.01;
+        this.rotY += this.vrotY;
 
         if(this.y >= this.restY){
-          this.state   = 'LANDING';
-          this.vx      = 0; this.vy = 0;
-          this.vrot   *= 0.12;
+          this.state = 'LANDING';
+          this.vx = 0; this.vy = 0;
+          this.vrot  *= 0.1;
+          this.vrotY *= 0.1;
           this.restRot = this.rot;
         }
 
       } else if(this.state === 'LANDING'){
-        this.rot  += this.vrot;
-        this.vrot *= 0.82;
-        if(Math.abs(this.vrot) < 0.0004){ this.vrot = 0; this.state = 'RESTING'; this.restRot = this.rot; this.idleTimer = 0; }
-
-      } else if(this.state === 'RESTING'){
-        // gentle breathing sway
-        this.rot = this.restRot + Math.sin(t * 0.007 + this.swayPhase) * 0.07;
-        this.idleTimer++;
-
-        // cursor proximity → flee
-        const dx = this.x - mouse.x, dy = this.y - mouse.y;
-        const d  = Math.sqrt(dx*dx + dy*dy);
-        if(d < 95 && d > 0){
-          this.state = 'FLEEING';
-          const spd = (95 - d) / 95 * 9 + 4;
-          const ang = Math.atan2(dy, dx);
-          this.vx   = Math.cos(ang) * spd + (Math.random()-0.5) * 3;
-          this.vy   = -Math.abs(Math.sin(ang) * spd) - 3;
-          this.vrot = (Math.random()-0.5) * 0.18;
+        this.rot  += this.vrot;  this.vrot  *= 0.80;
+        this.rotY += this.vrotY; this.vrotY *= 0.80;
+        if(Math.abs(this.vrot) < 0.0005 && Math.abs(this.vrotY) < 0.0005){
+          this.vrot=0; this.vrotY=0;
+          this.state='RESTING'; this.restRot=this.rot; this.idleTimer=0;
         }
 
-        // after a long rest, float away on its own (natural drift)
-        if(this.idleTimer > 480 + Math.random()*300){
-          this.state = 'FLEEING';
-          this.vx   = (Math.random()-0.5) * 2.5;
-          this.vy   = -1.5 - Math.random();
-          this.vrot = (Math.random()-0.5) * 0.1;
+      } else if(this.state === 'RESTING'){
+        // subtle 3D rocking — gentle Y sway + tiny Z sway
+        this.rot  = this.restRot + Math.sin(t*0.007 + this.swayPhase) * 0.06;
+        this.rotY += 0.003; // very slow continuous Y drift (looks 3D alive)
+        this.idleTimer++;
+
+        // cursor flee
+        const dx=this.x-mouse.x, dy=this.y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
+        if(d < 100 && d > 0){
+          this.state='FLEEING';
+          const spd=(100-d)/100*10+4;
+          const ang=Math.atan2(dy,dx);
+          this.vx    = Math.cos(ang)*spd + (Math.random()-0.5)*3;
+          this.vy    = -Math.abs(Math.sin(ang)*spd) - 3;
+          this.vrot  = (Math.random()-0.5)*0.2;
+          this.vrotY = (Math.random()-0.5)*0.25; // dramatic tumble
+        }
+
+        // natural drift after resting too long
+        if(this.idleTimer > 500 + Math.random()*400){
+          this.state='FLEEING';
+          this.vx=(Math.random()-0.5)*2;
+          this.vy=-1.2-Math.random();
+          this.vrot=(Math.random()-0.5)*0.1;
+          this.vrotY=(Math.random()-0.5)*0.12;
         }
 
       } else if(this.state === 'FLEEING'){
-        this.vy  += 0.11;   // gravity
-        this.vx  *= 0.982;
-        this.x   += this.vx;
-        this.y   += this.vy;
-        this.rot += this.vrot;
-        this.vrot *= 0.99;
+        this.vy    += 0.10;
+        this.vx    *= 0.983;
+        this.x     += this.vx;
+        this.y     += this.vy;
+        this.rot   += this.vrot;
+        this.rotY  += this.vrotY;
+        this.vrotY *= 0.995;
 
-        // find a new landing spot after it starts falling again
         if(this.vy > 0){
-          const newRest = canvas.height * (0.28 + Math.random() * 0.58);
-          if(this.y >= newRest){
-            this.restY   = newRest;
-            this.state   = 'LANDING';
-            this.vx = 0; this.vy = 0;
-            this.vrot *= 0.25;
-            this.restRot = this.rot;
+          const nr = canvas.height*(0.25+Math.random()*0.60);
+          if(this.y >= nr){
+            this.restY=nr; this.state='LANDING';
+            this.vx=0; this.vy=0;
+            this.vrot*=0.2; this.vrotY*=0.2;
+            this.restRot=this.rot;
           }
         }
-
-        // fell off screen → respawn
-        if(this.y > canvas.height + 60){ this.init(false); }
+        if(this.y > canvas.height+80){ this.init(false); }
       }
     }
 
     draw(){
+      const cosY = Math.cos(this.rotY);    // -1..1 → scaleX for 3D flip
+      const isFront = cosY >= 0;
+      const scaleX  = Math.max(Math.abs(cosY), 0.06); // never fully flat
+
       ctx.save();
       ctx.globalAlpha = this.alpha;
       ctx.translate(this.x, this.y);
       ctx.rotate(this.rot);
 
-      const w = this.w, h = w * 0.52;
+      // ---- drop shadow (only when not fully side-on) ----
+      if(scaleX > 0.15){
+        ctx.shadowColor   = 'rgba(40,20,0,0.22)';
+        ctx.shadowBlur    = 6;
+        ctx.shadowOffsetX = 2 * scaleX;
+        ctx.shadowOffsetY = 4;
+      }
 
-      // leaf body — oval bezier
-      ctx.fillStyle = this.color;
+      ctx.scale(isFront ? scaleX : -scaleX, 1);
+
+      const w = this.w, h = w * 0.50;
+      const fill = isFront ? this.colorF : this.colorB;
+
+      // --- leaf body: pointed oval with slight asymmetry ---
       ctx.beginPath();
-      ctx.moveTo(0, -h);
-      ctx.bezierCurveTo( w*0.82, -h*0.75,  w*0.82,  h*0.75, 0,  h);
-      ctx.bezierCurveTo(-w*0.82,  h*0.75, -w*0.82, -h*0.75, 0, -h);
+      ctx.moveTo(0, -h * 1.05);                                     // tip top
+      ctx.bezierCurveTo( w*0.78, -h*0.7,  w*0.78,  h*0.65, 0,  h*1.05); // right
+      ctx.bezierCurveTo(-w*0.78,  h*0.65, -w*0.78, -h*0.7, 0, -h*1.05); // left
+      ctx.closePath();
+
+      // gradient shading for 3D depth (lighter center, darker edge)
+      const grd = ctx.createLinearGradient(-w*0.6, 0, w*0.6, 0);
+      if(isFront){
+        grd.addColorStop(0,   shadeColor(fill, -20));
+        grd.addColorStop(0.4, shadeColor(fill,  18));
+        grd.addColorStop(1,   shadeColor(fill, -15));
+      } else {
+        grd.addColorStop(0,   shadeColor(fill, -10));
+        grd.addColorStop(0.5, shadeColor(fill,  10));
+        grd.addColorStop(1,   shadeColor(fill, -10));
+      }
+      ctx.fillStyle = grd;
       ctx.fill();
 
-      // slight dark edge for depth
-      ctx.strokeStyle = 'rgba(60,30,0,0.18)';
-      ctx.lineWidth   = 0.6;
+      // edge outline
+      ctx.shadowColor='transparent';
+      ctx.strokeStyle = isFront ? 'rgba(60,25,0,0.18)' : 'rgba(80,50,10,0.12)';
+      ctx.lineWidth   = 0.7 / scaleX;   // compensate scale for consistent stroke
       ctx.stroke();
 
-      // midrib
-      ctx.strokeStyle = 'rgba(60,30,0,0.28)';
-      ctx.lineWidth   = 0.9;
+      // ---- midrib ----
+      ctx.strokeStyle = isFront ? 'rgba(50,22,0,0.35)' : 'rgba(70,40,5,0.2)';
+      ctx.lineWidth   = 1.0 / scaleX;
       ctx.beginPath();
-      ctx.moveTo(0, -h * 0.85);
-      ctx.lineTo(0,  h * 0.85);
+      ctx.moveTo(0, -h*0.9);
+      ctx.quadraticCurveTo(w*0.08, 0, 0, h*0.9);
       ctx.stroke();
 
-      // 2 side veins
-      ctx.lineWidth = 0.5;
-      ctx.globalAlpha = this.alpha * 0.4;
-      ctx.beginPath();
-      ctx.moveTo(0, -h*0.2); ctx.lineTo( w*0.45, -h*0.55);
-      ctx.moveTo(0,  h*0.1); ctx.lineTo( w*0.45,  h*0.45);
-      ctx.moveTo(0, -h*0.2); ctx.lineTo(-w*0.45, -h*0.55);
-      ctx.moveTo(0,  h*0.1); ctx.lineTo(-w*0.45,  h*0.45);
-      ctx.stroke();
+      // ---- veins (front only, fade when nearly side-on) ----
+      if(isFront && scaleX > 0.25){
+        ctx.globalAlpha = this.alpha * Math.min((scaleX-0.25)/0.4, 1) * 0.45;
+        ctx.strokeStyle = 'rgba(50,22,0,0.7)';
+        ctx.lineWidth   = 0.45 / scaleX;
+        ctx.beginPath();
+        const vp = [
+          [ 0, -h*0.45,  w*0.52, -h*0.08 ],
+          [ 0,  h*0.05,  w*0.52,  h*0.52 ],
+          [ 0, -h*0.45, -w*0.52, -h*0.08 ],
+          [ 0,  h*0.05, -w*0.52,  h*0.52 ],
+        ];
+        vp.forEach(([x1,y1,x2,y2])=>{ ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); });
+        ctx.stroke();
+      }
 
       ctx.restore();
     }
   }
 
-  const COUNT = 9;
+  // helper: lighten/darken hex color by amount (-255..255)
+  function shadeColor(hex, amt){
+    const n=parseInt(hex.slice(1),16);
+    const r=Math.min(255,Math.max(0,((n>>16)&0xff)+amt));
+    const g=Math.min(255,Math.max(0,((n>>8)&0xff)+amt));
+    const b=Math.min(255,Math.max(0,(n&0xff)+amt));
+    return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+  }
+
+  const COUNT = 10;
   const leaves = [];
   for(let i=0; i<COUNT; i++) leaves.push(new Leaf(true));
 
@@ -1807,6 +1866,8 @@ if('serviceWorker' in navigator){
   function loop(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     t++;
+    // sort back-to-front by Y so closer leaves render on top
+    leaves.sort((a,b)=>a.y-b.y);
     leaves.forEach(l => { l.update(t); l.draw(); });
     requestAnimationFrame(loop);
   }
