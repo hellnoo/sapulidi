@@ -822,7 +822,7 @@ function showPage(p,btn){
   document.getElementById('page-'+p).classList.add('active');
   btn.classList.add('active');
   if(p==='dashboard') updateDash();
-  if(p==='cari') {/* user triggers search manually */}
+  if(p==='chat') renderChatHistory();
 }
 
 // ===== HANDLE FILE =====
@@ -1192,13 +1192,50 @@ function updateDash(){
 
 // ===== CHAT =====
 let chatHistory=JSON.parse(localStorage.getItem('sl_chat_history'))||[];
+let chatRendered=false;
+
 function saveChatHistory(){
-  localStorage.setItem('sl_chat_history',JSON.stringify(chatHistory.slice(-20)));
+  localStorage.setItem('sl_chat_history',JSON.stringify(chatHistory.slice(-40)));
 }
+
+function renderChatHistory(){
+  const msgs=document.getElementById('chat-msgs');
+  const intro=document.getElementById('chat-intro');
+  if(chatRendered) return; // already rendered, don't duplicate
+  chatRendered=true;
+  if(chatHistory.length===0) return;
+  if(intro) intro.style.display='none';
+  // Clear any existing bubbles first (except intro)
+  msgs.querySelectorAll('.chat-bubble').forEach(el=>el.remove());
+  chatHistory.forEach(m=>{
+    const cls=m.role==='user'?'user':'bot';
+    const div=document.createElement('div');
+    div.className=`chat-bubble ${cls}`;
+    div.innerHTML=m.content.replace(/\n/g,'<br>');
+    msgs.appendChild(div);
+  });
+  // Add clear button if there's history
+  if(!document.getElementById('chat-clear-btn')){
+    const cb=document.createElement('button');
+    cb.id='chat-clear-btn';
+    cb.textContent='Hapus Riwayat';
+    cb.style.cssText='display:block;margin:8px auto 0;font-size:11px;padding:4px 12px;border:1px solid var(--border);background:transparent;border-radius:8px;color:var(--muted);cursor:pointer;font-family:inherit';
+    cb.onclick=()=>{
+      chatHistory=[];saveChatHistory();chatRendered=false;
+      msgs.querySelectorAll('.chat-bubble').forEach(e=>e.remove());
+      cb.remove();
+      if(intro) intro.style.display='';
+    };
+    msgs.appendChild(cb);
+  }
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
 function suggestChat(btn){
   document.getElementById('chat-input').value=btn.textContent;
   sendChat();
 }
+
 async function sendChat(){
   const input=document.getElementById('chat-input');
   const send=document.getElementById('chat-send');
@@ -1206,14 +1243,27 @@ async function sendChat(){
   const intro=document.getElementById('chat-intro');
   const text=input.value.trim();
   if(!text||send.disabled)return;
-  if(intro)intro.style.display='none';
+  if(intro) intro.style.display='none';
+  chatRendered=true;
   input.value='';send.disabled=true;
-  // User bubble
-  msgs.innerHTML+=`<div class="chat-bubble user">${text}</div>`;
-  // Thinking bubble
-  const thinkId='think-'+Date.now();
-  msgs.innerHTML+=`<div class="chat-bubble bot thinking" id="${thinkId}">Sedang berpikir...</div>`;
+
+  // Add clear button if first message
+  if(!document.getElementById('chat-clear-btn')&&chatHistory.length===0){
+    const cb=document.createElement('div');cb.id='chat-clear-btn-wrap';
+    // will be added after first reply
+  }
+
+  const userBubble=document.createElement('div');
+  userBubble.className='chat-bubble user';
+  userBubble.textContent=text;
+  msgs.appendChild(userBubble);
+
+  const thinkBubble=document.createElement('div');
+  thinkBubble.className='chat-bubble bot thinking';
+  thinkBubble.textContent='Sedang berpikir...';
+  msgs.appendChild(thinkBubble);
   msgs.scrollTop=msgs.scrollHeight;
+
   chatHistory.push({role:'user',content:text});
   try{
     const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:chatHistory})});
@@ -1221,11 +1271,32 @@ async function sendChat(){
     if(d.error)throw new Error(d.error);
     chatHistory.push({role:'assistant',content:d.reply});
     saveChatHistory();
-    document.getElementById(thinkId)?.remove();
-    msgs.innerHTML+=`<div class="chat-bubble bot">${d.reply.replace(/\n/g,'<br>')}</div>`;
+    thinkBubble.remove();
+    const botBubble=document.createElement('div');
+    botBubble.className='chat-bubble bot';
+    botBubble.innerHTML=d.reply.replace(/\n/g,'<br>');
+    msgs.appendChild(botBubble);
+    // Show clear button
+    if(!document.getElementById('chat-clear-btn')){
+      const cb=document.createElement('button');
+      cb.id='chat-clear-btn';
+      cb.textContent='Hapus Riwayat';
+      cb.style.cssText='display:block;margin:8px auto 0;font-size:11px;padding:4px 12px;border:1px solid var(--border);background:transparent;border-radius:8px;color:var(--muted);cursor:pointer;font-family:inherit';
+      cb.onclick=()=>{
+        chatHistory=[];saveChatHistory();chatRendered=false;
+        msgs.querySelectorAll('.chat-bubble').forEach(e=>e.remove());
+        cb.remove();
+        if(intro) intro.style.display='';
+      };
+      msgs.appendChild(cb);
+    }
   }catch(err){
-    document.getElementById(thinkId)?.remove();
-    msgs.innerHTML+=`<div class="chat-bubble bot" style="color:var(--r5)">Gagal: ${err.message}</div>`;
+    thinkBubble.remove();
+    const errBubble=document.createElement('div');
+    errBubble.className='chat-bubble bot';
+    errBubble.style.color='var(--r5)';
+    errBubble.textContent='Gagal: '+err.message;
+    msgs.appendChild(errBubble);
     chatHistory.pop();
     saveChatHistory();
   }
