@@ -465,20 +465,16 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .upload-zone:not(:has(img[style*="block"])){animation:zonePulse 3s ease-in-out infinite}
 
 /* ===== WASTE DRUM ===== */
-#waste-drum{position:fixed;bottom:16px;right:20px;z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center}
-.drum-smokes{position:relative;height:60px;width:44px}
-.ds{position:absolute;bottom:0;left:50%;border-radius:40% 60% 55% 45%/45% 40% 60% 55%;animation:smokeUp ease-out infinite}
-.ds1{width:6px;height:10px;background:rgba(29,158,117,.55);animation-duration:3s;animation-delay:0s;left:45%}
-.ds2{width:5px;height:8px;background:rgba(50,120,40,.45);animation-duration:3.6s;animation-delay:1.1s;left:52%}
-.ds3{width:7px;height:12px;background:rgba(29,158,117,.5);animation-duration:2.8s;animation-delay:2s;left:40%}
-@keyframes smokeUp{
-  0%{transform:translateX(-50%) translateY(0) scaleX(1) rotate(-5deg);opacity:0}
-  8%{opacity:.85}
-  60%{transform:translateX(-60%) translateY(-44px) scaleX(2.5) rotate(12deg);opacity:.3}
-  100%{transform:translateX(-45%) translateY(-58px) scaleX(4) rotate(22deg);opacity:0}
+#waste-drum{position:fixed;bottom:16px;right:20px;z-index:5;pointer-events:none}
+.drum-smoke-wrap{position:relative;height:50px;width:38px;overflow:visible}
+.dsmk{position:absolute;bottom:0;width:3px;border-radius:50%;animation:dsmkUp ease-out infinite}
+.dsmk:nth-child(1){left:17px;height:18px;background:rgba(80,140,60,.4);animation-duration:4s;animation-delay:0s}
+.dsmk:nth-child(2){left:21px;height:14px;background:rgba(60,120,50,.35);animation-duration:5s;animation-delay:1.8s}
+@keyframes dsmkUp{
+  0%  {transform:translateY(0) scaleX(1);opacity:0}
+  5%  {opacity:.7}
+  100%{transform:translateY(-48px) scaleX(6);opacity:0}
 }
-.drum-wrap{filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));animation:drumBreath 5s ease-in-out infinite}
-@keyframes drumBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 </style>
 </head>
 <body>
@@ -486,58 +482,43 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
 <!-- Waste drum -->
 <div id="waste-drum" aria-hidden="true">
-  <div class="drum-smokes">
-    <span class="ds ds1"></span>
-    <span class="ds ds2"></span>
-    <span class="ds ds3"></span>
+  <div class="drum-smoke-wrap">
+    <span class="dsmk"></span>
+    <span class="dsmk"></span>
   </div>
-  <div class="drum-wrap">
-    <svg viewBox="0 0 44 62" width="44" height="62" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="barrel" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%"   stop-color="#0f2006"/>
-          <stop offset="28%"  stop-color="#1e3d0c"/>
-          <stop offset="52%"  stop-color="#2a5510"/>
-          <stop offset="75%"  stop-color="#1a3a0a"/>
-          <stop offset="100%" stop-color="#0d1f05"/>
-        </linearGradient>
-        <linearGradient id="rib" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%"   stop-color="#152908"/>
-          <stop offset="40%"  stop-color="#3b6d11"/>
-          <stop offset="100%" stop-color="#152908"/>
-        </linearGradient>
-        <linearGradient id="lidG" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0%"   stop-color="#1e3d0c"/>
-          <stop offset="45%"  stop-color="#4d7a18"/>
-          <stop offset="100%" stop-color="#1e3d0c"/>
-        </linearGradient>
-      </defs>
-      <!-- body -->
-      <rect x="2" y="10" width="40" height="48" rx="3" fill="url(#barrel)"/>
-      <!-- subtle highlight strip (cylindrical) -->
-      <rect x="13" y="10" width="6" height="48" rx="2" fill="rgba(255,255,255,0.03)"/>
-      <!-- ribs -->
-      <rect x="2" y="10" width="40" height="6"  rx="2" fill="url(#rib)"/>
-      <rect x="2" y="22" width="40" height="3.5" rx="1" fill="url(#rib)" opacity=".65"/>
-      <rect x="2" y="41" width="40" height="3.5" rx="1" fill="url(#rib)" opacity=".65"/>
-      <rect x="2" y="55" width="40" height="3"  rx="1" fill="url(#rib)" opacity=".5"/>
-      <!-- lid -->
-      <ellipse cx="22" cy="11" rx="20" ry="5"   fill="#2a5510"/>
-      <ellipse cx="22" cy="9.5" rx="20" ry="5"  fill="url(#lidG)"/>
-      <!-- vent nozzle -->
-      <rect x="18" y="3" width="8" height="7" rx="2" fill="#1e3d0c"/>
-      <ellipse cx="22" cy="3.5" rx="4" ry="1.8" fill="#3b6d11"/>
-      <!-- bottom rim -->
-      <ellipse cx="22" cy="58" rx="20" ry="4"   fill="#1a3a0a"/>
-      <!-- hazard triangle (pure geometry, no text) -->
-      <polygon points="22,30 30,44 14,44" fill="none" stroke="#4d8a18" stroke-width="1.3" stroke-linejoin="round" opacity=".7"/>
-      <line x1="22" y1="34" x2="22" y2="40" stroke="#6aab2e" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
-      <circle cx="22" cy="42.5" r="1" fill="#6aab2e" opacity=".8"/>
-      <!-- rivet dots -->
-      <circle cx="7"  cy="14" r="1.2" fill="#3b6d11" opacity=".7"/>
-      <circle cx="37" cy="14" r="1.2" fill="#3b6d11" opacity=".7"/>
-    </svg>
-  </div>
+  <svg viewBox="0 0 38 58" width="38" height="58" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(1px 4px 6px rgba(0,0,0,.45))">
+    <defs>
+      <!-- radial gradient for cylindrical body light -->
+      <radialGradient id="cyl" cx="38%" cy="45%" r="62%">
+        <stop offset="0%"   stop-color="#3a5c1a"/>
+        <stop offset="55%"  stop-color="#1e3a0a"/>
+        <stop offset="100%" stop-color="#0e1e05"/>
+      </radialGradient>
+      <radialGradient id="lidR" cx="42%" cy="40%" r="60%">
+        <stop offset="0%"  stop-color="#4a6e1e"/>
+        <stop offset="100%" stop-color="#1a3008"/>
+      </radialGradient>
+    </defs>
+    <!-- body cylinder -->
+    <rect x="1" y="10" width="36" height="44" rx="2.5" fill="url(#cyl)"/>
+    <!-- rolling rings (subtle, not cartoon) -->
+    <rect x="1" y="10" width="36" height="3.5" rx="1.5" fill="#2a4810" opacity=".9"/>
+    <rect x="1" y="25" width="36" height="2.5" rx="1"   fill="#243e0d" opacity=".6"/>
+    <rect x="1" y="41" width="36" height="2.5" rx="1"   fill="#243e0d" opacity=".6"/>
+    <rect x="1" y="51" width="36" height="3"   rx="1.5" fill="#1e3408" opacity=".7"/>
+    <!-- lid (top ellipse — perspective) -->
+    <ellipse cx="19" cy="11"  rx="18" ry="4.5" fill="#1e3408"/>
+    <ellipse cx="19" cy="9.5" rx="18" ry="4.5" fill="url(#lidR)"/>
+    <!-- vent/cap on lid -->
+    <ellipse cx="19" cy="7"  rx="5"  ry="1.8" fill="#162c07"/>
+    <ellipse cx="19" cy="6"  rx="5"  ry="1.8" fill="#2e4e12"/>
+    <!-- bottom ellipse -->
+    <ellipse cx="19" cy="54" rx="18" ry="3.5" fill="#111e06"/>
+    <!-- label stripe (like real drums have) -->
+    <rect x="1" y="28" width="36" height="12" rx="0" fill="#162c07" opacity=".5"/>
+    <!-- label text: B3 stencil style -->
+    <text x="19" y="38" text-anchor="middle" font-size="8" font-weight="700" font-family="monospace" fill="#3a6814" letter-spacing="2" opacity=".8">B3</text>
+  </svg>
 </div>
 
 <div class="header">
@@ -1653,218 +1634,38 @@ if('serviceWorker' in navigator){
   });
 }
 
-// ===== FALLING DRY LEAVES (3D) =====
+// ===== SINGLE DRY LEAF =====
 (function(){
   if(window.innerWidth < 768) return;
   const canvas = document.getElementById('particles-canvas');
   if(!canvas) return;
   const ctx = canvas.getContext('2d');
 
-  let mouse = {x: -9999, y: -9999};
   function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
   window.addEventListener('resize', resize); resize();
+
+  let mouse = {x:-9999, y:-9999};
   window.addEventListener('mousemove', e=>{ mouse.x=e.clientX; mouse.y=e.clientY; });
   window.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
 
-  // front color, back color (underside of leaf — paler)
-  const PALETTE = [
-    {f:'#C4956A', b:'#e8c99a'},
-    {f:'#B8860B', b:'#ddb84a'},
-    {f:'#A8733A', b:'#d4a870'},
-    {f:'#8B5E2A', b:'#c09060'},
-    {f:'#c9a55a', b:'#e8cc8e'},
-    {f:'#9e6b2e', b:'#c8986a'},
-  ];
+  // ONE leaf — warm dry brown, front/back
+  const CF = '#B8813A', CB = '#d9ae70';
 
-  class Leaf {
-    constructor(scattered){ this.init(scattered); }
+  // state
+  let x  = canvas.width  * 0.45;
+  let y  = canvas.height * 0.38;
+  let vx = 0.3, vy = 0.1;
+  let rot  = 0.3,  vrot  = 0.008;
+  let rotY = 0,    vrotY = 0.012;   // 3D flip
+  let w    = 28;                     // leaf half-width
+  let alpha = 0;                     // fade in on load
+  let blown = false;                 // being blown by cursor
 
-    init(scattered){
-      const pal    = PALETTE[Math.floor(Math.random()*PALETTE.length)];
-      this.colorF  = pal.f;
-      this.colorB  = pal.b;
-      this.w       = 20 + Math.random()*18;
-      // natural float height — spread across screen
-      this.floatY  = canvas.height * (0.10 + Math.random()*0.75);
-      this.x       = scattered ? Math.random()*canvas.width : Math.random()*canvas.width;
-      this.y       = scattered ? this.floatY + (Math.random()-0.5)*80 : -30 - Math.random()*200;
-      this.vx      = (Math.random()-0.5)*0.7;
-      this.vy      = scattered ? (Math.random()-0.5)*1 : 0.6 + Math.random()*0.5;
-      this.rot     = Math.random()*Math.PI*2;
-      this.vrot    = (Math.random()-0.5)*0.025;
-      this.rotY    = Math.random()*Math.PI*2;
-      this.vrotY   = 0.010 + Math.random()*0.018; // continuous gentle 3D spin
-      this.alpha   = scattered ? 0.7+Math.random()*0.2 : 0;
-      this.state   = scattered ? 'FLOAT' : 'ENTER';
-      // per-leaf breeze params
-      this.wp      = Math.random()*Math.PI*2;   // wind phase
-      this.ws      = 0.006 + Math.random()*0.009; // wind speed
-      this.wa      = 0.25  + Math.random()*0.45;  // wind amplitude
-      this.fp      = Math.random()*Math.PI*2;   // float bob phase
-      this.fs      = 0.004 + Math.random()*0.006; // float bob speed
-      this.fa      = 18   + Math.random()*28;   // float bob amplitude (px)
-    }
+  // wind params — slow sinusoidal drift
+  const wp = Math.random()*Math.PI*2;
+  const fp = Math.random()*Math.PI*2;
 
-    update(t){
-      // ---- ENTER: drift gently down from top until near floatY ----
-      if(this.state==='ENTER'){
-        this.alpha = Math.min(this.alpha+0.012, 0.88);
-        this.vy    = Math.min(this.vy, 1.2);
-        this.vx   += Math.sin(t*this.ws+this.wp)*this.wa*0.03;
-        this.vx   *= 0.97;
-        this.x    += this.vx;
-        this.y    += this.vy;
-        this.rot  += this.vrot;
-        this.rotY += this.vrotY;
-        if(this.y >= this.floatY){
-          this.vy    = 0;
-          this.state = 'FLOAT';
-        }
-        return;
-      }
-
-      // ---- FLOAT: hover at floatY with wind + sine bob ----
-      if(this.state==='FLOAT'){
-        // horizontal wind drift
-        this.vx += Math.sin(t*this.ws + this.wp)*this.wa*0.028;
-        this.vx *= 0.968;
-        this.x  += this.vx;
-
-        // vertical spring towards (floatY + sine bob)
-        const bobY = this.floatY + Math.sin(t*this.fs + this.fp)*this.fa;
-        this.vy   += (bobY - this.y)*0.012;
-        this.vy   *= 0.93;
-        this.y    += this.vy;
-
-        // gentle Z tilt follows horizontal drift
-        this.vrot += -this.vx * 0.001;
-        this.vrot *= 0.92;
-        this.rot  += this.vrot;
-
-        // continuous slow Y-axis spin for 3D feel
-        this.rotY += this.vrotY;
-
-        // wrap horizontally — leaf drifts off screen and reappears
-        if(this.x < -60)  this.x = canvas.width  + 50;
-        if(this.x > canvas.width+60) this.x = -50;
-
-        // cursor scatter
-        const dx=this.x-mouse.x, dy=this.y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
-        if(d<110 && d>0){
-          const spd=(110-d)/110*11+3;
-          const ang=Math.atan2(dy,dx);
-          this.vx    = Math.cos(ang)*spd + (Math.random()-0.5)*4;
-          this.vy    = Math.sin(ang)*spd - 2;
-          this.vrot  = (Math.random()-0.5)*0.22;
-          this.vrotY+= (Math.random()-0.5)*0.28;
-          this.state = 'SCATTER';
-          this.scatterT = 0;
-        }
-        return;
-      }
-
-      // ---- SCATTER: tumble freely, then settle back to float ----
-      if(this.state==='SCATTER'){
-        this.vx   *= 0.975;
-        this.vy   += 0.06;  // light gravity
-        this.vy   *= 0.975;
-        this.x    += this.vx;
-        this.y    += this.vy;
-        this.rot  += this.vrot;
-        this.vrot *= 0.98;
-        this.rotY += this.vrotY;
-        this.scatterT++;
-
-        if(this.scatterT > 80){
-          // new float height near current position
-          this.floatY = Math.min(canvas.height*0.82, Math.max(canvas.height*0.08, this.y+(Math.random()-0.5)*50));
-          this.fp     = Math.random()*Math.PI*2; // re-phase bob
-          this.state  = 'FLOAT';
-        }
-        if(this.y > canvas.height+80 || this.y < -120) this.init(false);
-      }
-    }
-
-    draw(){
-      const cosY = Math.cos(this.rotY);    // -1..1 → scaleX for 3D flip
-      const isFront = cosY >= 0;
-      const scaleX  = Math.max(Math.abs(cosY), 0.06); // never fully flat
-
-      ctx.save();
-      ctx.globalAlpha = this.alpha;
-      ctx.translate(this.x, this.y);
-      ctx.rotate(this.rot);
-
-      // ---- drop shadow (only when not fully side-on) ----
-      if(scaleX > 0.15){
-        ctx.shadowColor   = 'rgba(40,20,0,0.22)';
-        ctx.shadowBlur    = 6;
-        ctx.shadowOffsetX = 2 * scaleX;
-        ctx.shadowOffsetY = 4;
-      }
-
-      ctx.scale(isFront ? scaleX : -scaleX, 1);
-
-      const w = this.w, h = w * 0.50;
-      const fill = isFront ? this.colorF : this.colorB;
-
-      // --- leaf body: pointed oval with slight asymmetry ---
-      ctx.beginPath();
-      ctx.moveTo(0, -h * 1.05);                                     // tip top
-      ctx.bezierCurveTo( w*0.78, -h*0.7,  w*0.78,  h*0.65, 0,  h*1.05); // right
-      ctx.bezierCurveTo(-w*0.78,  h*0.65, -w*0.78, -h*0.7, 0, -h*1.05); // left
-      ctx.closePath();
-
-      // gradient shading for 3D depth (lighter center, darker edge)
-      const grd = ctx.createLinearGradient(-w*0.6, 0, w*0.6, 0);
-      if(isFront){
-        grd.addColorStop(0,   shadeColor(fill, -20));
-        grd.addColorStop(0.4, shadeColor(fill,  18));
-        grd.addColorStop(1,   shadeColor(fill, -15));
-      } else {
-        grd.addColorStop(0,   shadeColor(fill, -10));
-        grd.addColorStop(0.5, shadeColor(fill,  10));
-        grd.addColorStop(1,   shadeColor(fill, -10));
-      }
-      ctx.fillStyle = grd;
-      ctx.fill();
-
-      // edge outline
-      ctx.shadowColor='transparent';
-      ctx.strokeStyle = isFront ? 'rgba(60,25,0,0.18)' : 'rgba(80,50,10,0.12)';
-      ctx.lineWidth   = 0.7 / scaleX;   // compensate scale for consistent stroke
-      ctx.stroke();
-
-      // ---- midrib ----
-      ctx.strokeStyle = isFront ? 'rgba(50,22,0,0.35)' : 'rgba(70,40,5,0.2)';
-      ctx.lineWidth   = 1.0 / scaleX;
-      ctx.beginPath();
-      ctx.moveTo(0, -h*0.9);
-      ctx.quadraticCurveTo(w*0.08, 0, 0, h*0.9);
-      ctx.stroke();
-
-      // ---- veins (front only, fade when nearly side-on) ----
-      if(isFront && scaleX > 0.25){
-        ctx.globalAlpha = this.alpha * Math.min((scaleX-0.25)/0.4, 1) * 0.45;
-        ctx.strokeStyle = 'rgba(50,22,0,0.7)';
-        ctx.lineWidth   = 0.45 / scaleX;
-        ctx.beginPath();
-        const vp = [
-          [ 0, -h*0.45,  w*0.52, -h*0.08 ],
-          [ 0,  h*0.05,  w*0.52,  h*0.52 ],
-          [ 0, -h*0.45, -w*0.52, -h*0.08 ],
-          [ 0,  h*0.05, -w*0.52,  h*0.52 ],
-        ];
-        vp.forEach(([x1,y1,x2,y2])=>{ ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); });
-        ctx.stroke();
-      }
-
-      ctx.restore();
-    }
-  }
-
-  // helper: lighten/darken hex color by amount (-255..255)
-  function shadeColor(hex, amt){
+  function shade(hex, amt){
     const n=parseInt(hex.slice(1),16);
     const r=Math.min(255,Math.max(0,((n>>16)&0xff)+amt));
     const g=Math.min(255,Math.max(0,((n>>8)&0xff)+amt));
@@ -1872,17 +1673,111 @@ if('serviceWorker' in navigator){
     return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
   }
 
-  const COUNT = 11;
-  const leaves = [];
-  for(let i=0; i<COUNT; i++) leaves.push(new Leaf(i < 8)); // 8 start floating, 3 enter from top
+  function drawLeaf(){
+    const cosY    = Math.cos(rotY);
+    const isFront = cosY >= 0;
+    const scX     = Math.max(Math.abs(cosY), 0.05);
+    const h       = w * 0.48;
+    const fill    = isFront ? CF : CB;
 
-  let t = 0;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+
+    // shadow
+    ctx.shadowColor   = 'rgba(30,15,0,0.18)';
+    ctx.shadowBlur    = 7;
+    ctx.shadowOffsetX = 3 * scX;
+    ctx.shadowOffsetY = 4;
+    ctx.scale(isFront ? scX : -scX, 1);
+
+    // body
+    const grd = ctx.createLinearGradient(-w*0.55, 0, w*0.55, 0);
+    grd.addColorStop(0,   shade(fill, -18));
+    grd.addColorStop(0.38,shade(fill,  20));
+    grd.addColorStop(1,   shade(fill, -14));
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.moveTo(0, -h*1.05);
+    ctx.bezierCurveTo( w*0.8, -h*0.68,  w*0.8,  h*0.65, 0,  h*1.05);
+    ctx.bezierCurveTo(-w*0.8,  h*0.65, -w*0.8, -h*0.68, 0, -h*1.05);
+    ctx.closePath();
+    ctx.fill();
+
+    // edge
+    ctx.shadowColor = 'transparent';
+    ctx.strokeStyle = 'rgba(55,22,0,0.15)';
+    ctx.lineWidth   = 0.8/scX;
+    ctx.stroke();
+
+    // midrib
+    ctx.strokeStyle = isFront ? 'rgba(45,18,0,0.38)' : 'rgba(60,35,0,0.22)';
+    ctx.lineWidth   = 1.1/scX;
+    ctx.beginPath();
+    ctx.moveTo(0,-h*0.88); ctx.quadraticCurveTo(w*0.07,0, 0,h*0.88);
+    ctx.stroke();
+
+    // veins — only front, fade when side-on
+    if(isFront && scX>0.22){
+      ctx.globalAlpha = alpha * Math.min((scX-0.22)/0.35, 1) * 0.38;
+      ctx.strokeStyle = 'rgba(45,18,0,0.8)';
+      ctx.lineWidth   = 0.5/scX;
+      ctx.beginPath();
+      [[ 0,-h*.42, w*.5,-h*.05],[ 0,h*.08, w*.5,h*.5],
+       [ 0,-h*.42,-w*.5,-h*.05],[ 0,h*.08,-w*.5,h*.5]].forEach(([x1,y1,x2,y2])=>{
+        ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+      });
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  let t=0;
   function loop(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     t++;
-    // sort back-to-front by Y so closer leaves render on top
-    leaves.sort((a,b)=>a.y-b.y);
-    leaves.forEach(l => { l.update(t); l.draw(); });
+
+    // fade in
+    alpha = Math.min(alpha+0.008, 0.88);
+
+    // cursor repulsion
+    const dx=x-mouse.x, dy=y-mouse.y, d=Math.sqrt(dx*dx+dy*dy);
+    if(d < 90 && d > 0){
+      const f = (90-d)/90 * 7;
+      vx += (dx/d)*f;
+      vy += (dy/d)*f;
+      vrotY += 0.04;   // tumble when hit
+      vrot  += (Math.random()-0.5)*0.03;
+      blown = true;
+    } else {
+      blown = false;
+    }
+
+    if(!blown){
+      // gentle sinusoidal wind drift
+      vx += Math.sin(t*0.007 + wp) * 0.018;
+      vy += Math.sin(t*0.005 + fp) * 0.010;
+    }
+
+    // damping
+    vx *= 0.968; vy *= 0.968;
+    vrot  += blown ? 0 : -vx*0.0008;
+    vrot  *= 0.96;
+    vrotY *= 0.995;
+    if(!blown) vrotY = Math.max(Math.abs(vrotY), 0.010) * Math.sign(vrotY||1);
+
+    x += vx; y += vy;
+    rot  += vrot;
+    rotY += vrotY;
+
+    // wrap edges
+    if(x < -50) x = canvas.width  + 40;
+    if(x > canvas.width +50) x = -40;
+    if(y < -50) y = canvas.height + 40;
+    if(y > canvas.height+50) y = -40;
+
+    drawLeaf();
     requestAnimationFrame(loop);
   }
   loop();
