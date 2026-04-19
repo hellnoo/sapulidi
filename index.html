@@ -465,15 +465,21 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 .upload-zone:not(:has(img[style*="block"])){animation:zonePulse 3s ease-in-out infinite}
 
 /* ===== WASTE DRUM ===== */
-#waste-drum{position:fixed;bottom:0;right:22px;z-index:5;pointer-events:none;display:flex;flex-direction:column;align-items:center}
-#drum-smoke-canvas{display:block}
+#waste-drum{position:fixed;bottom:0;right:22px;z-index:5;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+#drum-smoke-canvas{display:block;pointer-events:none}
+#waste-drum svg{pointer-events:all}
+.drum-tooltip{position:absolute;bottom:calc(100% + 8px);right:0;background:var(--g9);color:var(--g3);font-size:11px;font-family:'Plus Jakarta Sans',sans-serif;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.3);line-height:1.5}
+.drum-tooltip::after{content:'';position:absolute;bottom:-5px;right:14px;border:5px solid transparent;border-top-color:var(--g9);border-bottom:none}
+#waste-drum:hover .drum-tooltip{opacity:1}
+@keyframes liquidWave{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
 <canvas id="particles-canvas" style="position:fixed;inset:0;pointer-events:none;z-index:0"></canvas>
 
 <!-- Waste drum -->
-<div id="waste-drum" aria-hidden="true">
+<div id="waste-drum" onclick="drumClick()" title="">
+  <div class="drum-tooltip" id="drum-tooltip">— belum ada analisis —</div>
   <!-- canvas smoke sits above the drum SVG -->
   <canvas id="drum-smoke-canvas" width="70" height="80"></canvas>
   <svg viewBox="0 0 44 72" width="44" height="72" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(2px 5px 8px rgba(0,0,0,.5));margin-top:-4px">
@@ -493,6 +499,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
       </radialGradient>
       <!-- clip body to rect so gradient doesn't bleed -->
       <clipPath id="bodyClip"><rect x="2" y="12" width="40" height="52" rx="3"/></clipPath>
+      <!-- liquid fill clip — updated by JS -->
+      <clipPath id="liquidClip"><rect id="liq-clip" x="2" y="64" width="40" height="0" rx="2"/></clipPath>
     </defs>
 
     <!-- toxic puddle on ground -->
@@ -500,6 +508,19 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:
 
     <!-- drum body -->
     <rect x="2" y="12" width="40" height="52" rx="3" fill="url(#cyl)"/>
+
+    <!-- ===== LIQUID FILL (level set by JS) ===== -->
+    <g clip-path="url(#liquidClip)" opacity=".82">
+      <!-- base liquid color -->
+      <rect id="liq-base" x="2" y="12" width="40" height="52" fill="rgba(22,120,70,.55)"/>
+      <!-- animated wave surface (wide path scrolls left) -->
+      <g id="liq-wave-g" style="animation:liquidWave 2.8s linear infinite">
+        <path d="M2,0 Q11,-4 20,0 Q29,4 38,0 Q47,-4 56,0 Q65,4 74,0 Q83,-4 92,0 L92,52 L2,52 Z"
+              fill="rgba(29,158,117,.7)" id="liq-wave"/>
+      </g>
+      <!-- lighter top sheen -->
+      <rect id="liq-sheen" x="2" y="12" width="40" height="3" fill="rgba(80,220,140,.3)" rx="1"/>
+    </g>
 
     <!-- metallic shine — diagonal highlight strip -->
     <rect x="8" y="12" width="5" height="52" rx="2" fill="rgba(255,255,255,0.04)" clip-path="url(#bodyClip)"/>
@@ -827,6 +848,7 @@ let hist=JSON.parse(localStorage.getItem('sl_hist'))||[];
 function saveLocal(){
   localStorage.setItem('sl_catCnt',JSON.stringify(catCnt));
   localStorage.setItem('sl_hist',JSON.stringify(hist));
+  updateDrumFill();
 }
 
 // ===== NAV =====
@@ -1515,6 +1537,7 @@ async function loadMateri() {
   updateAdminUI();
 }
 loadMateri();
+updateDrumFill();
 
 // ===== PWA INSTALL =====
 let _installPrompt = null;
@@ -1658,6 +1681,58 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('/sw.js').catch(()=>{});
   });
+}
+
+// ===== DRUM FILL LEVEL =====
+function updateDrumFill(){
+  const total   = hist.length;           // total scans from history
+  const MAX     = 30;                    // full drum = 30 scans
+  const pct     = Math.min(total / MAX, 1); // 0..1
+  const BODY_H  = 52;                    // SVG body height
+  const BODY_Y  = 12;                    // SVG body top y
+
+  const fillH   = Math.round(pct * BODY_H);
+  const fillY   = BODY_Y + BODY_H - fillH;  // liquid starts from bottom
+
+  // update clip rect
+  const clip = document.getElementById('liq-clip');
+  if(clip){ clip.setAttribute('y', fillY); clip.setAttribute('height', fillH); }
+
+  // move wave so it sits at liquid surface
+  const wave = document.getElementById('liq-wave-g');
+  if(wave){ wave.style.transform = `translateY(${fillY}px)`; }
+
+  // update sheen line at liquid surface
+  const sheen = document.getElementById('liq-sheen');
+  if(sheen){ sheen.setAttribute('y', fillY); }
+
+  // update tooltip
+  const tip = document.getElementById('drum-tooltip');
+  if(tip){
+    if(total === 0){
+      tip.innerHTML = '🛢 Belum ada analisis';
+    } else {
+      const pctLabel = Math.round(pct*100);
+      const dominant = getDrumDominant();
+      tip.innerHTML = `🛢 <strong>${total}</strong> limbah teranalisis<br><span style="font-size:10px;opacity:.8">${dominant} · drum ${pctLabel}% penuh</span>`;
+    }
+  }
+
+  // smoke intensity — more smoke when fuller
+  const sc = document.getElementById('drum-smoke-canvas');
+  if(sc) sc.style.opacity = 0.3 + pct * 0.7;
+}
+
+function getDrumDominant(){
+  if(!catCnt) return '';
+  const map = {organik:'🌿 Organik',anorganik:'♻️ Anorganik',b3:'⚠️ B3',residu:'🗑 Residu'};
+  const top = Object.entries(catCnt).sort((a,b)=>b[1]-a[1])[0];
+  return top && top[1]>0 ? map[top[0]]||top[0] : 'beragam';
+}
+
+function drumClick(){
+  const navBtn = document.querySelector('.nav-btn[onclick*="dashboard"]');
+  if(navBtn) navBtn.click();
 }
 
 // ===== DRUM SMOKE (canvas) =====
